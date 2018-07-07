@@ -1,4 +1,6 @@
 /*/target
 .idea/workspace.xml
 *.iml
-/*/*.iml
+*.xml
+!pom.xml
+!ehcache*.xml
