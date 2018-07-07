@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="/fragment/head :: head"></head>
+<body class="page-body">
+<!-- 顶部用户信息和设置 (平时隐藏) -->
+<div th:include="/fragment/settings-pane :: settings-pane"></div>
+
+<div class="page-container">
+
+    <!-- 左侧菜单栏 -->
+    <div class="sidebar-menu toggle-others" th:include="/fragment/menu :: main-menu"></div>
+
+    <div class="main-content">
+
+        <!-- 顶部用户信息栏 -->
+        <div th:include="/fragment/user-info :: user-info"></div>
+
+        <!-- 页脚版权信息 -->
+        <footer th:replace="/fragment/footer :: footer"></footer>
+
+        <!-- ********** 主页面 开始 ********** -->
+
+
+        <h1>404</h1>
+        <h3>您要找的页面可能迷路了~</h3>
+
+        <!--/*@thymesVar id="error" type="java.lang.String"*/-->
+        <div th:if="${error != null}">
+            <h3 th:text="${error}"></h3>
+        </div>
+
+        <!-- ********** 主页面 结束 ********** -->
+    </div>
+
+    <!-- 右侧聊天面板 -->
+    <div id="chat" class="fixed" th:include="/fragment/chat-pane :: chat-pane"></div>
+
+</div>
+
+<!-- 引入js文件 -->
+<div th:include="/fragment/onload_js :: onloadJS"></div>
+
+<script type="text/javascript">
+
+</script>
+
+</body>
+</html>

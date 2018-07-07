@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="/fragment/head :: head"></head>
+<style>
+    .none-border {
+        border: none;
+    }
+</style>
+
+<body class="page-body">
+<!-- 顶部用户信息和设置 (平时隐藏) -->
+<div th:include="/fragment/settings-pane :: settings-pane"></div>
+
+<div class="page-container">
+
+    <!-- 左侧菜单栏 -->
+    <div class="sidebar-menu toggle-others" th:include="/fragment/menu :: main-menu"></div>
+
+    <div class="main-content">
+
+        <!-- 顶部用户信息栏 -->
+        <div th:include="/fragment/user-info :: user-info"></div>
+
+        <!-- ********** 主页面 开始 ********** -->
+
+
+        <div class="row">
+            <div class="col-sm-6">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title" data-th-text="${op == 'create'? '新建权限':'编辑权限'}">编辑权限</h3>
+                        <div class="panel-options">
+                            <button class="btn btn-info" onclick="update()"
+                                    data-th-remove="${op == 'delete'?'all':'none'}">保存
+                            </button>
+                            <button class="btn btn-danger" onclick="remove()"
+                                    data-th-remove="${op == 'delete'?'none':'all'}">删除
+                            </button>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+
+                        <!--/*@thymesVar id="permission" type="com.caolei.system.pojo.Permission"*/-->
+                        <form id="main_form" role="form" class="form-horizontal" method="post">
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="name">名称</label>
+
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="name" name="name"
+                                           placeholder="角色名称" data-th-value="${permission.name}">
+                                </div>
+                            </div>
+
+                            <div class="form-group-separator"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="code">编码</label>
+
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="code" name="code"
+                                           placeholder="编码" data-th-value="${permission.code}">
+                                </div>
+                            </div>
+
+                            <div class="form-group-separator"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="entityResource">资源</label>
+
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="entityResource" name="entityResource"
+                                           placeholder="资源" data-th-value="${permission.entityResource?.code}">
+                                </div>
+                            </div>
+
+                            <div class="form-group-separator"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="operation">操作</label>
+
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="operation" name="operation"
+                                           placeholder="操作" data-th-value="${permission.operation}">
+                                </div>
+                            </div>
+
+                            <div class="form-group-separator"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="resourceId">实体</label>
+
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="resourceId" name="resourceId"
+                                           placeholder="实体" data-th-value="${permission.resourceId}">
+                                </div>
+                            </div>
+
+                            <div class="form-group-separator"></div>
+                            <br>
+
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- ********** 主页面 结束 ********** -->
+
+        <!-- 页脚版权信息 -->
+        <footer th:replace="/fragment/footer :: footer"></footer>
+
+    </div>
+
+    <!-- 右侧聊天面板 -->
+    <div id="chat" class="fixed" th:include="/fragment/chat-pane :: chat-pane"></div>
+
+</div>
+
+<!-- 引入js文件 -->
+<div th:include="/fragment/onload_js :: onloadJS"></div>
+
+<script type="text/javascript" th:inline="javascript">
+    var form = $("#main_form");
+
+    function update() {
+        var id = [[${permission.id}]];
+        var url = '';
+
+        if (id == null || id === '') {
+            url = /*[[@{/system/permission/create/}]]*/ +'';
+        } else {
+            url = /*[[@{'/system/role/permission/'+${permission.id}}]]*/ +'';
+        }
+        form.attr("action", url);
+        form.submit();
+    }
+
+    function remove() {
+        var url = /*[[@{'/system/role/delete/'+${permission.id}}]]*/+'';
+        form.attr("action", url);
+        form.submit();
+    }
+
+</script>
+</body>
+</html>

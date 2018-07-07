@@ -1,0 +1,24 @@
+package com.caolei.system.service;
+
+import com.caolei.system.api.CrudService;
+import com.caolei.system.pojo.Permission;
+
+import java.util.List;
+
+/**
+ * @author cloud0072
+ */
+public interface PermissionService
+        extends CrudService<Permission,String> {
+
+    /**
+     * 获取 EntityResource 的权限
+     * @author cloud0072
+     * @date 2018/6/12 22:43
+     * @param codes
+     * @param operation
+     * @return
+     */
+    List<Permission> findPermissionsByResourceCodesAndOperationLess(List<String> codes,String operation);
+
+}

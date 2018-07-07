@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="/fragment/head :: head"></head>
+<link rel="stylesheet" th:href="@{/s/css/table.css}">
+
+<body class="page-body">
+<!-- 顶部用户信息和设置 (平时隐藏) -->
+<div th:include="/fragment/settings-pane :: settings-pane"></div>
+
+<div class="page-container">
+
+    <!-- 左侧菜单栏 -->
+    <div class="sidebar-menu toggle-others" th:include="/fragment/menu :: main-menu"></div>
+
+    <div class="main-content">
+
+        <!-- 顶部用户信息栏 -->
+        <div th:include="/fragment/user-info :: user-info"></div>
+
+        <!-- ********** 主页面 开始 ********** -->
+
+
+        <div class="row">
+            <div class="col-sm-pull-0">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">角色信息</h3>
+                        <div class="panel-options">
+                            <button id="create" class="btn btn-info" onclick="showCreate()">
+                                创建角色
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="panel-body">
+                        <!--/*@thymesVar id="role" type="com.caolei.system.pojo.Role"*/-->
+                        <table class="table table-striped" id="example-2">
+                            <thead>
+                            <tr>
+                                <th class="no-sorting i-checkbox">
+                                    <input type="checkbox" class="cbr">
+                                </th>
+                                <th class="name-column">角色名</th>
+                                <th>编码</th>
+                                <th>描述</th>
+                                <th class="operation">操作</th>
+                            </tr>
+                            </thead>
+
+                            <tbody class="middle-align">
+
+                            <tr data-th-each="role : ${page}">
+                                <td>
+                                    <input type="checkbox" class="cbr" th:value="${role.id}">
+                                </td>
+                                <td data-th-text="${role.name}"></td>
+                                <td data-th-text="${role.code}"></td>
+                                <td data-th-text="${role.description}"></td>
+                                <td>
+                                    <a data-th-href="@{'/system/role/find/'+${role.id}}"
+                                       class="btn btn-info btn-sm btn-icon icon-left">
+                                        查看
+                                    </a>
+                                    <a data-th-href="@{'/system/role/update/'+${role.id}}"
+                                       class="btn btn-secondary btn-sm btn-icon icon-left">
+                                        修改
+                                    </a>
+                                    <a data-th-href="@{'/system/role/delete/'+${role.id}}"
+                                       class="btn btn-danger btn-sm btn-icon icon-left">
+                                        删除
+                                    </a>
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+
+                        <div th:include="/fragment/pagination :: pagination"></div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- ********** 主页面 结束 ********** -->
+
+        <!-- 页脚版权信息 -->
+        <footer th:replace="/fragment/footer :: footer"></footer>
+
+    </div>
+
+    <!-- 右侧聊天面板 -->
+    <div id="chat" class="fixed" th:include="/fragment/chat-pane :: chat-pane"></div>
+
+</div>
+
+<!-- 引入js文件 -->
+<div th:include="/fragment/onload_js :: onloadJS"></div>
+
+<script type="application/javascript" th:inline="javascript">
+    function showCreate() {
+        location.href = /*[[@{/system/role/create/}]]*/+'';
+    }
+
+    $(".page-link").on('click', function () {
+        var pageNumber = $(this).attr("pageIndex");
+        pageNumber = pageNumber < 0 ? 0 : pageNumber;
+        pageNumber = pageNumber > [[${page.totalPages-1}]] ? [[${page.totalPages-1}]] : pageNumber;
+        var url = /*[[@{/system/role/list}]]*/ +'';
+        if ([[${page.number}]] != pageNumber) {
+            location.href = url + '?pageSize=10&pageNumber=' + pageNumber;
+        }
+    })
+</script>
+
+</body>
+</html>
