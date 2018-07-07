@@ -1,6 +1,6 @@
 package com.caolei.system.api;
 
-import org.jetbrains.annotations.NotNull;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Example;
@@ -149,7 +149,6 @@ public interface CrudService<T extends BaseEntity, ID extends Serializable>
         return this.getClass().getName();
     }
 
-    @NotNull
     @Override
     default Logger getLogger() {
         return LoggerFactory.getLogger(this.getClass());

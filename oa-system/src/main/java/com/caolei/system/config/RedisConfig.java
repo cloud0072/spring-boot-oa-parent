@@ -1,3 +1,4 @@
+/*
 package com.caolei.system.config;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -13,10 +14,12 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+*/
 /**
  * 练习项目不再使用redis 使用时再添加
  * @author cloud0072
  */
+/*
 //@EnableCaching
 //@Configuration
 public class RedisConfig
@@ -70,3 +73,4 @@ public class RedisConfig
     }
 
 }
+*/
