@@ -101,7 +101,7 @@ public class BaseTest {
     public void test11() {
         User user = new User();
         user.setPassword("admin");
-        System.out.println(EncryptUtils.getInstance().encrypt(user).getPassword());
+        System.out.println(EncryptUtils.encrypt(user).getPassword());
 
     }
 

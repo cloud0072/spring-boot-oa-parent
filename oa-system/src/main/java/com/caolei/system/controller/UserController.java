@@ -8,6 +8,7 @@ import com.caolei.system.pojo.User;
 import com.caolei.system.service.PermissionService;
 import com.caolei.system.service.RoleService;
 import com.caolei.system.service.UserService;
+import com.caolei.system.utils.ObjectUtils;
 import com.caolei.system.utils.RequestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,7 +20,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 import static com.caolei.system.constant.Constants.*;
 
@@ -64,32 +68,28 @@ public class UserController
     @Override
     public void methodAdvice(String operation, String id, Model model) {
         Map map = model.asMap();
+        User user = (User) map.get(getEntityName());
+        User currentUser = RequestUtils.getCurrentUser();
         switch (operation) {
-            case OP_CREATE:
             case OP_UPDATE:
             case OP_DELETE:
-                User user = (User) map.get(getEntityName());
-                List<Role> hasRoles = user.getRoles();
-                List<Role> allRoles = RequestUtils.getCurrentUser().getRoles();
+                if (user.getSystemUser() && !currentUser.getSuperUser()) {
+                    throw new UnsupportedOperationException("您无权操作系统用户");
+                }
+            case OP_CREATE:
+                List<Role> hasRoles = ObjectUtils.nvl(user.getRoles(), new ArrayList<>());
+                List<Role> allRoles = currentUser.getRoles();
                 //如果是超级用户可以 授权所有角色 否则只能赋予自身拥有的角色
-                if (RequestUtils.getCurrentUser().getSuperUser()) {
+                if (currentUser.getSuperUser()) {
                     allRoles = roleService.findAll();
                 }
-                List<Map> roles = new ArrayList<>();
-                for (Role role : allRoles) {
-                    Map<String, Object> roleMap = new HashMap<>();
-                    roleMap.put("id", role.getId());
-                    roleMap.put("name", role.getName());
-                    roleMap.put("checked", hasRoles.contains(role));
-                    roles.add(roleMap);
-                }
-                roles.sort(Comparator.comparing(m -> "checked"));
-                model.addAttribute("roles", roles);
+                model.addAttribute("roles", RequestUtils.getCheckedList(allRoles, hasRoles));
                 break;
             case OP_FIND:
-                user = (User) map.get(getEntityName());
                 hasRoles = user.getRoles();
-                model.addAttribute("roles", hasRoles);
+                model.addAttribute("roles", RequestUtils.getCheckedList(hasRoles, hasRoles));
+                break;
+            case OP_LIST:
                 break;
         }
     }
@@ -103,7 +103,7 @@ public class UserController
         model.addAttribute("op", OP_FIND);
         model.addAttribute("type", TY_SELF);
         model.addAttribute(getEntityName(), userService.findById(id));
-        methodAdvice(OP_FIND,id,model);
+        methodAdvice(OP_FIND, id, model);
         return getModulePath() + "/" + getEntityName() + "/" + getEntityName() + "_view";
     }
 
@@ -151,7 +151,7 @@ public class UserController
         List<Role> roles = new ArrayList<>();
         roleIds.forEach(roleId -> roles.add(roleService.findById(roleId)));
         user.setRoles(roles);
-        getService().save(user);
+        userService.register(user.setDefaultValue());
         redirectAttributes.addFlashAttribute("message", "新增成功");
         return Constants.REDIRECT_TO + getModulePath() + "/" + getEntityName() + "/list";
     }
@@ -171,9 +171,11 @@ public class UserController
     public String update(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") String id,
                          User user, RedirectAttributes redirectAttributes) {
         checkOperation(OP_UPDATE);
-        List<String> roleIds = Arrays.asList(request.getParameterValues("roleId"));
         List<Role> roles = new ArrayList<>();
-        roleIds.forEach(roleId -> roles.add(roleService.findById(roleId)));
+        String[] roleIdArray = request.getParameterValues("roleId");
+        if (roleIdArray != null) {
+            Arrays.stream(roleIdArray).forEach(roleId -> roles.add(roleService.findById(roleId)));
+        }
         user.setRoles(roles);
         user = getService().update(id, user);
         redirectAttributes.addFlashAttribute("message", "修改成功");

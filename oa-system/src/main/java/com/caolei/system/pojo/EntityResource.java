@@ -2,7 +2,9 @@ package com.caolei.system.pojo;
 
 
 import com.caolei.system.api.BaseEntity;
+import com.caolei.system.api.NamedEntity;
 import com.caolei.system.constant.TableConstant;
+import org.apache.poi.ss.formula.functions.Na;
 
 
 import javax.persistence.*;
@@ -14,7 +16,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "label"})})
-public class EntityResource extends BaseEntity {
+public class EntityResource extends BaseEntity implements NamedEntity {
 
     @Column
     private String name;
@@ -42,6 +44,12 @@ public class EntityResource extends BaseEntity {
     }
 
     public EntityResource() {
+    }
+
+    @Override
+    public String getGroupName() {
+        //namedEntity
+        return getLabel();
     }
 
     @Override

@@ -41,7 +41,7 @@ public class SystemTest {
     public void Test01SaveUser() {
         printIndex();
         String key = "cloud0072";
-        User user = new User(key, key, key, null).setDefaultValue();
+        User user = new User(key, key, key, null,false).setDefaultValue();
         userService.register(user);
     }
 
@@ -110,7 +110,7 @@ public class SystemTest {
     @Test
     public void Test08UserAddLogs() {
         printIndex();
-        User user = userService.findUserByAccountFetchLogs("cloud0072");
+        User user = userService.findUserWithLogsByAccount("cloud0072");
 
         OperationLog log = new OperationLog();
         log.setCreateTime(new Date());
@@ -124,7 +124,7 @@ public class SystemTest {
     @Test
     public void Test09UserRemoveLogs() {
         printIndex();
-        User user = userService.findUserByAccountFetchLogs("cloud0072");
+        User user = userService.findUserWithLogsByAccount("cloud0072");
 
         user.getLogs().clear();
 

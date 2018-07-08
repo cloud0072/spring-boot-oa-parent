@@ -1,6 +1,7 @@
 package com.caolei.system.pojo;
 
 import com.caolei.system.api.BaseEntity;
+import com.caolei.system.api.NamedEntity;
 import com.caolei.system.constant.Operation;
 import com.caolei.system.constant.TableConstant;
 import com.caolei.system.utils.StringUtils;
@@ -8,7 +9,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * 认证权限
@@ -20,7 +20,7 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "auth_permission", uniqueConstraints = {@UniqueConstraint(columnNames = {"code"})})
-public class Permission extends BaseEntity {
+public class Permission extends BaseEntity implements NamedEntity {
 
     @Column
     private String name;
@@ -65,11 +65,13 @@ public class Permission extends BaseEntity {
 
     private String code() {
         if (operation != null && entityResource != null) {
-            StringBuilder code = new StringBuilder();
-            code.append(this.entityResource.getCode()).append(":")
-            .append(operation == Operation.ALL ? "*" : this.operation.name());
+            StringBuilder code = new StringBuilder()
+                    .append(this.entityResource.getCode()).append(":")
+                    .append(operation == Operation.ALL ? "*" : this.operation.name());
             if (!StringUtils.isEmpty(resourceId)) {
                 code.append(":").append(resourceId);
+            } else {
+                code.append(":*");
             }
             return code.toString();
         }

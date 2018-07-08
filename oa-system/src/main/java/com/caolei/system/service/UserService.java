@@ -42,7 +42,7 @@ public interface UserService
      * @param account
      * @return
      */
-    User findUserByAccountFetchLogs(String account);
+    User findUserWithLogsByAccount(String account);
 
 
     /**

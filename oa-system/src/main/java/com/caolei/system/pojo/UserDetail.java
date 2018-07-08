@@ -19,9 +19,6 @@ import java.util.Date;
 @Entity
 public class UserDetail extends BaseEntity {
 
-    @Column
-    private Date birthday;
-
     @Override
     public String tableName() {
         return TableConstant.USER_DETAILS;

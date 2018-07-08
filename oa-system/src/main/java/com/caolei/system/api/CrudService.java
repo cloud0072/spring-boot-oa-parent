@@ -149,11 +149,6 @@ public interface CrudService<T extends BaseEntity, ID extends Serializable>
         return this.getClass().getName();
     }
 
-    @Override
-    default Logger getLogger() {
-        return LoggerFactory.getLogger(this.getClass());
-    }
-
     /**
      * 修改
      *

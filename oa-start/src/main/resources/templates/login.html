@@ -11,11 +11,11 @@
 
             </div>
             <!-- class "fade-in-effect" 会使整个页面隐藏，加入 "in" 后会显示-->
-            <form id="login" th:action="@{/login}" method="post" class="login-form">
+            <form id="login" data-th-action="@{/login}" method="post" class="login-form">
 
                 <div class="login-header">
                     <a href="#" class="logo">
-                        <img th:src="@{/assets/images/logo@2x.png}" alt="" width="80"/>
+                        <img src="" data-th-src="@{/assets/images/logo@2x.png}" alt="" width="80"/>
                         <span>log in</span>
                     </a>
 
@@ -39,6 +39,10 @@
                         <i class="fa-lock"></i>
                         Log In
                     </button>
+                </div>
+
+                <div data-th-remove="${error == null?'all':'none'}">
+                    <span class="text-red" data-th-text="${error}"></span>
                 </div>
 
                 <div class="login-footer">

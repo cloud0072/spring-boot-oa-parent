@@ -1,10 +1,9 @@
 package com.caolei.system.shiro;
 
 
-import com.caolei.system.constant.Constants;
 import com.caolei.system.pojo.User;
-import com.caolei.system.utils.RequestUtils;
 import com.caolei.system.service.UserService;
+import com.caolei.system.utils.RequestUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -50,11 +49,11 @@ public class DefaultRealm extends AuthorizingRealm {
         log.info(account + " 正在验证身份...");
 
         //2.调用userService，根据用户名，查寻出对应的用户
-        User user = userService.findAuthorInfoByAccount(account);
+        User user = userService.findUserByAccount(account);
         if (null == user) {
             throw new UnknownAccountException("账号不存在");
         } else {
-            SecurityUtils.getSubject().getSession().setAttribute(Constants.USER_INFO, user);
+            RequestUtils.setCurrentUser(user);
             return new SimpleAuthenticationInfo(
                     user.getUserName(),
                     user.getPassword(),
@@ -76,16 +75,13 @@ public class DefaultRealm extends AuthorizingRealm {
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 
         //获取session中的用户
-        User user = RequestUtils.getCurrentUser();
-        user = userService.findAuthorInfoByAccount(user.getAccount());
-        //获取自身角色
-        user.getRoles().forEach(role -> info.addRole(role.getCode()));
-
+        User user = userService.findAuthorInfoByAccount((String) SecurityUtils.getSubject().getPrincipal());
         //获取自身权限
         user.getPermissions().forEach(permission -> info.addStringPermission(permission.getCode()));
-        //获取角色附带的权限
-        user.getRoles().forEach(role ->
-                role.getPermissions().forEach(permission -> info.addStringPermission(permission.getCode())));
+        //获取自身角色 和附带的权限
+        user.getRoles().forEach(role -> { info.addRole(role.getCode());
+            role.getPermissions().forEach(permission -> info.addStringPermission(permission.getCode()));
+        });
         return info;
     }
 

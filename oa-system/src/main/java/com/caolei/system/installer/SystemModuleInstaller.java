@@ -1,14 +1,16 @@
 package com.caolei.system.installer;
 
 import com.caolei.system.api.BaseEntity;
-
 import com.caolei.system.constant.Operation;
-import com.caolei.system.pojo.*;
-import com.caolei.system.utils.ReflectUtils;
+import com.caolei.system.pojo.EntityResource;
+import com.caolei.system.pojo.Permission;
+import com.caolei.system.pojo.Role;
+import com.caolei.system.pojo.User;
 import com.caolei.system.repository.EntityResourceRepository;
 import com.caolei.system.service.PermissionService;
 import com.caolei.system.service.RoleService;
 import com.caolei.system.service.UserService;
+import com.caolei.system.utils.ReflectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
@@ -41,7 +43,7 @@ public class SystemModuleInstaller
     @Autowired
     private EntityResourceRepository entityResourceRepository;
 
-    @Value("system.pojo.path")
+    @Value("${system.pojo.path}")
     private String system_pojo_path;
 
     @Override
@@ -65,8 +67,8 @@ public class SystemModuleInstaller
          * 添加实体
          */
         Set<Class<?>> classes = ReflectUtils.getClasses(system_pojo_path);
-        List<EntityResource> hasExistEntityResources = entityResourceRepository.findAll()
-                .stream().peek(entityResource -> entityResource.setId(null)).collect(toList());
+        List<EntityResource> hasExistEntityResources = entityResourceRepository.findAll().stream()
+                .peek(entityResource -> entityResource.setId(null)).collect(toList());
         List<EntityResource> entityResources = new ArrayList<>();
 
         classes.forEach(clazz -> {
@@ -81,8 +83,8 @@ public class SystemModuleInstaller
          * 添加权限
          */
         entityResources.addAll(hasExistEntityResources);
-        List<Permission> hasExistPermissions = permissionService.findAll()
-                .stream().peek(permission -> permission.setId(null)).collect(toList());
+        List<Permission> hasExistPermissions = permissionService.findAll().stream()
+                .peek(permission -> permission.setId(null)).collect(toList());
         List<Permission> authPermissions = new ArrayList<>();
 
         entityResources.forEach(entity -> Arrays.stream(Operation.values())
@@ -93,16 +95,16 @@ public class SystemModuleInstaller
         /*
          * 注册分组
          */
-        List<Role> hasExistRoles = roleService.findAll()
-                .stream().peek(role -> role.setId(null)).collect(toList());
-        Role superuserRole = new Role("超级管理员", "superuser", "拥有管理系统所有权限");
-        Role userRole = new Role("用户", "user", "普通用户");
+        List<Role> hasExistRoles = roleService.findAll().stream()
+                .peek(role -> role.setId(null)).collect(toList());
+        Role superuserRole = new Role("超级管理员", "superuser", "拥有管理系统所有权限", true);
+        Role userRole = new Role("用户", "user", "普通用户", true);
         if (!hasExistRoles.contains(superuserRole)) {
             List<Role> roles = new ArrayList<>();
             roles.add(superuserRole);
             roles.add(userRole);
             roles.removeAll(hasExistRoles);
-            //先保存一次，这样group才有id 不然直接多对多保存会导致group一方id没有初始化
+            //先保存一次，这样Role才有id 不然直接多对多保存会导致Role一方id没有初始化
             roleService.saveAll(roles);
 
             //superUser
@@ -117,11 +119,11 @@ public class SystemModuleInstaller
          */
         String account = "admin";
         if (null == userService.findUserByAccount(account)) {
-            User admin = new User(account, account, account, null).setDefaultValue();
+            User admin = new User(account, account, account, null, true).setDefaultValue();
             admin.setSuperUser(true);
             userService.register(admin);
             admin = userService.findUserByAccount(account);
-            admin.setRoles(Collections.singletonList(roleService.findRoleByCode("superuser")));
+            admin.setRoles(Arrays.asList(superuserRole,userRole));
 //            admin.setPermissions(permissionService.findAll());
             userService.save(admin);
         }
