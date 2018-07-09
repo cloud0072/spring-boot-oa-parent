@@ -1,5 +1,7 @@
 package com.caolei.system.utils;
 
+import com.caolei.system.installer.SystemModuleInstaller;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -220,6 +222,5 @@ public class ReflectUtils {
 
         return (Class) classTypes[typeIndex];
     }
-
 
 }

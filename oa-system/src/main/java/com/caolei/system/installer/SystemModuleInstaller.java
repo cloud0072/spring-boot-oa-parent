@@ -43,9 +43,6 @@ public class SystemModuleInstaller
     @Autowired
     private EntityResourceRepository entityResourceRepository;
 
-    @Value("${system.pojo.path}")
-    private String system_pojo_path;
-
     @Override
     public void run(ApplicationArguments args) {
         System.err.println("ModuleInstaller -> ModuleInstaller start...");
@@ -66,7 +63,7 @@ public class SystemModuleInstaller
         /*
          * 添加实体
          */
-        Set<Class<?>> classes = ReflectUtils.getClasses(system_pojo_path);
+        Set<Class<?>> classes = ReflectUtils.getClasses("com.caolei.system.pojo");
         List<EntityResource> hasExistEntityResources = entityResourceRepository.findAll().stream()
                 .peek(entityResource -> entityResource.setId(null)).collect(toList());
         List<EntityResource> entityResources = new ArrayList<>();

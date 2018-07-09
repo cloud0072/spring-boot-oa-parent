@@ -1,6 +1,7 @@
 package com.caolei.system.shiro;
 
 
+import com.caolei.system.api.BaseLogger;
 import com.caolei.system.pojo.User;
 import com.caolei.system.service.UserService;
 import com.caolei.system.utils.RequestUtils;
@@ -22,13 +23,11 @@ import org.springframework.context.annotation.Lazy;
  * @author cloud0072
  * @date 2018/6/12 22:43
  */
-public class DefaultRealm extends AuthorizingRealm {
+public class DefaultRealm extends AuthorizingRealm implements BaseLogger {
 
     @Autowired
     @Lazy
     private UserService userService;
-
-    private static final Logger log = LoggerFactory.getLogger(AuthorizingRealm.class);
 
     /**
      * 认证.登录
@@ -46,7 +45,7 @@ public class DefaultRealm extends AuthorizingRealm {
         }
         // 1.获取用户输入的用户名
         String account = token.getPrincipal().toString();
-        log.info(account + " 正在验证身份...");
+        getLogger().info(account + " 正在验证身份...");
 
         //2.调用userService，根据用户名，查寻出对应的用户
         User user = userService.findUserByAccount(account);
@@ -79,7 +78,8 @@ public class DefaultRealm extends AuthorizingRealm {
         //获取自身权限
         user.getPermissions().forEach(permission -> info.addStringPermission(permission.getCode()));
         //获取自身角色 和附带的权限
-        user.getRoles().forEach(role -> { info.addRole(role.getCode());
+        user.getRoles().forEach(role -> {
+            info.addRole(role.getCode());
             role.getPermissions().forEach(permission -> info.addStringPermission(permission.getCode()));
         });
         return info;

@@ -1,6 +1,7 @@
 package com.caolei.system.api;
 
 import com.caolei.system.constant.Constants;
+import com.caolei.system.constant.Operation;
 import com.caolei.system.utils.ReflectUtils;
 import com.caolei.system.utils.RequestUtils;
 import org.springframework.data.domain.*;
@@ -118,8 +119,9 @@ public interface CrudController<T extends BaseEntity, ID extends Serializable>
      * 适用于 create 和 list
      */
     default void checkOperation(String operation) {
-        operation = OP_LIST.equals(operation) ? OP_FIND : operation;
-        String permission = getEntityName() + ":" + operation + ":*";
+        String en = getEntityName();
+        String op = Operation.of(operation).name();
+        String permission = en + ":" + op + ":*";
         RequestUtils.checkAnyPermission(permission);
     }
 
@@ -129,8 +131,8 @@ public interface CrudController<T extends BaseEntity, ID extends Serializable>
      */
     default void checkOperationAndId(String operation, ID resourceId) {
         String en = getEntityName();
-        String op = OP_LIST.equals(operation) ? OP_FIND : operation;
-        String id = OP_LIST.equals(operation) || resourceId == null ? "*" : (String) resourceId;
+        String op = Operation.of(operation).name();
+        String id = resourceId == null ? "*" : (String) resourceId;
         String permission = en + ":" + op + ":" + id;
         RequestUtils.checkAnyPermission(permission);
     }
