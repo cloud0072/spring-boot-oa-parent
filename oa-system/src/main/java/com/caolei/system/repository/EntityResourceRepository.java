@@ -16,4 +16,5 @@ public interface EntityResourceRepository extends JpaRepository<EntityResource,S
      * @return
      */
     EntityResource findEntityResourceByCode(String code);
+    
 }

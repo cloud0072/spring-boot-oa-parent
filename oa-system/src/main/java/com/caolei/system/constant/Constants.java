@@ -9,10 +9,10 @@ import java.io.File;
  */
 public class Constants {
 
-    public static final String TEXT_NULL = "null";
-    public static final String TEXT_UNKNOWN = "unknown";
-    public static final String TEXT_UNDEFINED = "undefined";
-    public static final String TEXT_LOCALHOST = "localhost";
+    public static final String TXT_NULL = "null";
+    public static final String TXT_UNKNOWN = "unknown";
+    public static final String TXT_UNDEFINED = "undefined";
+    public static final String TXT_LOCALHOST = "localhost";
 
     public static final String REDIRECT = "redirect";
     public static final String REDIRECT_TO = "redirect:";
@@ -21,6 +21,7 @@ public class Constants {
 
     public static final String USER_INFO = "user_info";
 
+    //operation
     public static final String OP_LIST = "list";
     public static final String OP_FIND = "find";
     public static final String OP_CREATE = "create";
@@ -30,6 +31,7 @@ public class Constants {
     public static final String OP_EXPORT = "export";
     public static final String OP_DOWNLOAD = "download";
 
+    //类型
     public static final String TY_SELF = "self";
     public static final String TY_ADMIN = "admin";
 

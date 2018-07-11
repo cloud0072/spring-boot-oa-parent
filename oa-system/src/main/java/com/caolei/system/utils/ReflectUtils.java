@@ -1,7 +1,5 @@
 package com.caolei.system.utils;
 
-import com.caolei.system.installer.SystemModuleInstaller;
-
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -173,13 +171,19 @@ public class ReflectUtils {
         }
     }
 
-    public static void invoke(Object o, String[] inputMethods) {
-        Method[] methods = o.getClass().getMethods();
+    /**
+     * 调用主体对象的无参方法
+     *
+     * @param subject
+     * @param inputMethods
+     */
+    public static void invoke(Object subject, String... inputMethods) {
+        Method[] methods = subject.getClass().getMethods();
         for (String inputMethod : inputMethods) {
             Stream.of(methods).forEach(method -> {
                 if (method.getName().equals(inputMethod)) {
                     try {
-                        method.invoke(o);
+                        method.invoke(subject);
                     } catch (IllegalAccessException | InvocationTargetException e) {
                         e.printStackTrace();
                     }
@@ -190,6 +194,7 @@ public class ReflectUtils {
 
     /**
      * 获取该 类 上的泛型
+     *
      * @param clazz
      * @param typeIndex
      * @return
@@ -207,6 +212,7 @@ public class ReflectUtils {
 
     /**
      * 获取某个 接口 上的泛型
+     *
      * @param clazz
      * @param interfaceIndex
      * @param typeIndex

@@ -1,7 +1,6 @@
 package com.caolei.system.api;
 
 import com.caolei.system.constant.Constants;
-import com.caolei.system.constant.Operation;
 import com.caolei.system.utils.ReflectUtils;
 import com.caolei.system.utils.RequestUtils;
 import org.springframework.data.domain.*;
@@ -37,7 +36,7 @@ public interface CrudController<T extends BaseEntity, ID extends Serializable>
                         @RequestParam(value = "direction", defaultValue = "ASC") String direction,
                         @RequestParam(value = "sortField", defaultValue = "id") String sortField,
                         Model model, T t) {
-        checkOperation(OP_LIST);
+        RequestUtils.checkOperation(getEntityName(), OP_LIST);
         Pageable pageable = PageRequest.of(pageNumber, pageSize, new Sort(Sort.Direction.fromString(direction), sortField));
         Page<T> list = getService().findAll(Example.of(t), pageable);
         model.addAttribute("page", list);
@@ -54,7 +53,7 @@ public interface CrudController<T extends BaseEntity, ID extends Serializable>
     @RequestMapping(value = "/{operation}/{id}", method = RequestMethod.GET)
     default String showForm(HttpServletRequest request, HttpServletResponse response,
                             @PathVariable("id") ID id, @PathVariable("operation") String operation, Model model) {
-        checkOperationAndId(operation, id);
+        RequestUtils.checkOperation(getEntityName(), operation, (String) id);
         model.addAttribute(getEntityName(), getService().findById(id));
         model.addAttribute("op", operation);
         model.addAttribute("type", TY_ADMIN);
@@ -69,7 +68,7 @@ public interface CrudController<T extends BaseEntity, ID extends Serializable>
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     default String showCreateForm(HttpServletRequest request, HttpServletResponse response,
                                   Model model) throws IllegalAccessException, InstantiationException {
-        checkOperation(OP_CREATE);
+        RequestUtils.checkOperation(getEntityName(), OP_CREATE);
         model.addAttribute(getEntityName(), ReflectUtils
                 .getInterfaceGenericType(getClass(), 0, 0).newInstance());
         model.addAttribute("op", OP_CREATE);
@@ -84,7 +83,7 @@ public interface CrudController<T extends BaseEntity, ID extends Serializable>
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     default String create(HttpServletRequest request, HttpServletResponse response,
                           T t, RedirectAttributes redirectAttributes) {
-        checkOperation(OP_CREATE);
+        RequestUtils.checkOperation(getEntityName(), OP_CREATE);
         getService().save(t);
         redirectAttributes.addFlashAttribute("message", "新增成功");
         return Constants.REDIRECT_TO + getModulePath() + "/" + getEntityName() + "/list";
@@ -96,7 +95,7 @@ public interface CrudController<T extends BaseEntity, ID extends Serializable>
     @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
     default String update(HttpServletRequest request, HttpServletResponse response,
                           @PathVariable("id") ID id, T t, RedirectAttributes redirectAttributes) {
-        checkOperationAndId(OP_UPDATE, id);
+        RequestUtils.checkOperation(getEntityName(), OP_UPDATE, (String) id);
         getService().update(id, t);
         redirectAttributes.addFlashAttribute("message", "修改成功");
         return Constants.REDIRECT_TO + getModulePath() + "/" + getEntityName() + "/find/" + id;
@@ -108,33 +107,10 @@ public interface CrudController<T extends BaseEntity, ID extends Serializable>
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
     default String delete(HttpServletRequest request, HttpServletResponse response,
                           @PathVariable("id") ID id, RedirectAttributes redirectAttributes) {
-        checkOperationAndId(OP_DELETE, id);
+        RequestUtils.checkOperation(getEntityName(), OP_DELETE, (String) id);
         getService().deleteById(id);
         redirectAttributes.addFlashAttribute("message", "删除成功");
         return Constants.REDIRECT_TO + getModulePath() + "/" + getEntityName() + "/list";
-    }
-
-    /**
-     * 判断当前用户是否有权限进行操作 默认为所有元素操作
-     * 适用于 create 和 list
-     */
-    default void checkOperation(String operation) {
-        String en = getEntityName();
-        String op = Operation.of(operation).name();
-        String permission = en + ":" + op + ":*";
-        RequestUtils.checkAnyPermission(permission);
-    }
-
-    /**
-     * 判断当前用户是否有权限进行操作 OP_LIST 需要 FIND_ALL 权限
-     * FIXME: 另一种策略是 有多少权限就能查到多少元素，待完善
-     */
-    default void checkOperationAndId(String operation, ID resourceId) {
-        String en = getEntityName();
-        String op = Operation.of(operation).name();
-        String id = resourceId == null ? "*" : (String) resourceId;
-        String permission = en + ":" + op + ":" + id;
-        RequestUtils.checkAnyPermission(permission);
     }
 
     default void methodAdvice(String operation, ID id, Model model) {
