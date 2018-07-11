@@ -85,7 +85,7 @@ public class SystemModuleInstaller
         List<Permission> authPermissions = new ArrayList<>();
 
         entityResources.forEach(entity -> Arrays.stream(Operation.values())
-                .forEach(operation -> authPermissions.add(new Permission(entity, operation))));
+                .forEach(operation -> authPermissions.add(new Permission(entity, operation, null, true))));
         authPermissions.removeAll(hasExistPermissions);
         permissionService.saveAll(authPermissions);
 
@@ -105,9 +105,9 @@ public class SystemModuleInstaller
             roleService.saveAll(roles);
 
             //superUser
-            superuserRole.setPermissions(permissionService.findAll(Example.of(new Permission(null, Operation.ALL))));
+            superuserRole.setPermissions(permissionService.findAll(Example.of(new Permission(null, Operation.ALL, null, true))));
             //user
-            userRole.setPermissions(permissionService.findAll(Example.of(new Permission(new EntityResource(User.class), Operation.ALL))));
+            userRole.setPermissions(permissionService.findAll(Example.of(new Permission(new EntityResource(User.class), Operation.ALL, null, true))));
             roleService.saveAll(roles);
         }
 
@@ -120,7 +120,7 @@ public class SystemModuleInstaller
             admin.setSuperUser(true);
             userService.register(admin);
             admin = userService.findUserByAccount(account);
-            admin.setRoles(Arrays.asList(superuserRole,userRole));
+            admin.setRoles(Arrays.asList(superuserRole, userRole));
 //            admin.setPermissions(permissionService.findAll());
             userService.save(admin);
         }

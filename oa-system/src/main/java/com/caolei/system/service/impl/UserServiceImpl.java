@@ -35,13 +35,7 @@ public class UserServiceImpl
     }
 
     @Override
-    public User save(User user) {
-        getLogger().info("save " + user.tableName() + "\t" + user.getId());
-        return getRepository().save(user);
-    }
-
-    @Override
-    public User update(String id, User input) {
+    public User updateById(String id, User input) {
         User user = findById(id);
         user.setUserName(input.getUserName());
         user.setAccount(input.getAccount());

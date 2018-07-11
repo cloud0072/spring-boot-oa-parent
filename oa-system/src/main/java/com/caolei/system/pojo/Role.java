@@ -52,7 +52,7 @@ public class Role extends BaseEntity implements NamedEntity {
         this.name = name;
         this.code = code;
         this.description = description;
-        this.systemRole = systemRole;
+        this.systemRole = systemRole == null ? false : systemRole;
     }
 
     @Override
@@ -82,6 +82,9 @@ public class Role extends BaseEntity implements NamedEntity {
 
     public Boolean getSystemRole() {
         return systemRole;
+    }
+    public Boolean isSystemRole() {
+        return systemRole == null ? false : systemRole;
     }
 
     public void setSystemRole(Boolean systemRole) {

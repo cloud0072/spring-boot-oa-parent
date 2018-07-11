@@ -43,7 +43,7 @@ public interface CrudController<T extends BaseEntity, ID extends Serializable>
         model.addAttribute("search", t);
         model.addAttribute("op", OP_LIST);
         model.addAttribute("type", TY_ADMIN);
-        methodAdvice(OP_LIST, null, model);
+        modelAdvice(OP_LIST, null, model);
         return getModulePath() + "/" + getEntityName() + "/" + getEntityName() + "_list";
     }
 
@@ -57,7 +57,7 @@ public interface CrudController<T extends BaseEntity, ID extends Serializable>
         model.addAttribute(getEntityName(), getService().findById(id));
         model.addAttribute("op", operation);
         model.addAttribute("type", TY_ADMIN);
-        methodAdvice(operation, id, model);
+        modelAdvice(operation, id, model);
         String prefix = operation.equals(OP_FIND) ? "_view" : "_edit";
         return getModulePath() + "/" + getEntityName() + "/" + getEntityName() + prefix;
     }
@@ -73,7 +73,7 @@ public interface CrudController<T extends BaseEntity, ID extends Serializable>
                 .getInterfaceGenericType(getClass(), 0, 0).newInstance());
         model.addAttribute("op", OP_CREATE);
         model.addAttribute("type", TY_ADMIN);
-        methodAdvice(OP_CREATE, null, model);
+        modelAdvice(OP_CREATE, null, model);
         return getModulePath() + "/" + getEntityName() + "/" + getEntityName() + "_edit";
     }
 
@@ -96,7 +96,7 @@ public interface CrudController<T extends BaseEntity, ID extends Serializable>
     default String update(HttpServletRequest request, HttpServletResponse response,
                           @PathVariable("id") ID id, T t, RedirectAttributes redirectAttributes) {
         RequestUtils.checkOperation(getEntityName(), OP_UPDATE, (String) id);
-        getService().update(id, t);
+        getService().updateById(id, t);
         redirectAttributes.addFlashAttribute("message", "修改成功");
         return Constants.REDIRECT_TO + getModulePath() + "/" + getEntityName() + "/find/" + id;
     }
@@ -113,7 +113,8 @@ public interface CrudController<T extends BaseEntity, ID extends Serializable>
         return Constants.REDIRECT_TO + getModulePath() + "/" + getEntityName() + "/list";
     }
 
-    default void methodAdvice(String operation, ID id, Model model) {
+
+    default void modelAdvice(String operation, ID id, Model model) {
     }
 
 

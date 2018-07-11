@@ -156,7 +156,7 @@ public interface CrudService<T extends BaseEntity, ID extends Serializable>
      * @author cloud0072
      * @date 2018/6/12 22:49
      */
-    T update(ID id, T input);
+    T updateById(ID id, T input);
 
     /**
      * 返回数据源

@@ -51,4 +51,6 @@ public interface UserService
      * @return
      */
     User findAuthorInfoByAccount(String account);
+
+
 }

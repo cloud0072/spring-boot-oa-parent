@@ -66,14 +66,14 @@ public class UserController
      * @param model
      */
     @Override
-    public void methodAdvice(String operation, String id, Model model) {
+    public void modelAdvice(String operation, String id, Model model) {
         Map map = model.asMap();
         User user = (User) map.get(getEntityName());
         User currentUser = RequestUtils.getCurrentUser();
         switch (operation) {
             case OP_UPDATE:
             case OP_DELETE:
-                if (user.getSystemUser() && !currentUser.getSuperUser()) {
+                if (user.isSystemUser() && !currentUser.getSuperUser()) {
                     throw new UnsupportedOperationException("您无权操作系统用户");
                 }
             case OP_CREATE:
@@ -103,7 +103,7 @@ public class UserController
         model.addAttribute("op", OP_FIND);
         model.addAttribute("type", TY_SELF);
         model.addAttribute(getEntityName(), userService.findById(id));
-        methodAdvice(OP_FIND, id, model);
+        modelAdvice(OP_FIND, id, model);
         return getModulePath() + "/" + getEntityName() + "/" + getEntityName() + "_view";
     }
 
@@ -126,7 +126,7 @@ public class UserController
     public String updateSelf(User user, RedirectAttributes redirectAttributes) {
         String id = RequestUtils.getCurrentUser().getId();
         if (id.equals(user.getId())) {
-            userService.update(id, user);
+            userService.updateById(id, user);
             redirectAttributes.addFlashAttribute("message", "修改成功");
         } else {
             redirectAttributes.addFlashAttribute("message", "修改失败");
@@ -146,8 +146,8 @@ public class UserController
     @Override
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String create(HttpServletRequest request, HttpServletResponse response, User user, RedirectAttributes redirectAttributes) {
-        checkOperation(OP_CREATE);
-        List<String> roleIds = Arrays.asList(request.getParameterValues("roleId"));
+        RequestUtils.checkOperation(getEntityName(), OP_CREATE);
+        List<String> roleIds = Arrays.asList(request.getParameterValues("role-checked"));
         List<Role> roles = new ArrayList<>();
         roleIds.forEach(roleId -> roles.add(roleService.findById(roleId)));
         user.setRoles(roles);
@@ -170,14 +170,12 @@ public class UserController
     @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
     public String update(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") String id,
                          User user, RedirectAttributes redirectAttributes) {
-        checkOperation(OP_UPDATE);
+        RequestUtils.checkOperation(getEntityName(), OP_UPDATE, id);
+        List<String> roleIds = Arrays.asList(request.getParameterValues("role-checked"));
         List<Role> roles = new ArrayList<>();
-        String[] roleIdArray = request.getParameterValues("roleId");
-        if (roleIdArray != null) {
-            Arrays.stream(roleIdArray).forEach(roleId -> roles.add(roleService.findById(roleId)));
-        }
+        roleIds.forEach(roleId -> roles.add(roleService.findById(roleId)));
         user.setRoles(roles);
-        user = getService().update(id, user);
+        user = getService().updateById(id, user);
         redirectAttributes.addFlashAttribute("message", "修改成功");
         return Constants.REDIRECT_TO + getModulePath() + "/" + getEntityName() + "/find/" + user.getId();
     }

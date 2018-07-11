@@ -37,6 +37,9 @@ public class Permission extends BaseEntity implements NamedEntity {
     @Column(name = "resource_id")
     private String resourceId;
 
+    @Column
+    private Boolean systemPermission;
+
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "auth_user_permission", joinColumns = @JoinColumn(name = "auth_permission_id"),
@@ -49,25 +52,32 @@ public class Permission extends BaseEntity implements NamedEntity {
             inverseJoinColumns = @JoinColumn(name = "auth_role_id"))
     private List<Role> roles;
 
-    public Permission(EntityResource entityResource, Operation operation, String resourceId) {
+    public Permission(EntityResource entityResource, Operation operation, String resourceId, Boolean systemPermission) {
         this.entityResource = entityResource;
         this.operation = operation;
         this.resourceId = resourceId;
+        this.systemPermission = systemPermission == null ? false : systemPermission;
         this.code = code();
-    }
-
-    public Permission(EntityResource entityResource, Operation operation) {
-        this(entityResource, operation, null);
+        this.name = name();
     }
 
     public Permission() {
+    }
+
+    /**
+     * FIXME 以后改为中文名
+     *
+     * @return
+     */
+    private String name() {
+        return code;
     }
 
     private String code() {
         if (operation != null && entityResource != null) {
             StringBuilder code = new StringBuilder()
                     .append(this.entityResource.getCode()).append(":")
-                    .append(operation == Operation.ALL ? "*" : this.operation.name());
+                    .append(operation.code());
             if (!StringUtils.isEmpty(resourceId)) {
                 code.append(":").append(resourceId);
             } else {
@@ -121,6 +131,18 @@ public class Permission extends BaseEntity implements NamedEntity {
 
     public void setResourceId(String resourceId) {
         this.resourceId = resourceId;
+    }
+
+    public Boolean getSystemPermission() {
+        return systemPermission;
+    }
+
+    public Boolean isSystemPermission() {
+        return systemPermission == null ? false : systemPermission;
+    }
+
+    public void setSystemPermission(Boolean systemPermission) {
+        this.systemPermission = systemPermission;
     }
 
     public List<User> getUsers() {

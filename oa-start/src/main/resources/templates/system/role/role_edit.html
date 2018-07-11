@@ -76,6 +76,36 @@
                             </div>
 
                             <div class="form-group-separator"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="multi-select">权限</label>
+
+                                <div class="col-sm-8">
+                                    <script type="text/javascript">
+                                        jQuery(document).ready(function ($) {
+                                            $("#multi-select").multiSelect({
+                                                afterInit: function () {
+                                                    // Add alternative scrollbar to list
+                                                    this.$selectableContainer.add(this.$selectionContainer)
+                                                        .find('.ms-list').perfectScrollbar();
+                                                },
+                                                afterSelect: function () {
+                                                    // Update scrollbar size
+                                                    this.$selectableContainer.add(this.$selectionContainer)
+                                                        .find('.ms-list').perfectScrollbar('update');
+                                                }
+                                            });
+                                        });
+                                    </script>
+                                    <select class="form-control" multiple="multiple" id="multi-select"
+                                            name="permission-select[]">
+                                        <option data-th-each="p : ${permissions}"  data-th-text="${p.name}"
+                                                data-th-value="${p.id}" data-th-selected="${p.checked}">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group-separator"></div>
                             <br>
 
                         </form>
@@ -101,6 +131,9 @@
 <!-- 引入js文件 -->
 <div th:include="/fragment/onload_js :: onloadJS"></div>
 
+<link rel="stylesheet" data-th-href="@{/assets/js/multiselect/css/multi-select.css}">
+<script data-th-src="@{/assets/js/multiselect/js/jquery.multi-select.js}"></script>
+
 <script type="text/javascript" th:inline="javascript">
     var form = $("#main_form");
 
@@ -122,7 +155,6 @@
         form.attr("action", url);
         form.submit();
     }
-
 </script>
 </body>
 </html>

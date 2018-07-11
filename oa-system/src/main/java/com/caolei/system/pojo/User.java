@@ -82,7 +82,7 @@ public class User extends BaseEntity implements NamedEntity {
         this.password = password;
         this.userName = userName;
         this.email = email;
-        this.systemUser = systemUser;
+        this.systemUser = systemUser == null ? false : this.systemUser;
     }
 
     public User setDefaultValue() {
@@ -94,6 +94,7 @@ public class User extends BaseEntity implements NamedEntity {
         this.lastLoginTime = this.lastLoginTime == null ? new Date() : this.lastLoginTime;
         return this;
     }
+
     @Override
     public String getName() {
         //namedEntity
@@ -157,6 +158,10 @@ public class User extends BaseEntity implements NamedEntity {
         return active;
     }
 
+    public Boolean isActive() {
+        return active == null ? false : active;
+    }
+
     public void setActive(Boolean active) {
         this.active = active;
     }
@@ -165,12 +170,27 @@ public class User extends BaseEntity implements NamedEntity {
         return superUser;
     }
 
+    /**
+     * 使用 is+名称方式获取 Boolean 的值 并判断非空
+     * 好处 可以使用 Example 查询 而不必被默认的 boolean 默认为 false 所困扰
+     * 同理 使用枚举类 取代 int类型数据 防止默认值污染实体
+     *
+     * @return
+     */
+    public Boolean isSuperUser() {
+        return superUser == null ? false : superUser;
+    }
+
     public void setSuperUser(Boolean superUser) {
         this.superUser = superUser;
     }
 
     public Boolean getSystemUser() {
         return systemUser;
+    }
+
+    public Boolean isSystemUser() {
+        return systemUser == null ? false : systemUser;
     }
 
     public void setSystemUser(Boolean systemUser) {

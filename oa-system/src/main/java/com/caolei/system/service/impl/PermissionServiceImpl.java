@@ -28,7 +28,7 @@ public class PermissionServiceImpl
     private RoleService roleService;
 
     @Override
-    public Permission update(String id, Permission input) {
+    public Permission updateById(String id, Permission input) {
         return null;
     }
 

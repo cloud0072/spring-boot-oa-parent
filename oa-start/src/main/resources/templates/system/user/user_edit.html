@@ -122,7 +122,7 @@
                                     <p>
                                         <!--/*@thymesVar id="role" type="java.util.Map"*/-->
                                         <label class="checkbox-inline" data-th-each="role : ${roles}">
-                                            <input name="roleId" data-th-value="${role.id}"
+                                            <input name="role-checked" data-th-value="${role.id}"
                                                    type="checkbox" data-th-checked="${role.checked}">
                                             <span data-th-text="${role.name}"></span>
                                         </label>
