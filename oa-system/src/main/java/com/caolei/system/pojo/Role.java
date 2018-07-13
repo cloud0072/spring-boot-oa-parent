@@ -3,6 +3,7 @@ package com.caolei.system.pojo;
 
 import com.caolei.system.api.BaseEntity;
 import com.caolei.system.api.NamedEntity;
+import com.caolei.system.api.SystemEntity;
 import com.caolei.system.constant.TableConstant;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -19,7 +20,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "auth_role", uniqueConstraints = {@UniqueConstraint(columnNames = {"name"})})
-public class Role extends BaseEntity implements NamedEntity {
+public class Role extends SystemEntity implements NamedEntity {
 
     @Column
     private String name;
@@ -29,9 +30,6 @@ public class Role extends BaseEntity implements NamedEntity {
 
     @Column
     private String description;
-
-    @Column
-    private Boolean systemRole;
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
@@ -48,11 +46,11 @@ public class Role extends BaseEntity implements NamedEntity {
     public Role() {
     }
 
-    public Role(String name, String code, String description, Boolean systemRole) {
+    public Role(String name, String code, String description, Boolean systemEntity) {
         this.name = name;
         this.code = code;
         this.description = description;
-        this.systemRole = systemRole == null ? false : systemRole;
+        this.systemEntity = systemEntity == null ? false : systemEntity;
     }
 
     @Override
@@ -78,17 +76,6 @@ public class Role extends BaseEntity implements NamedEntity {
 
     public String getDescription() {
         return description;
-    }
-
-    public Boolean getSystemRole() {
-        return systemRole;
-    }
-    public Boolean isSystemRole() {
-        return systemRole == null ? false : systemRole;
-    }
-
-    public void setSystemRole(Boolean systemRole) {
-        this.systemRole = systemRole;
     }
 
     public void setDescription(String description) {

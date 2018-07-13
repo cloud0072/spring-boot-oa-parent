@@ -1,9 +1,10 @@
 package com.caolei.system.pojo;
 
-import com.caolei.system.api.BaseEntity;
 import com.caolei.system.api.NamedEntity;
+import com.caolei.system.api.SystemEntity;
 import com.caolei.system.constant.Operation;
 import com.caolei.system.constant.TableConstant;
+import com.caolei.system.po.EntityResource;
 import com.caolei.system.utils.StringUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -20,7 +21,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "auth_permission", uniqueConstraints = {@UniqueConstraint(columnNames = {"code"})})
-public class Permission extends BaseEntity implements NamedEntity {
+public class Permission extends SystemEntity implements NamedEntity {
 
     @Column
     private String name;
@@ -37,9 +38,6 @@ public class Permission extends BaseEntity implements NamedEntity {
     @Column(name = "resource_id")
     private String resourceId;
 
-    @Column
-    private Boolean systemPermission;
-
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "auth_user_permission", joinColumns = @JoinColumn(name = "auth_permission_id"),
@@ -52,13 +50,13 @@ public class Permission extends BaseEntity implements NamedEntity {
             inverseJoinColumns = @JoinColumn(name = "auth_role_id"))
     private List<Role> roles;
 
-    public Permission(EntityResource entityResource, Operation operation, String resourceId, Boolean systemPermission) {
+    public Permission(EntityResource entityResource, Operation operation, String resourceId, Boolean systemEntity) {
         this.entityResource = entityResource;
         this.operation = operation;
         this.resourceId = resourceId;
-        this.systemPermission = systemPermission == null ? false : systemPermission;
         this.code = code();
         this.name = name();
+        this.systemEntity = systemEntity == null ? false : systemEntity;
     }
 
     public Permission() {
@@ -131,18 +129,6 @@ public class Permission extends BaseEntity implements NamedEntity {
 
     public void setResourceId(String resourceId) {
         this.resourceId = resourceId;
-    }
-
-    public Boolean getSystemPermission() {
-        return systemPermission;
-    }
-
-    public Boolean isSystemPermission() {
-        return systemPermission == null ? false : systemPermission;
-    }
-
-    public void setSystemPermission(Boolean systemPermission) {
-        this.systemPermission = systemPermission;
     }
 
     public List<User> getUsers() {

@@ -1,4 +1,4 @@
-package com.caolei.system.pojo;
+package com.caolei.system.po;
 
 
 import com.caolei.system.api.BaseEntity;

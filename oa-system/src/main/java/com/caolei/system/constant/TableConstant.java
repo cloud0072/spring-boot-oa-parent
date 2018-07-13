@@ -14,7 +14,10 @@ public class TableConstant {
     public static final String ROLE = "认证角色";
     public static final String USER = "基础用户";
     public static final String USER_DETAILS = "用户详情";
-    public static final String BOOK = "图书";
+    public static final String DICT_ENTITY = "字典实体";
+    public static final String DICT_CATALOG = "字典目录";
+    public static final String COLUMN_ENTITY = "字段实体";
 
+    public static final String BOOK = "图书";
 
 }

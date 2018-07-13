@@ -8,6 +8,9 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * 将menuId存入session中 实现菜单高亮
+ */
 public class MenuInterceptor implements HandlerInterceptor, BaseLogger {
 
     @Override

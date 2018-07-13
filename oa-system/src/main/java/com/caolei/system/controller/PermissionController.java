@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * 使用RequiresRoles时需要使用open class 不然会报错 final 类不能 subclass
@@ -59,7 +60,7 @@ public class PermissionController
     public Result findUserPermission(@PathVariable(name = "userId") String userId,
                                      Model model, Permission permission) {
         User user = userService.findById(userId);
-        permission.setUsers(Arrays.asList(user));
+        permission.setUsers(Collections.singletonList(user));
         return RequestUtils.success(permissionService.findAll(Example.of(permission)));
     }
 
@@ -73,7 +74,7 @@ public class PermissionController
         //检查权限
         RequestUtils.checkAnyRole("superuser");
         Role role = roleService.findById(roleId);
-        permission.setRoles(Arrays.asList(role));
+        permission.setRoles(Collections.singletonList(role));
         return RequestUtils.success(permissionService.findAll(Example.of(permission)));
     }
 }

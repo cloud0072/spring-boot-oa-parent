@@ -2,7 +2,7 @@ package com.caolei.system.installer;
 
 import com.caolei.system.api.BaseEntity;
 import com.caolei.system.constant.Operation;
-import com.caolei.system.pojo.EntityResource;
+import com.caolei.system.po.EntityResource;
 import com.caolei.system.pojo.Permission;
 import com.caolei.system.pojo.Role;
 import com.caolei.system.pojo.User;
@@ -12,7 +12,6 @@ import com.caolei.system.service.RoleService;
 import com.caolei.system.service.UserService;
 import com.caolei.system.utils.ReflectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.Ordered;

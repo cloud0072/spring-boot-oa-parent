@@ -3,6 +3,7 @@ package com.caolei.system.pojo;
 
 import com.caolei.system.api.BaseEntity;
 import com.caolei.system.api.NamedEntity;
+import com.caolei.system.api.SystemEntity;
 import com.caolei.system.constant.TableConstant;
 import com.caolei.system.utils.EncryptUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -21,7 +22,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "auth_user", uniqueConstraints = @UniqueConstraint(columnNames = {"account"}))
-public class User extends BaseEntity implements NamedEntity {
+public class User extends SystemEntity implements NamedEntity {
 
     @Column(nullable = false, unique = true)
     private String account;
@@ -39,8 +40,7 @@ public class User extends BaseEntity implements NamedEntity {
     private Boolean active;
     @Column
     private Boolean superUser;
-    @Column
-    private Boolean systemUser;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column
     private Date createTime;
@@ -76,20 +76,20 @@ public class User extends BaseEntity implements NamedEntity {
         this.account = account;
     }
 
-    public User(String account, String password, String userName, String email, Boolean systemUser) {
+    public User(String account, String password, String userName, String email, Boolean systemEntity) {
         this.setDefaultValue();
         this.account = account;
         this.password = password;
         this.userName = userName;
         this.email = email;
-        this.systemUser = systemUser == null ? false : this.systemUser;
+        this.systemEntity = systemEntity == null ? false : this.systemEntity;
     }
 
     public User setDefaultValue() {
         this.salt = this.salt == null ? EncryptUtils.UUID32() : salt;
         this.active = this.active == null ? true : this.active;
         this.superUser = this.superUser == null ? false : this.superUser;
-        this.systemUser = this.systemUser == null ? false : this.systemUser;
+        this.systemEntity = this.systemEntity == null ? false : this.systemEntity;
         this.createTime = this.createTime == null ? new Date() : this.createTime;
         this.lastLoginTime = this.lastLoginTime == null ? new Date() : this.lastLoginTime;
         return this;
@@ -183,18 +183,6 @@ public class User extends BaseEntity implements NamedEntity {
 
     public void setSuperUser(Boolean superUser) {
         this.superUser = superUser;
-    }
-
-    public Boolean getSystemUser() {
-        return systemUser;
-    }
-
-    public Boolean isSystemUser() {
-        return systemUser == null ? false : systemUser;
-    }
-
-    public void setSystemUser(Boolean systemUser) {
-        this.systemUser = systemUser;
     }
 
     public Date getCreateTime() {

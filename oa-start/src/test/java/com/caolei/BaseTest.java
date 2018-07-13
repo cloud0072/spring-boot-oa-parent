@@ -8,7 +8,10 @@ import org.junit.Test;
 
 import java.util.*;
 
+import static java.util.stream.Collectors.toList;
+
 public class BaseTest {
+
 
     @Test
     public void test01() {
@@ -106,9 +109,34 @@ public class BaseTest {
     }
 
     @Test
-    public void test12(){
-        String password = new Md5Hash("admin","8d78869f470951332959580424d4bf4f",2).toString();
+    public void test12() {
+        String password = new Md5Hash("admin", "8d78869f470951332959580424d4bf4f", 2).toString();
 
         System.out.println(password);
     }
+
+    @Test
+    public void test13() {
+        String account = "account";
+        List<User> users = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            User user = new User(account + i, Integer.toString(i), account + i, null, false);
+            users.add(user);
+        }
+
+        List<Map> result = users.stream()
+                .peek(user -> user.setPassword(user.getPassword() + 0))
+                .filter(user -> Integer.valueOf(user.getPassword()) > 50)
+                .peek(user -> new User(EncryptUtils.UUID32()))
+                .map(user -> {
+                    Map<String, Object> m = new HashMap<>();
+                    m.put("account", user.getAccount());
+                    m.put("name", user.getName());
+                    m.put("password", user.getPassword());
+                    return m;
+                }).collect(toList());
+
+        System.out.println(result);
+    }
+
 }

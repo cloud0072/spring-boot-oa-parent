@@ -8,6 +8,7 @@ import java.util.Date;
 
 @Embeddable
 public class BaseCreator {
+
     @Column
     private Date createTime;
     @Column
