@@ -6,7 +6,7 @@ public interface NamedEntity {
 
     String getName();
 
-    default String getGroupName() {
+   /* default String getGroupName() {
         return null;
-    }
+    }*/
 }

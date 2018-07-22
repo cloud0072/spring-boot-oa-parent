@@ -1,7 +1,8 @@
 package com.caolei.system.controller;
 
-import com.caolei.system.api.CrudController;
-import com.caolei.system.api.CrudService;
+import com.caolei.system.api.AbstractCrudController;
+import com.caolei.system.api.BaseCrudController;
+import com.caolei.system.api.BaseCrudService;
 import com.caolei.system.constant.Constants;
 import com.caolei.system.pojo.Role;
 import com.caolei.system.pojo.User;
@@ -33,7 +34,7 @@ import static com.caolei.system.constant.Constants.*;
 @RequestMapping("/system/user")
 @Controller
 public class UserController
-        implements CrudController<User, String> {
+        extends AbstractCrudController<User> {
 
     @Autowired
     private UserService userService;
@@ -43,39 +44,26 @@ public class UserController
     private PermissionService permissionService;
 
     @Override
-    public CrudService<User, String> getService() {
+    protected BaseCrudService<User> service() {
         return userService;
-    }
-
-    @Override
-    public String getModulePath() {
-        return "/system";
-    }
-
-    @Override
-    public String getEntityName() {
-        return "user";
     }
 
     /**
      * 回调函数
      * 增强默认controller的参数集合
      *
-     * @param operation
-     * @param id
      * @param model
      */
     @Override
-    public void modelAdvice(String operation, String id, Model model) {
-        Map map = model.asMap();
-        User user = (User) map.get(getEntityName());
+    public void modelAdvice(Model model) {
+        Map<String, Object> map = model.asMap();
+        User user = (User) map.get(entityName());
+        String operation = (String) map.get("op");
+
         User currentUser = RequestUtils.getCurrentUser();
         switch (operation) {
             case OP_UPDATE:
             case OP_DELETE:
-                if (user.isSystemUser() && !currentUser.getSuperUser()) {
-                    throw new UnsupportedOperationException("您无权操作系统用户");
-                }
             case OP_CREATE:
                 List<Role> hasRoles = ObjectUtils.nvl(user.getRoles(), new ArrayList<>());
                 List<Role> allRoles = currentUser.getRoles();
@@ -100,11 +88,10 @@ public class UserController
     @RequestMapping(value = "/find/self", method = RequestMethod.GET)
     public String findSelf(Model model) {
         String id = RequestUtils.getCurrentUser().getId();
-        model.addAttribute("op", OP_FIND);
-        model.addAttribute("type", TY_SELF);
-        model.addAttribute(getEntityName(), userService.findById(id));
-        modelAdvice(OP_FIND, id, model);
-        return getModulePath() + "/" + getEntityName() + "/" + getEntityName() + "_view";
+        User user = service().findById(id);
+        RequestUtils.checkOperation(OP_FIND, user);
+        putModel(model, OP_FIND, user, TY_SELF);
+        return "/" + moduleName() + "/" + entityName() + "/" + entityName() + "_view";
     }
 
     /**
@@ -115,8 +102,8 @@ public class UserController
         String id = RequestUtils.getCurrentUser().getId();
         model.addAttribute("op", OP_UPDATE);
         model.addAttribute("type", TY_SELF);
-        model.addAttribute(getEntityName(), userService.findById(id));
-        return getModulePath() + "/" + getEntityName() + "/" + getEntityName() + "_edit";
+        model.addAttribute(entityName(), service().findById(id));
+        return "/" + moduleName() + "/" + entityName() + "/" + entityName() + "_edit";
     }
 
     /**
@@ -131,7 +118,7 @@ public class UserController
         } else {
             redirectAttributes.addFlashAttribute("message", "修改失败");
         }
-        return Constants.REDIRECT_TO + getModulePath() + "/" + getEntityName() + "/find/" + id;
+        return Constants.REDIRECT_TO + "/" + moduleName() + "/" + entityName() + "/find/" + id;
     }
 
     /**
@@ -146,14 +133,14 @@ public class UserController
     @Override
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String create(HttpServletRequest request, HttpServletResponse response, User user, RedirectAttributes redirectAttributes) {
-        RequestUtils.checkOperation(getEntityName(), OP_CREATE);
+        RequestUtils.checkOperation(OP_CREATE, instance());
         List<String> roleIds = Arrays.asList(request.getParameterValues("role-checked"));
         List<Role> roles = new ArrayList<>();
         roleIds.forEach(roleId -> roles.add(roleService.findById(roleId)));
         user.setRoles(roles);
         userService.register(user.setDefaultValue());
         redirectAttributes.addFlashAttribute("message", "新增成功");
-        return Constants.REDIRECT_TO + getModulePath() + "/" + getEntityName() + "/list";
+        return Constants.REDIRECT_TO + "/" + moduleName() + "/" + entityName() + "/list";
     }
 
     /**
@@ -161,22 +148,22 @@ public class UserController
      *
      * @param request
      * @param response
-     * @param id
      * @param user
      * @param redirectAttributes
      * @return
      */
     @Override
-    @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
-    public String update(HttpServletRequest request, HttpServletResponse response, @PathVariable("id") String id,
+    @RequestMapping(value = "/update/", method = RequestMethod.POST)
+    public String update(HttpServletRequest request, HttpServletResponse response,
                          User user, RedirectAttributes redirectAttributes) {
-        RequestUtils.checkOperation(getEntityName(), OP_UPDATE, id);
+        RequestUtils.checkOperation(OP_UPDATE, user);
         List<String> roleIds = Arrays.asList(request.getParameterValues("role-checked"));
         List<Role> roles = new ArrayList<>();
         roleIds.forEach(roleId -> roles.add(roleService.findById(roleId)));
         user.setRoles(roles);
-        user = getService().updateById(id, user);
+        user = service().updateById(user.getId(), user);
         redirectAttributes.addFlashAttribute("message", "修改成功");
-        return Constants.REDIRECT_TO + getModulePath() + "/" + getEntityName() + "/find/" + user.getId();
+        return Constants.REDIRECT_TO + "/" + moduleName() + "/" + entityName() + "/find/" + user.getId();
     }
+
 }

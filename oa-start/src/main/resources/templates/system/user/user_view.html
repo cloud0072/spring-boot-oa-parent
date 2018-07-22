@@ -134,13 +134,10 @@
 <div th:include="/fragment/onload_js :: onloadJS"></div>
 
 <script type="text/javascript" th:inline="javascript">
-    $(function () {
-
-
-    });
+    var baseUrl = /*[[@{'/'+${moduleName}+'/'+${entityName}}]]*/ +'';
 
     function showUpdate() {
-        location.href = /*[[@{'/system/user/update/'+${user.id}}]]*/ +'';
+        location.href = baseUrl + '/update/' + [[${id}]];
     }
 </script>
 </body>

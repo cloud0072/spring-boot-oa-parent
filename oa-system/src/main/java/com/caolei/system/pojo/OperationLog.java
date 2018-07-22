@@ -2,7 +2,6 @@ package com.caolei.system.pojo;
 
 
 import com.caolei.system.api.BaseEntity;
-import com.caolei.system.constant.TableConstant;
 
 
 import javax.persistence.*;
@@ -49,7 +48,12 @@ public class OperationLog extends BaseEntity {
 
     @Override
     public String tableName() {
-        return TableConstant.OPERATION_LOG;
+        return "系统管理日志";
+    }
+
+    @Override
+    public String moduleName() {
+        return "system";
     }
 
     public User getUser() {

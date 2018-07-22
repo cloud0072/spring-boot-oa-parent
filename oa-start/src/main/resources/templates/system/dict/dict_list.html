@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      lang="zh-CN">
+
+<head th:replace="/fragment/head :: head"></head>
+<link rel="stylesheet" th:href="@{/s/css/table.css}">
+
+<body class="page-body">
+<!-- 顶部用户信息和设置 (平时隐藏) -->
+<div th:include="/fragment/settings-pane :: settings-pane"></div>
+
+<div class="page-container">
+
+    <!-- 左侧菜单栏 -->
+    <div class="sidebar-menu toggle-others" th:include="/fragment/menu :: main-menu"></div>
+
+    <div class="main-content">
+
+        <!-- 顶部用户信息栏 -->
+        <div th:include="/fragment/user-info :: user-info"></div>
+
+        <!-- ********** 主页面 开始 ********** -->
+
+
+        <div class="row">
+            <div class="col-sm-pull-0">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">字典列表</h3>
+                        <div class="panel-options">
+                            <button class="btn btn-info" onclick="addMenuSelfLevel();">新建字典</button>
+                            <button class="btn btn-info" onclick="addMenuSonLevel();">新建子级</button>
+                        </div>
+                    </div>
+
+                    <div class="panel-body">
+
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- ********** 主页面 结束 ********** -->
+
+        <!-- 页脚版权信息 -->
+        <footer th:replace="/fragment/footer :: footer"></footer>
+
+    </div>
+
+    <!-- 右侧聊天面板 -->
+    <div id="chat" class="fixed" th:include="/fragment/chat-pane :: chat-pane"></div>
+
+</div>
+
+<!-- 引入js文件 -->
+<div th:include="/fragment/onload_js :: onloadJS"></div>
+
+<script type="application/javascript" th:inline="javascript">
+    function showCreate() {
+        location.href = /*[[@{/system/permission/create/}]]*/ +'';
+    }
+
+    $(".page-link").on('click', function () {
+
+        var pageNumber = $(this).attr("pageIndex");
+        pageNumber = pageNumber < 0 ? 0 : pageNumber;
+        pageNumber = pageNumber > [[${page.totalPages-1}]] ? [[${page.totalPages-1}]] : pageNumber;
+        var url = /*[[@{/system/permission/list}]]*/ +'';
+        if ([[${page.number}]] != pageNumber) {
+            location.href = url + '?pageSize=10&pageNumber=' + pageNumber;
+        }
+    })
+
+</script>
+
+</body>
+</html>

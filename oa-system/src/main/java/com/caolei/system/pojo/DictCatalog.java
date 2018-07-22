@@ -1,16 +1,16 @@
 package com.caolei.system.pojo;
 
 import com.caolei.system.api.BaseEntity;
-import com.caolei.system.constant.TableConstant;
-import com.caolei.system.po.ColumnEntiy;
+import com.caolei.system.po.ColumnEntity;
 
 import javax.persistence.*;
-import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 /**
- * @ClassName: DictCatalog
- * @Description: TODO
  * @author caolei
+ * @ClassName: 字典目录
+ * @Description: TODO
  * @date 2018/7/13 18:42
  */
 @Entity
@@ -20,17 +20,29 @@ public class DictCatalog extends BaseEntity {
     @Column
     private String name;
     @Column
-    private DictCatalog parent;
+    private String description;
     @Column
     private Boolean root;
-
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     @JoinColumn(name = "dict_catalog_id")
-    private ArrayList<ColumnEntiy> columnEntities;
+    private List<ColumnEntity> columnConfig;
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
+    @JoinColumn(name = "dict_catalog_id")
+    private List<DictEntity> dictEntities;
+    @ManyToOne
+    @JoinColumn(name = "parent_id")
+    private DictCatalog parent;
+    @OneToMany(mappedBy = "parent", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
+    private Set<DictCatalog> children;
 
     @Override
     public String tableName() {
-        return TableConstant.DICT_CATALOG;
+        return "字典目录";
+    }
+
+    @Override
+    public String moduleName() {
+        return "system";
     }
 
     public String getName() {
@@ -41,16 +53,12 @@ public class DictCatalog extends BaseEntity {
         this.name = name;
     }
 
-    public DictCatalog getParent() {
-        return parent;
+    public String getDescription() {
+        return description;
     }
 
-    public void setParent(DictCatalog parent) {
-        this.parent = parent;
-    }
-
-    public boolean isRoot() {
-        return root == null ? false : root;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Boolean getRoot() {
@@ -61,11 +69,35 @@ public class DictCatalog extends BaseEntity {
         this.root = root;
     }
 
-    public ArrayList<ColumnEntiy> getColumnEntities() {
-        return columnEntities;
+    public DictCatalog getParent() {
+        return parent;
     }
 
-    public void setColumnEntities(ArrayList<ColumnEntiy> columnEntities) {
-        this.columnEntities = columnEntities;
+    public void setParent(DictCatalog parent) {
+        this.parent = parent;
+    }
+
+    public Set<DictCatalog> getChildren() {
+        return children;
+    }
+
+    public void setChildren(Set<DictCatalog> children) {
+        this.children = children;
+    }
+
+    public List<ColumnEntity> getColumnConfig() {
+        return columnConfig;
+    }
+
+    public void setColumnConfig(List<ColumnEntity> columnConfig) {
+        this.columnConfig = columnConfig;
+    }
+
+    public List<DictEntity> getDictEntities() {
+        return dictEntities;
+    }
+
+    public void setDictEntities(List<DictEntity> dictEntities) {
+        this.dictEntities = dictEntities;
     }
 }

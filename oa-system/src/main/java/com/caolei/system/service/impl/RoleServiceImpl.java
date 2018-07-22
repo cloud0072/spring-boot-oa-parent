@@ -23,7 +23,7 @@ public class RoleServiceImpl
     private PermissionService authPermissionService;
 
     @Override
-    public JpaRepository<Role, String> getRepository() {
+    public JpaRepository<Role, String> repository() {
         return roleRepository;
     }
 

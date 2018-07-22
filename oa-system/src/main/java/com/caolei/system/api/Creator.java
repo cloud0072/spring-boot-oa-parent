@@ -7,7 +7,7 @@ import javax.persistence.Embeddable;
 import java.util.Date;
 
 @Embeddable
-public class BaseCreator {
+public class Creator {
 
     @Column
     private Date createTime;
@@ -29,7 +29,7 @@ public class BaseCreator {
         modifyUser = user;
     }
 
-    public BaseCreator() {
+    public Creator() {
     }
 
     public Date getCreateTime() {

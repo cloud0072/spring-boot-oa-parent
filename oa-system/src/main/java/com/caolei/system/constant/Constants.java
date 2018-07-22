@@ -4,6 +4,7 @@ import java.io.File;
 
 /**
  * 文本类型常量
+ *
  * @author cloud0072
  * @date 2018/6/12 22:36
  */

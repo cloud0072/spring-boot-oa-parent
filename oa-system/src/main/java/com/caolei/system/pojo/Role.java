@@ -1,10 +1,8 @@
 package com.caolei.system.pojo;
 
 
-import com.caolei.system.api.BaseEntity;
 import com.caolei.system.api.NamedEntity;
 import com.caolei.system.api.SystemEntity;
-import com.caolei.system.constant.TableConstant;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -55,15 +53,12 @@ public class Role extends SystemEntity implements NamedEntity {
 
     @Override
     public String tableName() {
-        return TableConstant.ROLE;
+        return "认证角色";
     }
 
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
+    @Override
+    public String moduleName() {
+        return "system";
     }
 
     public String getName() {
@@ -72,6 +67,14 @@ public class Role extends SystemEntity implements NamedEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getDescription() {

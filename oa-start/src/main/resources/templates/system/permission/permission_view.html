@@ -119,14 +119,10 @@
 <div th:include="/fragment/onload_js :: onloadJS"></div>
 
 <script type="text/javascript" th:inline="javascript">
-    $(function () {
-        var flag = [[${op == 'find'}]];
-
-    });
+    var baseUrl = /*[[@{'/'+${moduleName}+'/'+${entityName}}]]*/ +'';
 
     function showUpdate() {
-        var url = /*[[@{'/system/role/update/'+${permission.id}}]]*/+'';
-        location.href = url;
+        location.href = baseUrl + '/update/' + [[${id}]];
     }
 </script>
 </body>

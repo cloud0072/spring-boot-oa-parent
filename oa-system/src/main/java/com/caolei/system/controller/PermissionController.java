@@ -1,7 +1,8 @@
 package com.caolei.system.controller;
 
-import com.caolei.system.api.CrudController;
-import com.caolei.system.api.CrudService;
+import com.caolei.system.api.AbstractCrudController;
+import com.caolei.system.api.BaseCrudController;
+import com.caolei.system.api.BaseCrudService;
 import com.caolei.system.pojo.Permission;
 import com.caolei.system.pojo.Role;
 import com.caolei.system.pojo.User;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 /**
@@ -28,7 +28,7 @@ import java.util.Collections;
 @RequestMapping("/system/permission")
 @Controller
 public class PermissionController
-        implements CrudController<Permission, String> {
+        extends AbstractCrudController<Permission> {
 
     @Autowired
     private UserService userService;
@@ -38,19 +38,10 @@ public class PermissionController
     private PermissionService permissionService;
 
     @Override
-    public CrudService<Permission, String> getService() {
+    public BaseCrudService<Permission> service() {
         return permissionService;
     }
 
-    @Override
-    public String getModulePath() {
-        return "/system";
-    }
-
-    @Override
-    public String getEntityName() {
-        return "permission";
-    }
 
     /**
      * 查询用户自身的权限集合

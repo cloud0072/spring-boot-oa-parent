@@ -1,13 +1,13 @@
 package com.caolei.system.service;
 
-import com.caolei.system.api.CrudService;
+import com.caolei.system.api.BaseCrudService;
 import com.caolei.system.pojo.User;
 
 /**
  * @author cloud0072
  */
 public interface UserService
-        extends CrudService<User, String> {
+        extends BaseCrudService<User> {
     /**
      * 注册用户
      *

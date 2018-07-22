@@ -45,6 +45,9 @@
 
                         <!--/*@thymesVar id="permission" type="com.caolei.system.pojo.Permission"*/-->
                         <form id="main_form" role="form" class="form-horizontal" method="post">
+                            <label>
+                                <input hidden="hidden" name="id" data-th-value="${id}">
+                            </label>
 
                             <div class="form-group">
                                 <label class="col-sm-2 control-label" for="name">名称</label>
@@ -122,27 +125,34 @@
 <div th:include="/fragment/onload_js :: onloadJS"></div>
 
 <script type="text/javascript" th:inline="javascript">
+    var baseUrl = /*[[@{'/'+${moduleName}+'/'+${entityName}}]]*/ +'';
     var form = $("#main_form");
 
+    $(function () {
+        if ([[${op == 'find'}]]) {
+            $("#account").attr("readOnly");
+        }
+    });
+
     function update() {
-        var id = [[${permission.id}]];
+        var id = [[${id}]];
         var url = '';
 
         if (id == null || id === '') {
-            url = /*[[@{/system/permission/create/}]]*/ +'';
+            url = baseUrl + '/create';
         } else {
-            url = /*[[@{'/system/role/permission/'+${permission.id}}]]*/ +'';
+            url = baseUrl + '/update';
         }
+
         form.attr("action", url);
         form.submit();
     }
 
     function remove() {
-        var url = /*[[@{'/system/role/delete/'+${permission.id}}]]*/+'';
+        var url =  baseUrl + '/delete';
         form.attr("action", url);
         form.submit();
     }
-
 </script>
 </body>
 </html>

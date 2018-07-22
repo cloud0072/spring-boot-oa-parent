@@ -1,7 +1,9 @@
 package com.caolei.system.utils;
 
 
+import com.caolei.system.api.BaseEntity;
 import com.caolei.system.api.NamedEntity;
+import com.caolei.system.api.SystemEntity;
 import com.caolei.system.constant.Constants;
 import com.caolei.system.constant.Operation;
 import com.caolei.system.pojo.User;
@@ -29,6 +31,7 @@ public class RequestUtils {
 
     /**
      * 获取回话
+     *
      * @return
      */
     private static Session getSession() {
@@ -37,6 +40,7 @@ public class RequestUtils {
 
     /**
      * 获取当前用户
+     *
      * @return
      */
     public static User getCurrentUser() {
@@ -45,6 +49,7 @@ public class RequestUtils {
 
     /**
      * 重新设置当前用户属性
+     *
      * @param user
      */
     public static void setCurrentUser(User user) {
@@ -56,29 +61,137 @@ public class RequestUtils {
 
     /**
      * 返回带有状态码和信息json
+     *
      * @param message
      * @param data
      * @param <T>
      * @return
      */
     public static <T> Result<T> success(String message, T data) {
-        return new Result<>(message, HttpStatus.OK, data);
+        return new Result<>(message, HttpStatus.OK.value(), data);
     }
 
     public static Result success(String message) {
-        return new Result<>(message, HttpStatus.OK);
+        return new Result<>(message, HttpStatus.OK.value());
     }
 
     public static <T> Result<T> success(T data) {
-        return new Result<>("success", HttpStatus.OK, data);
+        return new Result<>("success", HttpStatus.OK.value(), data);
     }
 
     public static <T> Result<T> error(String message, HttpStatus status, T data) {
-        return new Result<>(message, status, data);
+        return new Result<>(message, status.value(), data);
     }
 
     public static Result error(String message, HttpStatus status) {
-        return new Result(message, status);
+        return new Result(message, status.value());
+    }
+
+    /**
+     * 检查当前用户 是否包含其中一个角色
+     *
+     * @param roles
+     */
+    public static void checkAnyRole(String... roles) {
+        List<Boolean> flag = new ArrayList<>();
+        Stream.of(roles).forEach(role -> flag.add(SecurityUtils.getSubject().hasRole(role.toLowerCase())));
+        if (!flag.contains(true)) {
+            String name = SecurityUtils.getSubject().getPrincipal().toString();
+            throw new AuthorizationException(name + " do not has role " + Arrays.asList(roles));
+        }
+    }
+
+    /**
+     * 检查当前用户 是否包含其中一个权限
+     *
+     * @param permissions
+     */
+    public static void checkAnyPermission(String... permissions) {
+        List<Boolean> flag = new ArrayList<>();
+        Stream.of(permissions).forEach(permission -> flag.add(SecurityUtils.getSubject().isPermitted(permission.toLowerCase())));
+        if (!flag.contains(true)) {
+            String name = SecurityUtils.getSubject().getPrincipal().toString();
+            throw new AuthorizationException(name + " do not has permission " + Arrays.asList(permissions));
+        }
+    }
+
+    /**
+     * 判断当前用户是否有权限进行操作 OP_LIST 需要 FIND_ALL 权限
+     * FIXME: 另一种策略是 有多少权限就能查到多少元素，待完善
+     *
+     * @param entityName
+     * @param operation
+     * @param resourceId
+     */
+    public static void checkOperation(String entityName, String operation, String resourceId) {
+        String op = Operation.of(operation).name();
+        String id = resourceId == null ? "*" : resourceId;
+        String permission = entityName + ":" + op + ":" + id;
+        RequestUtils.checkAnyPermission(permission);
+    }
+
+    /**
+     * 判断当前用户是否有权限进行操作 默认为所有元素操作
+     * 适用于 create 和 list
+     *
+     * @param entityName
+     * @param operation
+     */
+    public static void checkOperation(String entityName, String operation) {
+        checkOperation(entityName, operation, null);
+    }
+
+    public static void checkOperation(String operation, BaseEntity entity) {
+        if (entity instanceof SystemEntity) {
+            SystemEntity systemEntity = (SystemEntity) entity;
+            if (systemEntity.isSystemEntity() && !getCurrentUser().isSuperUser()) {
+                throw new UnsupportedOperationException("您无权操作系统对象");
+            }
+        }
+        checkOperation(entity.entityName(), operation, entity.getId());
+    }
+
+    /**
+     * 转化为 checkbox列表
+     *
+     * @param all
+     * @param has
+     * @param <T>
+     * @return
+     */
+    public static <T extends NamedEntity> List<Map> getCheckedList(List<T> all, List<T> has) {
+        List<Map> list = new ArrayList<>();
+        for (T t : all) {
+            Map<String, Object> entityMap = new HashMap<>();
+            entityMap.put("id", t.getId());
+            entityMap.put("name", t.getName());
+//            entityMap.put("groupName", t.getGroupName());
+            entityMap.put("checked", has.contains(t));
+            list.add(entityMap);
+        }
+
+        list.sort(Comparator.comparing(m -> "checked").thenComparing(m -> "groupName"));
+        return list;
+    }
+
+    /**
+     * 转换为 select 列表
+     *
+     * @param list
+     * @param <T>
+     * @return
+     */
+    public static <T extends NamedEntity> LinkedHashMap<String, String> getSelectMap(List<T> list, LinkedHashMap<String, String> map) {
+        list.sort(Comparator.comparing(NamedEntity::getName));
+        for (T t : list) {
+            map.put(t.getId(), t.getName());
+        }
+        return map;
+    }
+
+    public static <T extends NamedEntity> LinkedHashMap<String, String> getSelectMap(List<T> list) {
+        LinkedHashMap<String, String> map = new LinkedHashMap<>();
+        return getSelectMap(list, map);
     }
 
     /**
@@ -118,102 +231,5 @@ public class RequestUtils {
             }
         }
         return ip;
-    }
-
-    /**
-     * 检查当前用户 是否包含其中一个角色
-     * @param roles
-     */
-    public static void checkAnyRole(String... roles) {
-        List<Boolean> flag = new ArrayList<>();
-        Stream.of(roles).forEach(role -> flag.add(SecurityUtils.getSubject().hasRole(role.toLowerCase())));
-        if (!flag.contains(true)) {
-            String name = SecurityUtils.getSubject().getPrincipal().toString();
-            throw new AuthorizationException(name + " do not has role " + Arrays.asList(roles));
-        }
-    }
-
-    /**
-     * 检查当前用户 是否包含其中一个权限
-     * @param permissions
-     */
-    public static void checkAnyPermission(String... permissions) {
-        List<Boolean> flag = new ArrayList<>();
-        Stream.of(permissions).forEach(permission -> flag.add(SecurityUtils.getSubject().isPermitted(permission.toLowerCase())));
-        if (!flag.contains(true)) {
-            String name = SecurityUtils.getSubject().getPrincipal().toString();
-            throw new AuthorizationException(name + " do not has permission " + Arrays.asList(permissions));
-        }
-    }
-
-    /**
-     * 判断当前用户是否有权限进行操作 OP_LIST 需要 FIND_ALL 权限
-     * FIXME: 另一种策略是 有多少权限就能查到多少元素，待完善
-     *
-     * @param entityName
-     * @param operation
-     * @param resourceId
-     */
-    public static void checkOperation(String entityName, String operation, String resourceId) {
-        String op = Operation.of(operation).name();
-        String id = resourceId == null ? "*" : resourceId;
-        String permission = entityName + ":" + op + ":" + id;
-        RequestUtils.checkAnyPermission(permission);
-    }
-
-    /**
-     * 判断当前用户是否有权限进行操作 默认为所有元素操作
-     * 适用于 create 和 list
-     *
-     * @param entityName
-     * @param operation
-     */
-    public static void checkOperation(String entityName, String operation) {
-        operation = Operation.of(operation).name();
-        String permission = entityName + ":" + operation + ":*";
-        RequestUtils.checkAnyPermission(permission);
-    }
-
-    /**
-     * 转化为 checkbox列表
-     *
-     * @param all
-     * @param has
-     * @param <T>
-     * @return
-     */
-    public static <T extends NamedEntity> List<Map> getCheckedList(List<T> all, List<T> has) {
-        List<Map> list = new ArrayList<>();
-        for (T t : all) {
-            Map<String, Object> entityMap = new HashMap<>();
-            entityMap.put("id", t.getId());
-            entityMap.put("name", t.getName());
-            entityMap.put("groupName", t.getGroupName());
-            entityMap.put("checked", has.contains(t));
-            list.add(entityMap);
-        }
-
-        list.sort(Comparator.comparing(m -> "checked").thenComparing(m -> "groupName"));
-        return list;
-    }
-
-    /**
-     * 转换为 select 列表
-     *
-     * @param list
-     * @param <T>
-     * @return
-     */
-    public static <T extends NamedEntity> LinkedHashMap<String, String> getSelectMap(List<T> list, LinkedHashMap<String, String> map) {
-        list.sort(Comparator.comparing(NamedEntity::getGroupName).thenComparing(NamedEntity::getName));
-        for (T t : list) {
-            map.put(t.getId(), t.getName());
-        }
-        return map;
-    }
-
-    public static <T extends NamedEntity> LinkedHashMap<String, String> getSelectMap(List<T> list) {
-        LinkedHashMap<String, String> map = new LinkedHashMap<>();
-        return getSelectMap(list, map);
     }
 }

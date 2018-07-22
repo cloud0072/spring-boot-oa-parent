@@ -33,7 +33,7 @@ public class PermissionServiceImpl
     }
 
     @Override
-    public JpaRepository<Permission, String> getRepository() {
+    public JpaRepository<Permission, String> repository() {
         return permissionRepository;
     }
 

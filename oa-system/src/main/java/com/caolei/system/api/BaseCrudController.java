@@ -13,18 +13,48 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.Serializable;
 
 import static com.caolei.system.constant.Constants.*;
 
-public interface CrudController<T extends BaseEntity, ID extends Serializable>
+public interface BaseCrudController<T extends BaseEntity>
         extends BaseController {
+    /**
+     * 获取实例对应的服务
+     *
+     * @return
+     */
+    BaseCrudService<T> service();
 
-    CrudService<T, ID> getService();
+    /**
+     * 建议重写
+     * 返回一个空对象实例
+     * 用于查询和调用实例内的方法
+     * @return
+     */
+    default T instance() {
+        try {
+            return (T) ReflectUtils.getInterfaceGenericType(getClass(), 0, 0).newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        throw new UnsupportedOperationException("泛型读取错误,请检查" + getClass().getName());
+    }
 
-    String getModulePath();
+    /**
+     * 获取实例名
+     * @return
+     */
+    default String entityName() {
+        return instance().entityName();
+    }
 
-    String getEntityName();
+    /**
+     * 获取模块名
+     * @return
+     */
+    default String moduleName() {
+        return instance().moduleName();
+    }
 
     /**
      * 查询所有对象
@@ -35,16 +65,16 @@ public interface CrudController<T extends BaseEntity, ID extends Serializable>
                         @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
                         @RequestParam(value = "direction", defaultValue = "ASC") String direction,
                         @RequestParam(value = "sortField", defaultValue = "id") String sortField,
-                        Model model, T t) {
-        RequestUtils.checkOperation(getEntityName(), OP_LIST);
+                        T t, Model model) {
+        RequestUtils.checkOperation(t.entityName(), OP_LIST);
         Pageable pageable = PageRequest.of(pageNumber, pageSize, new Sort(Sort.Direction.fromString(direction), sortField));
-        Page<T> list = getService().findAll(Example.of(t), pageable);
+        Page<T> list = service().findAll(Example.of(t), pageable);
         model.addAttribute("page", list);
         model.addAttribute("search", t);
         model.addAttribute("op", OP_LIST);
         model.addAttribute("type", TY_ADMIN);
-        modelAdvice(OP_LIST, null, model);
-        return getModulePath() + "/" + getEntityName() + "/" + getEntityName() + "_list";
+        modelAdvice(OP_LIST, t.getId(), t, model);
+        return "/" + t.moduleName() + "/" + t.entityName() + "/" + t.entityName() + "_list";
     }
 
     /**
@@ -52,14 +82,14 @@ public interface CrudController<T extends BaseEntity, ID extends Serializable>
      */
     @RequestMapping(value = "/{operation}/{id}", method = RequestMethod.GET)
     default String showForm(HttpServletRequest request, HttpServletResponse response,
-                            @PathVariable("id") ID id, @PathVariable("operation") String operation, Model model) {
-        RequestUtils.checkOperation(getEntityName(), operation, (String) id);
-        model.addAttribute(getEntityName(), getService().findById(id));
+                            @PathVariable("operation") String operation, @PathVariable("id") String id, T t, Model model) {
+        RequestUtils.checkOperation(t.entityName(), operation, id);
+        model.addAttribute(t.entityName(), service().findById(id));
         model.addAttribute("op", operation);
         model.addAttribute("type", TY_ADMIN);
-        modelAdvice(operation, id, model);
+        modelAdvice(operation, id, t, model);
         String prefix = operation.equals(OP_FIND) ? "_view" : "_edit";
-        return getModulePath() + "/" + getEntityName() + "/" + getEntityName() + prefix;
+        return "/" + t.moduleName() + "/" + t.entityName() + "/" + t.entityName() + prefix;
     }
 
     /**
@@ -67,14 +97,13 @@ public interface CrudController<T extends BaseEntity, ID extends Serializable>
      */
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     default String showCreateForm(HttpServletRequest request, HttpServletResponse response,
-                                  Model model) throws IllegalAccessException, InstantiationException {
-        RequestUtils.checkOperation(getEntityName(), OP_CREATE);
-        model.addAttribute(getEntityName(), ReflectUtils
-                .getInterfaceGenericType(getClass(), 0, 0).newInstance());
+                                  T t, Model model) {
+        RequestUtils.checkOperation(t.entityName(), OP_CREATE);
+        model.addAttribute(t.entityName(), t);
         model.addAttribute("op", OP_CREATE);
         model.addAttribute("type", TY_ADMIN);
-        modelAdvice(OP_CREATE, null, model);
-        return getModulePath() + "/" + getEntityName() + "/" + getEntityName() + "_edit";
+        modelAdvice(OP_CREATE, null, t, model);
+        return "/" + t.moduleName() + "/" + t.entityName() + "/" + t.entityName() + "_edit";
     }
 
     /**
@@ -83,10 +112,10 @@ public interface CrudController<T extends BaseEntity, ID extends Serializable>
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     default String create(HttpServletRequest request, HttpServletResponse response,
                           T t, RedirectAttributes redirectAttributes) {
-        RequestUtils.checkOperation(getEntityName(), OP_CREATE);
-        getService().save(t);
+        RequestUtils.checkOperation(t.entityName(), OP_CREATE);
+        service().save(t);
         redirectAttributes.addFlashAttribute("message", "新增成功");
-        return Constants.REDIRECT_TO + getModulePath() + "/" + getEntityName() + "/list";
+        return Constants.REDIRECT_TO + "/" + t.moduleName() + "/" + t.entityName() + "/list";
     }
 
     /**
@@ -94,11 +123,11 @@ public interface CrudController<T extends BaseEntity, ID extends Serializable>
      */
     @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
     default String update(HttpServletRequest request, HttpServletResponse response,
-                          @PathVariable("id") ID id, T t, RedirectAttributes redirectAttributes) {
-        RequestUtils.checkOperation(getEntityName(), OP_UPDATE, (String) id);
-        getService().updateById(id, t);
+                          @PathVariable("id") String id, T t, RedirectAttributes redirectAttributes) {
+        RequestUtils.checkOperation(t.entityName(), OP_UPDATE, id);
+        service().updateById(id, t);
         redirectAttributes.addFlashAttribute("message", "修改成功");
-        return Constants.REDIRECT_TO + getModulePath() + "/" + getEntityName() + "/find/" + id;
+        return Constants.REDIRECT_TO + "/" + t.moduleName() + "/" + t.entityName() + "/find/" + id;
     }
 
     /**
@@ -106,16 +135,14 @@ public interface CrudController<T extends BaseEntity, ID extends Serializable>
      */
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
     default String delete(HttpServletRequest request, HttpServletResponse response,
-                          @PathVariable("id") ID id, RedirectAttributes redirectAttributes) {
-        RequestUtils.checkOperation(getEntityName(), OP_DELETE, (String) id);
-        getService().deleteById(id);
+                          @PathVariable("id") String id, T t, RedirectAttributes redirectAttributes) {
+        RequestUtils.checkOperation(t.entityName(), OP_DELETE, id);
+        service().deleteById(id);
         redirectAttributes.addFlashAttribute("message", "删除成功");
-        return Constants.REDIRECT_TO + getModulePath() + "/" + getEntityName() + "/list";
+        return Constants.REDIRECT_TO + "/" + t.moduleName() + "/" + t.entityName() + "/list";
     }
 
-
-    default void modelAdvice(String operation, ID id, Model model) {
+    default void modelAdvice(String operation, String id, T t, Model model) {
     }
-
 
 }

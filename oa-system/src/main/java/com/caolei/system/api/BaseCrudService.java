@@ -13,12 +13,31 @@ import java.util.List;
  * crud服务接口
  *
  * @param <T>  entity class
- * @param <ID> entity id
  * @author cloud0072
  * @date 2018/6/12 22:48
  */
-public interface CrudService<T extends BaseEntity, ID extends Serializable>
+public interface BaseCrudService<T extends BaseEntity>
         extends BaseService {
+
+    /**
+     * 返回数据源
+     *
+     * @return
+     * @author cloud0072
+     * @date 2018/6/12 21:50
+     */
+    JpaRepository<T, String> repository();
+
+    /**
+     * 修改
+     *
+     * @param id
+     * @param input
+     * @return
+     * @author cloud0072
+     * @date 2018/6/12 22:49
+     */
+    T updateById(String id, T input);
 
     /**
      * 创建
@@ -29,8 +48,8 @@ public interface CrudService<T extends BaseEntity, ID extends Serializable>
      * @date 2018/6/12 22:49
      */
     default T save(T t) {
-        getLogger().info("save " + t.tableName() + "\t" + t.getId());
-        return getRepository().save(t);
+        logger().info("save " + t.tableName() + "\t" + t.getId());
+        return repository().save(t);
     }
 
     /**
@@ -41,7 +60,7 @@ public interface CrudService<T extends BaseEntity, ID extends Serializable>
      * @date 2018/6/12 22:49
      */
     default void saveAll(List<T> var) {
-        getRepository().saveAll(var);
+        repository().saveAll(var);
     }
 
     /**
@@ -52,7 +71,7 @@ public interface CrudService<T extends BaseEntity, ID extends Serializable>
      * @date 2018/6/12 22:49
      */
     default void delete(T t) {
-        getRepository().delete(t);
+        repository().delete(t);
     }
 
     /**
@@ -62,8 +81,8 @@ public interface CrudService<T extends BaseEntity, ID extends Serializable>
      * @author cloud0072
      * @date 2018/6/12 22:49
      */
-    default void deleteById(ID id) {
-        getRepository().deleteById(id);
+    default void deleteById(String id) {
+        repository().deleteById(id);
     }
 
     /**
@@ -74,7 +93,7 @@ public interface CrudService<T extends BaseEntity, ID extends Serializable>
      * @date 2018/6/12 22:49
      */
     default void deleteAll(List<T> list) {
-        getRepository().deleteAll(list);
+        repository().deleteAll(list);
     }
 
     /**
@@ -86,7 +105,7 @@ public interface CrudService<T extends BaseEntity, ID extends Serializable>
      * @date 2018/6/12 22:49
      */
     default T find(Example<T> example) {
-        return getRepository().findOne(example).orElse(null);
+        return repository().findOne(example).orElse(null);
     }
 
     /**
@@ -97,8 +116,8 @@ public interface CrudService<T extends BaseEntity, ID extends Serializable>
      * @author cloud0072
      * @date 2018/6/12 22:49
      */
-    default T findById(ID id) {
-        return getRepository().findById(id).orElse(null);
+    default T findById(String id) {
+        return repository().findById(id).orElse(null);
     }
 
     /**
@@ -111,7 +130,7 @@ public interface CrudService<T extends BaseEntity, ID extends Serializable>
      * @date 2018/6/12 22:49
      */
     default Page<T> findAll(Example<T> example, Pageable pageable) {
-        return getRepository().findAll(example, pageable);
+        return repository().findAll(example, pageable);
     }
 
     /**
@@ -122,7 +141,7 @@ public interface CrudService<T extends BaseEntity, ID extends Serializable>
      * @date 2018/6/12 22:49
      */
     default List<T> findAll(Example<T> example) {
-        return getRepository().findAll(example);
+        return repository().findAll(example);
     }
 
     /**
@@ -133,37 +152,7 @@ public interface CrudService<T extends BaseEntity, ID extends Serializable>
      * @date 2018/6/12 22:49
      */
     default List<T> findAll() {
-        return getRepository().findAll();
+        return repository().findAll();
     }
 
-    /**
-     * 获取类名
-     *
-     * @return
-     * @author cloud0072
-     * @date 2018/6/12 23:02
-     */
-    default String getClassName() {
-        return this.getClass().getName();
-    }
-
-    /**
-     * 修改
-     *
-     * @param id
-     * @param input
-     * @return
-     * @author cloud0072
-     * @date 2018/6/12 22:49
-     */
-    T updateById(ID id, T input);
-
-    /**
-     * 返回数据源
-     *
-     * @return
-     * @author cloud0072
-     * @date 2018/6/12 21:50
-     */
-    JpaRepository<T, ID> getRepository();
 }

@@ -1,10 +1,12 @@
 package com.caolei.system.api;
 
+import com.caolei.system.utils.StringUtils;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -22,6 +24,9 @@ public abstract class BaseEntity implements Serializable, BaseLogger {
     @GeneratedValue(generator = "system-uuid")
     private String id;
 
+    @Transient
+    private String entityName;
+
     public String getId() {
         return id;
     }
@@ -36,6 +41,25 @@ public abstract class BaseEntity implements Serializable, BaseLogger {
      * @return
      */
     public abstract String tableName();
+
+    /**
+     * 获取模块路径
+     *
+     * @return
+     */
+    public abstract String moduleName();
+
+    /**
+     * 获取实体名
+     *
+     * @return
+     */
+    public String entityName() {
+        if (entityName == null) {
+            entityName = StringUtils.toLowerCaseFirstOne(getClass().getSimpleName());
+        }
+        return entityName;
+    }
 
     @Override
     public boolean equals(Object o) {

@@ -45,7 +45,7 @@ public class DefaultRealm extends AuthorizingRealm implements BaseLogger {
         }
         // 1.获取用户输入的用户名
         String account = token.getPrincipal().toString();
-        getLogger().info(account + " 正在验证身份...");
+        logger().info(account + " 正在验证身份...");
 
         //2.调用userService，根据用户名，查寻出对应的用户
         User user = userService.findUserByAccount(account);

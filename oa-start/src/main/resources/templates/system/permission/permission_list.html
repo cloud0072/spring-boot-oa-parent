@@ -61,7 +61,7 @@
                                 </td>
                                 <td data-th-text="${permission.name}"></td>
                                 <td data-th-text="${permission.code}"></td>
-                                <td data-th-text="${permission.entityResource.code}"></td>
+                                <td data-th-text="${permission.entityResource?.code}"></td>
                                 <td data-th-text="${permission.operation}"></td>
                                 <td data-th-text="${permission.resourceId}"></td>
                                 <td>
@@ -108,21 +108,11 @@
 <div th:include="/fragment/onload_js :: onloadJS"></div>
 
 <script type="application/javascript" th:inline="javascript">
+    var baseUrl = /*[[@{'/'+${moduleName}+'/'+${entityName}}]]*/ +'';
+
     function showCreate() {
-        location.href = /*[[@{/system/permission/create/}]]*/ +'';
+        location.href = baseUrl + '/create';
     }
-
-    $(".page-link").on('click', function () {
-
-        var pageNumber = $(this).attr("pageIndex");
-        pageNumber = pageNumber < 0 ? 0 : pageNumber;
-        pageNumber = pageNumber > [[${page.totalPages-1}]] ? [[${page.totalPages-1}]] : pageNumber;
-        var url = /*[[@{/system/permission/list}]]*/ +'';
-        if ([[${page.number}]] != pageNumber) {
-            location.href = url + '?pageSize=10&pageNumber=' + pageNumber;
-        }
-    })
-
 </script>
 
 </body>

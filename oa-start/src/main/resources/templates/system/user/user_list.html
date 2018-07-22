@@ -106,20 +106,10 @@
 
 </body>
 <script type="application/javascript" th:inline="javascript">
+    var baseUrl = /*[[@{'/'+${moduleName}+'/'+${entityName}}]]*/ +'';
+
     function showCreate() {
-        location.href = /*[[@{/system/user/create/}]]*/ +'';
+        location.href = baseUrl + '/create';
     }
-
-    $(".page-link").on('click', function () {
-        var pageNumber = $(this).attr("pageIndex");
-        pageNumber = pageNumber < 0 ? 0 : pageNumber;
-        pageNumber = pageNumber > [[${page.totalPages-1}]] ? [[${page.totalPages-1}]] : pageNumber;
-        var url = /*[[@{/system/user/list}]]*/ +'';
-        if ([[${page.number}]] != pageNumber) {
-            location.href = url + '?pageSize=10&pageNumber=' + pageNumber;
-        }
-    })
-
 </script>
-
 </html>

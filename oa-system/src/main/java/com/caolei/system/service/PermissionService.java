@@ -1,6 +1,6 @@
 package com.caolei.system.service;
 
-import com.caolei.system.api.CrudService;
+import com.caolei.system.api.BaseCrudService;
 import com.caolei.system.pojo.Permission;
 
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.List;
  * @author cloud0072
  */
 public interface PermissionService
-        extends CrudService<Permission,String> {
+        extends BaseCrudService<Permission> {
 
     /**
      * 获取 EntityResource 的权限

@@ -3,8 +3,6 @@ package com.caolei.system.po;
 
 import com.caolei.system.api.BaseEntity;
 import com.caolei.system.api.NamedEntity;
-import com.caolei.system.constant.TableConstant;
-import org.apache.poi.ss.formula.functions.Na;
 
 
 import javax.persistence.*;
@@ -46,19 +44,24 @@ public class EntityResource extends BaseEntity implements NamedEntity {
     public EntityResource() {
     }
 
-    @Override
+    /*@Override
     public String getGroupName() {
         //namedEntity
         return getLabel();
+    }*/
+
+    public String getName() {
+        return name;
     }
 
     @Override
     public String tableName() {
-        return TableConstant.ENTITY_NAME;
+        return "实体名";
     }
 
-    public String getName() {
-        return name;
+    @Override
+    public String moduleName() {
+        return "system";
     }
 
     public void setName(String name) {

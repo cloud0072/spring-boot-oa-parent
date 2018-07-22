@@ -1,10 +1,7 @@
 package com.caolei.system.pojo;
 
-
-import com.caolei.system.api.BaseEntity;
 import com.caolei.system.api.NamedEntity;
 import com.caolei.system.api.SystemEntity;
-import com.caolei.system.constant.TableConstant;
 import com.caolei.system.utils.EncryptUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -96,14 +93,19 @@ public class User extends SystemEntity implements NamedEntity {
     }
 
     @Override
-    public String getName() {
-        //namedEntity
-        return getUserName();
+    public String tableName() {
+        return "基础用户";
     }
 
     @Override
-    public String tableName() {
-        return TableConstant.USER;
+    public String moduleName() {
+        return "system";
+    }
+
+    @Override
+    public String getName() {
+        //namedEntity
+        return getUserName();
     }
 
     public String getAccount() {
@@ -170,6 +172,10 @@ public class User extends SystemEntity implements NamedEntity {
         return superUser;
     }
 
+    public void setSuperUser(Boolean superUser) {
+        this.superUser = superUser;
+    }
+
     /**
      * 使用 is+名称方式获取 Boolean 的值 并判断非空
      * 好处 可以使用 Example 查询 而不必被默认的 boolean 默认为 false 所困扰
@@ -179,10 +185,6 @@ public class User extends SystemEntity implements NamedEntity {
      */
     public Boolean isSuperUser() {
         return superUser == null ? false : superUser;
-    }
-
-    public void setSuperUser(Boolean superUser) {
-        this.superUser = superUser;
     }
 
     public Date getCreateTime() {

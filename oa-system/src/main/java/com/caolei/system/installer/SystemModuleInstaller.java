@@ -104,9 +104,11 @@ public class SystemModuleInstaller
             roleService.saveAll(roles);
 
             //superUser
-            superuserRole.setPermissions(permissionService.findAll(Example.of(new Permission(null, Operation.ALL, null, true))));
+            Permission superUserPermission = new Permission(null, Operation.ALL, null, true);
+            superuserRole.setPermissions(permissionService.findAll(Example.of(superUserPermission)));
             //user
-            userRole.setPermissions(permissionService.findAll(Example.of(new Permission(new EntityResource(User.class), Operation.ALL, null, true))));
+            Permission userPermission = new Permission(new EntityResource(User.class), Operation.ALL, null, true);
+            userRole.setPermissions(permissionService.findAll(Example.of(userPermission)));
             roleService.saveAll(roles);
         }
 

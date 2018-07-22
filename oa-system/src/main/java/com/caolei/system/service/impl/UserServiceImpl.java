@@ -30,7 +30,7 @@ public class UserServiceImpl
     private PermissionService permissionService;
 
     @Override
-    public JpaRepository<User, String> getRepository() {
+    public JpaRepository<User, String> repository() {
         return userRepository;
     }
 
@@ -72,7 +72,7 @@ public class UserServiceImpl
         subject.login(token);
         //验证是否成功登录的方法
         if (subject.isAuthenticated()) {
-            getLogger().info(user.getAccount() + " 登陆成功...");
+            logger().info(user.getAccount() + " 登陆成功...");
             return true;
         } else {
             RequestUtils.setCurrentUser(null);

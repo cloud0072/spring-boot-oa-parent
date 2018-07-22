@@ -1,6 +1,6 @@
 package com.caolei.system.service;
 
-import com.caolei.system.api.CrudService;
+import com.caolei.system.api.BaseCrudService;
 import com.caolei.system.pojo.Role;
 
 /**
@@ -8,7 +8,7 @@ import com.caolei.system.pojo.Role;
  * @date 2018/6/12 22:42
  */
 public interface RoleService
-        extends CrudService<Role, String> {
+        extends BaseCrudService<Role> {
 
     /**
      * 查询
@@ -20,6 +20,5 @@ public interface RoleService
     Role findRoleByName(String name);
 
     Role findRoleByCode(String code);
-
 
 }

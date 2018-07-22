@@ -44,6 +44,9 @@
                     <div class="panel-body">
                         <!--/*@thymesVar id="role" type="com.caolei.system.pojo.Role"*/-->
                         <form id="main_form" role="form" class="form-horizontal" method="post">
+                            <label>
+                                <input hidden="hidden" name="id" data-th-value="${id}">
+                            </label>
 
                             <div class="form-group">
                                 <label class="col-sm-2 control-label" for="name">名称</label>
@@ -135,23 +138,31 @@
 <script data-th-src="@{/assets/js/multiselect/js/jquery.multi-select.js}"></script>
 
 <script type="text/javascript" th:inline="javascript">
+    var baseUrl = /*[[@{'/'+${moduleName}+'/'+${entityName}}]]*/ +'';
     var form = $("#main_form");
 
+    $(function () {
+        if ([[${op == 'find'}]]) {
+            $("#account").attr("readOnly");
+        }
+    });
+
     function update() {
-        var id = [[${role.id}]];
+        var id = [[${id}]];
         var url = '';
 
         if (id == null || id === '') {
-            url = /*[[@{/system/role/create/}]]*/ +'';
+            url = baseUrl + '/create';
         } else {
-            url = /*[[@{'/system/role/update/'+${role.id}}]]*/ +'';
+            url = baseUrl + '/update';
         }
+
         form.attr("action", url);
         form.submit();
     }
 
     function remove() {
-        var url = /*[[@{'/system/role/delete/'+${role.id}}]]*/+'';
+        var url =  baseUrl + '/delete';
         form.attr("action", url);
         form.submit();
     }

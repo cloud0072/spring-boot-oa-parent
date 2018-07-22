@@ -1,7 +1,8 @@
 package com.caolei.system.controller;
 
-import com.caolei.system.api.CrudController;
-import com.caolei.system.api.CrudService;
+import com.caolei.system.api.AbstractCrudController;
+import com.caolei.system.api.BaseCrudController;
+import com.caolei.system.api.BaseCrudService;
 import com.caolei.system.constant.Constants;
 import com.caolei.system.pojo.Permission;
 import com.caolei.system.pojo.Role;
@@ -31,7 +32,7 @@ import static com.caolei.system.constant.Constants.*;
 @RequestMapping("/system/role")
 @Controller
 public class RoleController
-        implements CrudController<Role, String> {
+        extends AbstractCrudController<Role> {
 
     @Autowired
     private UserService userService;
@@ -41,31 +42,20 @@ public class RoleController
     private PermissionService permissionService;
 
     @Override
-    public CrudService<Role, String> getService() {
+    public BaseCrudService<Role> service() {
         return roleService;
     }
 
     @Override
-    public String getModulePath() {
-        return "/system";
-    }
+    public void modelAdvice(Model model) {
+        Map<String, Object> map = model.asMap();
+        Role role = (Role) map.get(entityName());
+        String operation = (String) map.get("op");
 
-    @Override
-    public String getEntityName() {
-        return "role";
-    }
-
-    @Override
-    public void modelAdvice(String operation, String id, Model model) {
-        Map map = model.asMap();
-        Role role = (Role) map.get(getEntityName());
         User currentUser = RequestUtils.getCurrentUser();
         switch (operation) {
             case OP_DELETE:
             case OP_UPDATE:
-                if (role.isSystemRole() && !currentUser.getSuperUser()) {
-                    throw new UnsupportedOperationException("您无权操作系统角色");
-                }
             case OP_CREATE:
                 List<Permission> hasPermissions = ObjectUtils.nvl(role.getPermissions(), new ArrayList<>());
                 List<Permission> allPermissions = new ArrayList<>();
@@ -93,27 +83,27 @@ public class RoleController
     @Override
     public String create(HttpServletRequest request, HttpServletResponse response,
                          Role role, RedirectAttributes redirectAttributes) {
-        RequestUtils.checkOperation(getEntityName(), OP_CREATE);
+        RequestUtils.checkOperation(OP_CREATE, role);
         List<String> permissionIds = Arrays.asList(request.getParameterValues("permission-select[]"));
         List<Permission> permissions = new ArrayList<>();
         permissionIds.forEach(permissionId -> permissions.add(permissionService.findById(permissionId)));
         role.setPermissions(permissions);
-        getService().save(role);
+        service().save(role);
         redirectAttributes.addFlashAttribute("message", "新增成功");
-        return Constants.REDIRECT_TO + getModulePath() + "/" + getEntityName() + "/list";
+        return Constants.REDIRECT_TO + "/" + moduleName() + "/" + entityName() + "/list";
     }
 
-    @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
     @Override
     public String update(HttpServletRequest request, HttpServletResponse response,
-                         @PathVariable(name = "id") String id, Role role, RedirectAttributes redirectAttributes) {
-        RequestUtils.checkOperation(getEntityName(), OP_UPDATE, id);
+                         Role role, RedirectAttributes redirectAttributes) {
+        RequestUtils.checkOperation(OP_UPDATE, role);
         List<String> permissionIds = Arrays.asList(request.getParameterValues("permission-select[]"));
         List<Permission> permissions = new ArrayList<>();
         permissionIds.forEach(permissionId -> permissions.add(permissionService.findById(permissionId)));
         role.setPermissions(permissions);
-        role = getService().updateById(id, role);
+        role = service().updateById(role.getId(), role);
         redirectAttributes.addFlashAttribute("message", "新增成功");
-        return Constants.REDIRECT_TO + getModulePath() + "/" + getEntityName() + "/find/" + role.getId();
+        return Constants.REDIRECT_TO + "/" + moduleName() + "/" + entityName() + "/find/" + role.getId();
     }
 }
