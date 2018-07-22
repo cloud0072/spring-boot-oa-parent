@@ -1,7 +1,6 @@
 package com.caolei.system.controller;
 
 import com.caolei.system.api.AbstractCrudController;
-import com.caolei.system.api.BaseCrudController;
 import com.caolei.system.api.BaseCrudService;
 import com.caolei.system.constant.Constants;
 import com.caolei.system.pojo.Role;
@@ -14,7 +13,6 @@ import com.caolei.system.utils.RequestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;

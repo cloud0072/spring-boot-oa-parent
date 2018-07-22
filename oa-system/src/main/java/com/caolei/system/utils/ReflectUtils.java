@@ -24,7 +24,8 @@ import java.util.stream.Stream;
  */
 @SuppressWarnings("AlibabaRemoveCommentedCode")
 public class ReflectUtils {
-
+    private ReflectUtils() {
+    }
     /**
      * 从包package中获取所有的Class
      *

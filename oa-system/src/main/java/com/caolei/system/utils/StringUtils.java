@@ -7,12 +7,11 @@ package com.caolei.system.utils;
  */
 public class StringUtils {
 
-    public static boolean isEmpty(String input) {
-        return input == null || "".equals(input);
+    private StringUtils() {
     }
 
-    public static boolean isNull(Object o) {
-        return o == null || "".equals(o) || "null".equals(o);
+    public static boolean isEmpty(String input) {
+        return input == null || "".equals(input);
     }
 
     public static String toLowerCaseFirstOne(String string){

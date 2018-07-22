@@ -17,14 +17,14 @@ import java.util.UUID;
 @Component
 public class EncryptUtils {
 
+    private EncryptUtils() {
+    }
+
     private static Integer HASH_ITERATIONS;
 
     @Value("${shiro.hash.iterations}")
     private void setHashIterations(Integer hashIterations) {
         HASH_ITERATIONS = hashIterations;
-    }
-
-    private EncryptUtils() {
     }
 
     /**

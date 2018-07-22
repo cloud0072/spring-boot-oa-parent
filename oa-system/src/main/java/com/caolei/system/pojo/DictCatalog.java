@@ -17,15 +17,30 @@ import java.util.Set;
 @Table
 public class DictCatalog extends BaseEntity {
 
+    /**
+     * 字典名
+     */
     @Column
     private String name;
+    /**
+     * 详细信息
+     */
     @Column
     private String description;
+    /**
+     * 根节点
+     */
     @Column
     private Boolean root;
+    /**
+     * 成员属性配置
+     */
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     @JoinColumn(name = "dict_catalog_id")
     private List<ColumnEntity> columnConfig;
+    /**
+     *
+     */
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     @JoinColumn(name = "dict_catalog_id")
     private List<DictEntity> dictEntities;

@@ -1,7 +1,6 @@
 package com.caolei.system.controller;
 
 import com.caolei.system.api.AbstractCrudController;
-import com.caolei.system.api.BaseCrudController;
 import com.caolei.system.api.BaseCrudService;
 import com.caolei.system.pojo.Permission;
 import com.caolei.system.pojo.Role;

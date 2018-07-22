@@ -20,7 +20,7 @@ public class RoleServiceImpl
     @Autowired
     private RoleRepository roleRepository;
     @Autowired
-    private PermissionService authPermissionService;
+    private PermissionService permissionService;
 
     @Override
     public JpaRepository<Role, String> repository() {

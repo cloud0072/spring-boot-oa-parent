@@ -29,13 +29,20 @@ import static com.caolei.system.constant.Constants.TXT_UNKNOWN;
  */
 public class RequestUtils {
 
+    private RequestUtils() {
+    }
+
     /**
-     * 获取回话
+     * 获取会话
      *
      * @return
      */
     private static Session getSession() {
         return SecurityUtils.getSubject().getSession();
+    }
+
+    private static String getSessionId() {
+        return (String) getSession().getId();
     }
 
     /**

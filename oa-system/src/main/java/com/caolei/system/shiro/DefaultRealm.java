@@ -39,7 +39,8 @@ public class DefaultRealm extends AuthorizingRealm implements BaseLogger {
      * @date 2018/6/12 22:43
      */
     @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token)
+            throws AuthenticationException {
         if (token.getPrincipal() == null) {
             return null;
         }
@@ -53,11 +54,8 @@ public class DefaultRealm extends AuthorizingRealm implements BaseLogger {
             throw new UnknownAccountException("账号不存在");
         } else {
             RequestUtils.setCurrentUser(user);
-            return new SimpleAuthenticationInfo(
-                    user.getUserName(),
-                    user.getPassword(),
-                    ByteSource.Util.bytes(user.getSalt()),
-                    super.getName());
+            return new SimpleAuthenticationInfo(user.getUserName(), user.getPassword(),
+                    ByteSource.Util.bytes(user.getSalt()), super.getName());
         }
     }
 
