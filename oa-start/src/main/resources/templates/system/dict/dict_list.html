@@ -65,16 +65,6 @@
         location.href = /*[[@{/system/permission/create/}]]*/ +'';
     }
 
-    $(".page-link").on('click', function () {
-
-        var pageNumber = $(this).attr("pageIndex");
-        pageNumber = pageNumber < 0 ? 0 : pageNumber;
-        pageNumber = pageNumber > [[${page.totalPages-1}]] ? [[${page.totalPages-1}]] : pageNumber;
-        var url = /*[[@{/system/permission/list}]]*/ +'';
-        if ([[${page.number}]] != pageNumber) {
-            location.href = url + '?pageSize=10&pageNumber=' + pageNumber;
-        }
-    })
 
 </script>
 

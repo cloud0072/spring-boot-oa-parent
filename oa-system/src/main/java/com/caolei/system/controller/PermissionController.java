@@ -41,7 +41,6 @@ public class PermissionController
         return permissionService;
     }
 
-
     /**
      * 查询用户自身的权限集合
      */

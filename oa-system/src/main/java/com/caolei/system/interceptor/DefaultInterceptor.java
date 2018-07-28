@@ -27,8 +27,7 @@ public class DefaultInterceptor implements HandlerInterceptor, BaseLogger {
     }
 
     /**
-     * 菜单 状态拦截器
-     *
+     * basePathURL
      * @param request
      * @param response
      * @param handler
@@ -37,7 +36,7 @@ public class DefaultInterceptor implements HandlerInterceptor, BaseLogger {
      */
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable ModelAndView modelAndView) throws Exception {
-
+        info("RequestURL:\t" + request.getRequestURL().toString());
     }
 
     @Override

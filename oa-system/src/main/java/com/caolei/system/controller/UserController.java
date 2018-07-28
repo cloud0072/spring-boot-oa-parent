@@ -8,7 +8,7 @@ import com.caolei.system.pojo.User;
 import com.caolei.system.service.PermissionService;
 import com.caolei.system.service.RoleService;
 import com.caolei.system.service.UserService;
-import com.caolei.system.utils.ObjectUtils;
+import com.caolei.system.utils.EntityUtils;
 import com.caolei.system.utils.RequestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,10 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.caolei.system.constant.Constants.*;
 
@@ -42,7 +39,7 @@ public class UserController
     private PermissionService permissionService;
 
     @Override
-    protected BaseCrudService<User> service() {
+    public BaseCrudService<User> service() {
         return userService;
     }
 
@@ -63,11 +60,11 @@ public class UserController
             case OP_UPDATE:
             case OP_DELETE:
             case OP_CREATE:
-                List<Role> hasRoles = ObjectUtils.nvl(user.getRoles(), new ArrayList<>());
-                List<Role> allRoles = currentUser.getRoles();
+                Set<Role> hasRoles = EntityUtils.orNull(user.getRoles(), new LinkedHashSet<>());
+                Set<Role> allRoles = currentUser.getRoles();
                 //如果是超级用户可以 授权所有角色 否则只能赋予自身拥有的角色
                 if (currentUser.getSuperUser()) {
-                    allRoles = roleService.findAll();
+                    allRoles = new LinkedHashSet<>(roleService.findAll());
                 }
                 model.addAttribute("roles", RequestUtils.getCheckedList(allRoles, hasRoles));
                 break;
@@ -78,6 +75,51 @@ public class UserController
             case OP_LIST:
                 break;
         }
+    }
+
+    /**
+     * 重写 post 提交方法
+     *
+     * @param request
+     * @param response
+     * @param user
+     * @param redirectAttributes
+     * @return
+     */
+    @Override
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    public String create(HttpServletRequest request, HttpServletResponse response, User user, RedirectAttributes redirectAttributes) {
+        RequestUtils.checkOperation(OP_CREATE, instance());
+        List<String> roleIds = Arrays.asList(request.getParameterValues("role-checked"));
+        List<Role> roles = new ArrayList<>();
+        roleIds.forEach(roleId -> roles.add(roleService.findById(roleId)));
+        user.getRoles().addAll(roles);
+        userService.register(user.setDefaultValue());
+        redirectAttributes.addFlashAttribute("message", "新增成功");
+        return Constants.REDIRECT_TO + "/" + moduleName() + "/" + entityName() + "/list";
+    }
+
+    /**
+     * 重写 post 提交方法
+     *
+     * @param request
+     * @param response
+     * @param user
+     * @param redirectAttributes
+     * @return
+     */
+    @Override
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public String update(HttpServletRequest request, HttpServletResponse response,
+                         User user, RedirectAttributes redirectAttributes) {
+        RequestUtils.checkOperation(OP_UPDATE, user);
+        List<String> roleIds = Arrays.asList(request.getParameterValues("role-checked"));
+        List<Role> roles = new ArrayList<>();
+        roleIds.forEach(roleId -> roles.add(roleService.findById(roleId)));
+        user.getRoles().addAll(roles);
+        user = service().updateById(user.getId(), user);
+        redirectAttributes.addFlashAttribute("message", "修改成功");
+        return Constants.REDIRECT_TO + "/" + moduleName() + "/" + entityName() + "/find/" + user.getId();
     }
 
     /**
@@ -117,51 +159,6 @@ public class UserController
             redirectAttributes.addFlashAttribute("message", "修改失败");
         }
         return Constants.REDIRECT_TO + "/" + moduleName() + "/" + entityName() + "/find/" + id;
-    }
-
-    /**
-     * 重写 post 提交方法
-     *
-     * @param request
-     * @param response
-     * @param user
-     * @param redirectAttributes
-     * @return
-     */
-    @Override
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String create(HttpServletRequest request, HttpServletResponse response, User user, RedirectAttributes redirectAttributes) {
-        RequestUtils.checkOperation(OP_CREATE, instance());
-        List<String> roleIds = Arrays.asList(request.getParameterValues("role-checked"));
-        List<Role> roles = new ArrayList<>();
-        roleIds.forEach(roleId -> roles.add(roleService.findById(roleId)));
-        user.setRoles(roles);
-        userService.register(user.setDefaultValue());
-        redirectAttributes.addFlashAttribute("message", "新增成功");
-        return Constants.REDIRECT_TO + "/" + moduleName() + "/" + entityName() + "/list";
-    }
-
-    /**
-     * 重写 post 提交方法
-     *
-     * @param request
-     * @param response
-     * @param user
-     * @param redirectAttributes
-     * @return
-     */
-    @Override
-    @RequestMapping(value = "/update/", method = RequestMethod.POST)
-    public String update(HttpServletRequest request, HttpServletResponse response,
-                         User user, RedirectAttributes redirectAttributes) {
-        RequestUtils.checkOperation(OP_UPDATE, user);
-        List<String> roleIds = Arrays.asList(request.getParameterValues("role-checked"));
-        List<Role> roles = new ArrayList<>();
-        roleIds.forEach(roleId -> roles.add(roleService.findById(roleId)));
-        user.setRoles(roles);
-        user = service().updateById(user.getId(), user);
-        redirectAttributes.addFlashAttribute("message", "修改成功");
-        return Constants.REDIRECT_TO + "/" + moduleName() + "/" + entityName() + "/find/" + user.getId();
     }
 
 }

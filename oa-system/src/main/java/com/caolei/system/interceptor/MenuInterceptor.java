@@ -13,6 +13,13 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class MenuInterceptor implements HandlerInterceptor, BaseLogger {
 
+    /**
+     * 菜单 状态拦截器
+     * @param request
+     * @param response
+     * @param handler
+     * @param modelAndView
+     */
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) {
         String currentMenuId = request.getParameter("menuId");

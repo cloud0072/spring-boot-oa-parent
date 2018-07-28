@@ -9,7 +9,7 @@ import com.caolei.system.pojo.User;
 import com.caolei.system.service.PermissionService;
 import com.caolei.system.service.RoleService;
 import com.caolei.system.service.UserService;
-import com.caolei.system.utils.ObjectUtils;
+import com.caolei.system.utils.EntityUtils;
 import com.caolei.system.utils.RequestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -58,7 +58,7 @@ public class RoleController
             case OP_DELETE:
             case OP_UPDATE:
             case OP_CREATE:
-                List<Permission> hasPermissions = ObjectUtils.nvl(role.getPermissions(), new ArrayList<>());
+                List<Permission> hasPermissions = EntityUtils.orNull(role.getPermissions(), new ArrayList<>());
                 List<Permission> allPermissions = new ArrayList<>();
 
                 //如果是超级用户可以 授权所有角色 否则只能赋予自身拥有的角色

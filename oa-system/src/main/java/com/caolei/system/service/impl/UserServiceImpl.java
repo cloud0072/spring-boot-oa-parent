@@ -1,11 +1,13 @@
 package com.caolei.system.service.impl;
 
+import com.caolei.system.pojo.Role;
 import com.caolei.system.pojo.User;
 import com.caolei.system.repository.UserRepository;
 import com.caolei.system.service.PermissionService;
 import com.caolei.system.service.RoleService;
 import com.caolei.system.service.UserService;
 import com.caolei.system.utils.EncryptUtils;
+import com.caolei.system.utils.EntityUtils;
 import com.caolei.system.utils.RequestUtils;
 import com.caolei.system.utils.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -15,6 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author cloud0072

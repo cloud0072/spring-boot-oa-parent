@@ -7,9 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * 基础用户
@@ -52,18 +50,18 @@ public class User extends SystemEntity implements NamedEntity {
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinTable(name = "auth_user_role", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "auth_role_id"))
-    private List<Role> roles;
+    private Set<Role> roles;
 
     @JsonIgnore
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinTable(name = "auth_user_permission", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "auth_permission_id"))
-    private List<Permission> permissions;
+    private Set<Permission> permissions;
 
     @JsonIgnore
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private List<OperationLog> logs;
+    private Set<OperationLog> logs;
 
     public User() {
     }
@@ -160,12 +158,12 @@ public class User extends SystemEntity implements NamedEntity {
         return active;
     }
 
-    public Boolean isActive() {
-        return active == null ? false : active;
-    }
-
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public Boolean isActive() {
+        return active == null ? false : active;
     }
 
     public Boolean getSuperUser() {
@@ -211,27 +209,36 @@ public class User extends SystemEntity implements NamedEntity {
         this.birthday = birthday;
     }
 
-    public List<Role> getRoles() {
-        return roles == null ? new ArrayList<>() : roles;
+    public Set<Role> getRoles() {
+        if (roles == null) {
+            roles = new HashSet<>();
+        }
+        return roles;
     }
 
-    public void setRoles(List<Role> roles) {
+    public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
 
-    public List<Permission> getPermissions() {
-        return permissions == null ? new ArrayList<>() : permissions;
+    public Set<Permission> getPermissions() {
+        if (permissions == null) {
+            permissions = new HashSet<>();
+        }
+        return permissions;
     }
 
-    public void setPermissions(List<Permission> permissions) {
+    public void setPermissions(Set<Permission> permissions) {
         this.permissions = permissions;
     }
 
-    public List<OperationLog> getLogs() {
-        return logs == null ? new ArrayList<>() : logs;
+    public Set<OperationLog> getLogs() {
+        if (logs == null) {
+            logs = new HashSet<>();
+        }
+        return logs;
     }
 
-    public void setLogs(List<OperationLog> logs) {
+    public void setLogs(Set<OperationLog> logs) {
         this.logs = logs;
     }
 

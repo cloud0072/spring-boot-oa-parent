@@ -166,7 +166,7 @@ public class RequestUtils {
      * @param <T>
      * @return
      */
-    public static <T extends NamedEntity> List<Map> getCheckedList(List<T> all, List<T> has) {
+    public static <T extends NamedEntity> List<Map> getCheckedList(Collection<T> all, Collection<T> has) {
         List<Map> list = new ArrayList<>();
         for (T t : all) {
             Map<String, Object> entityMap = new HashMap<>();
@@ -184,11 +184,12 @@ public class RequestUtils {
     /**
      * 转换为 select 列表
      *
-     * @param list
+     * @param collection
      * @param <T>
      * @return
      */
-    public static <T extends NamedEntity> LinkedHashMap<String, String> getSelectMap(List<T> list, LinkedHashMap<String, String> map) {
+    public static <T extends NamedEntity> LinkedHashMap<String, String> getSelectMap(Collection<T> collection, LinkedHashMap<String, String> map) {
+        ArrayList<T> list = new ArrayList<>(collection);
         list.sort(Comparator.comparing(NamedEntity::getName));
         for (T t : list) {
             map.put(t.getId(), t.getName());
@@ -196,9 +197,9 @@ public class RequestUtils {
         return map;
     }
 
-    public static <T extends NamedEntity> LinkedHashMap<String, String> getSelectMap(List<T> list) {
+    public static <T extends NamedEntity> LinkedHashMap<String, String> getSelectMap(Collection<T> collection) {
         LinkedHashMap<String, String> map = new LinkedHashMap<>();
-        return getSelectMap(list, map);
+        return getSelectMap(collection, map);
     }
 
     /**

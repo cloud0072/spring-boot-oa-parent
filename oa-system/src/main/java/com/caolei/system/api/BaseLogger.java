@@ -12,12 +12,12 @@ public interface BaseLogger {
 
     default void error(String errorMessage) {
         String sessionId = (String) SecurityUtils.getSubject().getSession().getId();
-        logger().error("Class : " + getClass().getName() + "\nSessionId : " + sessionId + "\nERROR : " + errorMessage);
+        logger().error("SessionId : " + sessionId + "\tERROR : " + errorMessage);
     }
 
     default void info(String message) {
         String sessionId = (String) SecurityUtils.getSubject().getSession().getId();
-        logger().info("Class : " + getClass().getName() + "\nSessionId : " + sessionId + "\nINFO : " + message);
+        logger().info("SessionId : " + sessionId + "\tINFO : " + message);
     }
 
 }

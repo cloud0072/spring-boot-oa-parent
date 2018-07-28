@@ -102,7 +102,7 @@ public class SystemTest {
 
         Role role = roleService.findRoleByCode("user");
 
-        user.setRoles(Collections.singletonList(role));
+        user.setRoles(Collections.singleton(role));
 
         userService.save(user);
     }
