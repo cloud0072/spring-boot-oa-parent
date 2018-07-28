@@ -37,11 +37,11 @@ public class RequestUtils {
      *
      * @return
      */
-    private static Session getSession() {
+    public static Session getSession() {
         return SecurityUtils.getSubject().getSession();
     }
 
-    private static String getSessionId() {
+    public static String getSessionId() {
         return (String) getSession().getId();
     }
 
@@ -210,7 +210,7 @@ public class RequestUtils {
      * @author cloud0072
      * @date 2018/6/12 22:38
      */
-    public String getIPAddress(HttpServletRequest request) {
+    public static String IPAddress(HttpServletRequest request) {
         String ip = request.getHeader("X-Forwarded-For");
         if (ip == null || ip.length() == 0 || TXT_UNKNOWN.equalsIgnoreCase(ip)) {
             ip = request.getHeader("Proxy-Client-IP");

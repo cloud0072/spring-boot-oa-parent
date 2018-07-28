@@ -9,18 +9,33 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"id", "orderField"}))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"id", "fieldOrder"}))
 public class ColumnEntity extends BaseEntity {
+    /**
+     * 字段名
+     */
     @Column
     private String columnName;
+    /**
+     * 字段值 分类(DictCatalog)中为空
+     */
     @Column
     private String columnValue;
+    /**
+     * 字段类型
+     */
     @Column
     private ColumnType columnType;
-    @Column
-    private Integer orderField;
+    /**
+     * 字段长度
+     */
     @Column
     private Integer length;
+    /**
+     * 第几个字段
+     */
+    @Column
+    private Integer fieldOrder;
 
     @Override
     public String tableName() {
@@ -48,14 +63,6 @@ public class ColumnEntity extends BaseEntity {
         this.columnValue = columnValue;
     }
 
-    public Integer getOrderField() {
-        return orderField;
-    }
-
-    public void setOrderField(Integer orderField) {
-        this.orderField = orderField;
-    }
-
     public ColumnType getColumnType() {
         return columnType;
     }
@@ -70,5 +77,13 @@ public class ColumnEntity extends BaseEntity {
 
     public void setLength(Integer length) {
         this.length = length;
+    }
+
+    public Integer getFieldOrder() {
+        return fieldOrder;
+    }
+
+    public void setFieldOrder(Integer fieldOrder) {
+        this.fieldOrder = fieldOrder;
     }
 }

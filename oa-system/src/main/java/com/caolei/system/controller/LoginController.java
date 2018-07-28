@@ -19,8 +19,12 @@ import static com.caolei.system.constant.Constants.FORWARD_TO;
 public class LoginController
         implements BaseController {
 
+    private final UserService userService;
+
     @Autowired
-    UserService userService;
+    public LoginController(UserService userService) {
+        this.userService = userService;
+    }
 
     /**
      * 登陆

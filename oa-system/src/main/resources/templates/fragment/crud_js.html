@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN"
+      xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="crud_js">
+
+<script type="text/javascript" th:inline="javascript">
+    var baseUrl = /*[[@{'/'+${moduleName}+'/'+${entityName}}]]*/ +'';
+    var form = $("#main_form");
+
+    function showCreate() {
+        location.href = baseUrl + '/create';
+    }
+
+    function showUpdate() {
+        location.href = baseUrl + '/update/' + [[${id}]];
+    }
+
+    function update() {
+        var id = [[${id}]];
+        var url = '';
+
+        if (id == null || id === '') {
+            url = baseUrl + '/create';
+        } else {
+            url = baseUrl + '/update';
+        }
+
+        form.attr("action", url);
+        form.submit();
+    }
+
+    function remove() {
+        var url =  baseUrl + '/delete';
+        form.attr("action", url);
+        form.submit();
+    }
+</script>
+
+</div>
+</body>
+</html>

@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
  * @author cloud0072
  */
 @Repository
-public interface AdminLogRepository extends JpaRepository<OperationLog,String> {
+public interface OperationLogRepository extends JpaRepository<OperationLog,String> {
 }

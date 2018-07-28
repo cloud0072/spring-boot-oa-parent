@@ -48,7 +48,6 @@ public interface BaseCrudService<T extends BaseEntity>
      * @date 2018/6/12 22:49
      */
     default T save(T t) {
-        logger().info("save " + t.tableName() + "\t" + t.getId());
         return repository().save(t);
     }
 

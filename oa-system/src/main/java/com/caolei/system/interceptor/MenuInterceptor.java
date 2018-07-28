@@ -2,6 +2,7 @@ package com.caolei.system.interceptor;
 
 import com.caolei.system.api.BaseLogger;
 import com.caolei.system.utils.StringUtils;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * 将menuId存入session中 实现菜单高亮
  */
+@Component
 public class MenuInterceptor implements HandlerInterceptor, BaseLogger {
 
     /**

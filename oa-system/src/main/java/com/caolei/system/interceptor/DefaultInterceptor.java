@@ -5,6 +5,7 @@ import com.caolei.system.utils.RequestUtils;
 import com.caolei.system.utils.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -18,7 +19,7 @@ import java.util.Arrays;
  * @author cloud0072
  * @date 2018/6/12 22:41
  */
-
+@Component
 public class DefaultInterceptor implements HandlerInterceptor, BaseLogger {
 
     @Override
@@ -26,17 +27,9 @@ public class DefaultInterceptor implements HandlerInterceptor, BaseLogger {
         return true;
     }
 
-    /**
-     * basePathURL
-     * @param request
-     * @param response
-     * @param handler
-     * @param modelAndView
-     * @throws Exception
-     */
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable ModelAndView modelAndView) throws Exception {
-        info("RequestURL:\t" + request.getRequestURL().toString());
+
     }
 
     @Override

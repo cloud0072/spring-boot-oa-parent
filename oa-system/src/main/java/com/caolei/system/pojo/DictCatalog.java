@@ -16,7 +16,6 @@ import java.util.Set;
 @Entity
 @Table
 public class DictCatalog extends BaseEntity {
-
     /**
      * 字典名
      */
@@ -28,27 +27,17 @@ public class DictCatalog extends BaseEntity {
     @Column
     private String description;
     /**
-     * 根节点
-     */
-    @Column
-    private Boolean root;
-    /**
      * 成员属性配置
      */
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     @JoinColumn(name = "dict_catalog_id")
     private List<ColumnEntity> columnConfig;
-    /**
-     *
-     */
-    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
-    @JoinColumn(name = "dict_catalog_id")
-    private List<DictEntity> dictEntities;
-    @ManyToOne
-    @JoinColumn(name = "parent_id")
-    private DictCatalog parent;
-    @OneToMany(mappedBy = "parent", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
-    private Set<DictCatalog> children;
+
+//    /**
+//     * 分类的根元素
+//     */
+//    @Column
+//    private DictEntity root;
 
     @Override
     public String tableName() {
@@ -76,30 +65,6 @@ public class DictCatalog extends BaseEntity {
         this.description = description;
     }
 
-    public Boolean getRoot() {
-        return root;
-    }
-
-    public void setRoot(Boolean root) {
-        this.root = root;
-    }
-
-    public DictCatalog getParent() {
-        return parent;
-    }
-
-    public void setParent(DictCatalog parent) {
-        this.parent = parent;
-    }
-
-    public Set<DictCatalog> getChildren() {
-        return children;
-    }
-
-    public void setChildren(Set<DictCatalog> children) {
-        this.children = children;
-    }
-
     public List<ColumnEntity> getColumnConfig() {
         return columnConfig;
     }
@@ -108,11 +73,4 @@ public class DictCatalog extends BaseEntity {
         this.columnConfig = columnConfig;
     }
 
-    public List<DictEntity> getDictEntities() {
-        return dictEntities;
-    }
-
-    public void setDictEntities(List<DictEntity> dictEntities) {
-        this.dictEntities = dictEntities;
-    }
 }

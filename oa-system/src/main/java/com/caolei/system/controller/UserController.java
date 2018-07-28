@@ -31,12 +31,16 @@ import static com.caolei.system.constant.Constants.*;
 public class UserController
         extends AbstractCrudController<User> {
 
+    private final UserService userService;
+    private final RoleService roleService;
+    private final PermissionService permissionService;
+
     @Autowired
-    private UserService userService;
-    @Autowired
-    private RoleService roleService;
-    @Autowired
-    private PermissionService permissionService;
+    public UserController(UserService userService, RoleService roleService, PermissionService permissionService) {
+        this.userService = userService;
+        this.roleService = roleService;
+        this.permissionService = permissionService;
+    }
 
     @Override
     public BaseCrudService<User> service() {
