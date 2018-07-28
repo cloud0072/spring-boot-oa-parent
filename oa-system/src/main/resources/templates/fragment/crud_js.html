@@ -3,39 +3,74 @@
       xmlns:th="http://www.thymeleaf.org">
 <body>
 <div th:fragment="crud_js">
+    <form method="post" id="form">
+        <input id="id" name="id" type="hidden">
+    </form>
+    <script type="text/javascript" th:inline="javascript">
+        var baseUrl = /*[[@{'/'+${moduleName}+'/'+${entityName}}]]*/ +'';
 
-<script type="text/javascript" th:inline="javascript">
-    var baseUrl = /*[[@{'/'+${moduleName}+'/'+${entityName}}]]*/ +'';
-    var form = $("#main_form");
-
-    function showCreate() {
-        location.href = baseUrl + '/create';
-    }
-
-    function showUpdate() {
-        location.href = baseUrl + '/update/' + [[${id}]];
-    }
-
-    function update() {
-        var id = [[${id}]];
-        var url = '';
-
-        if (id == null || id === '') {
-            url = baseUrl + '/create';
-        } else {
-            url = baseUrl + '/update';
+        function showCreate() {
+            location.href = baseUrl + '/create';
         }
 
-        form.attr("action", url);
-        form.submit();
-    }
+        function showUpdate() {
+            location.href = baseUrl + '/update/' + [[${id}]];
+        }
 
-    function remove() {
-        var url =  baseUrl + '/delete';
-        form.attr("action", url);
-        form.submit();
-    }
-</script>
+        function update() {
+            var form = $("#main_form");
+            var id = [[${id}]];
+            var url = '';
+
+            if (id == null || id === '') {
+                url = baseUrl + '/create';
+            } else {
+                url = baseUrl + '/update';
+            }
+
+            form.attr("action", url);
+            form.submit();
+        }
+
+        //get 跳转
+
+        $('.btn.create').on('click', function () {
+            location.href = baseUrl + '/create';
+        });
+
+        $('.btn.update').on('click', function () {
+            var id = $(this).attr("entity_id");
+            location.href = baseUrl + '/update/' + id;
+        });
+
+        $('.btn.view').on('click', function () {
+            var id = $(this).attr("entity_id");
+            location.href = baseUrl + '/find/' + id;
+        });
+
+        //post 提交
+
+        $('.btn.save').on('click', function () {
+            var id = $(this).attr("entity_id");
+            var form = $("#main_form");
+            if (id){
+                form.attr({"action": baseUrl + "/update"});
+            }else {
+                form.attr({"action": baseUrl + "/create"});
+            }
+
+            form.submit();
+        });
+
+        $('.btn.remove').on('click', function () {
+            var id = $("#id");
+            id.val($(this).attr("entity_id"));
+
+            var form = $("#form");
+            form.attr({"action": baseUrl + "/delete"});
+            form.submit();
+        });
+    </script>
 
 </div>
 </body>

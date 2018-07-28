@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="zh-CN"
-      xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      lang="zh-CN">
 
 <head th:replace="/fragment/head :: head"></head>
 <link rel="stylesheet" th:href="@{/s/css/table.css}">
@@ -27,54 +27,53 @@
 
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">角色信息</h3>
+                        <h3 class="panel-title">访问日志</h3>
                         <div class="panel-options">
-                            <button id="create" class="btn btn-info" onclick="showCreate()">
-                                创建角色
-                            </button>
+
                         </div>
                     </div>
 
                     <div class="panel-body">
-                        <!--/*@thymesVar id="role" type="com.caolei.system.pojo.Role"*/-->
-                        <table class="table table-striped" id="example-2">
+
+                        <!--/*@thymesVar id="log" type="com.caolei.system.pojo.OperationLog"*/-->
+                        <table class="table table-striped" id="main-table">
                             <thead>
                             <tr>
                                 <th class="no-sorting i-checkbox">
-                                    <input type="checkbox" class="cbr">
+                                    <label>
+                                        <input type="checkbox" class="cbr">
+                                    </label>
                                 </th>
-                                <th class="name-column">角色名</th>
-                                <th>编码</th>
-                                <th>描述</th>
+                                <th class="name-column">用户</th>
+                                <th>IP地址</th>
+                                <th>方法</th>
+                                <th>URL</th>
+                                <th>时间</th>
                                 <th class="operation">操作</th>
                             </tr>
                             </thead>
 
                             <tbody class="middle-align">
-
-                            <tr data-th-each="role : ${page}">
+                            <tr data-th-each="log : ${page}">
                                 <td>
-                                    <input type="checkbox" class="cbr" th:value="${role.id}">
+                                    <input type="checkbox" class="cbr" th:value="${log.id}">
                                 </td>
-                                <td data-th-text="${role.name}"></td>
-                                <td data-th-text="${role.code}"></td>
-                                <td data-th-text="${role.description}"></td>
+                                <td data-th-text="${log.user?.userName}"></td>
+                                <td data-th-text="${log.ipAddress}"></td>
+                                <td data-th-text="${log.method}"></td>
+                                <td data-th-text="${log.requestUrl}"></td>
+                                <td data-th-text="${log.createTime}"></td>
                                 <td>
-                                    <a data-th-href="@{'/system/role/find/'+${role.id}}"
-                                       class="btn btn-info btn-sm btn-icon icon-left">
+                                    <a href="javascript:void(0)" data-th-attr="entity_id=${log.id}"
+                                       class="btn btn-info btn-sm btn-icon icon-left view">
                                         查看
                                     </a>
-                                    <a data-th-href="@{'/system/role/update/'+${role.id}}"
-                                       class="btn btn-secondary btn-sm btn-icon icon-left">
-                                        修改
-                                    </a>
-                                    <a data-th-href="@{'/system/role/delete/'+${role.id}}"
-                                       class="btn btn-danger btn-sm btn-icon icon-left">
+                                    <a href="javascript:void(0)" data-th-attr="entity_id=${log.id}"
+                                       class="btn btn-danger btn-sm btn-icon icon-left remove">
                                         删除
                                     </a>
                                 </td>
                             </tr>
-
                             </tbody>
                         </table>
 
@@ -101,14 +100,9 @@
 
 <!-- 引入js文件 -->
 <div th:include="/fragment/onload_js :: onloadJS"></div>
+<div th:include="/fragment/crud_js :: crud_js"></div>
+<script type="text/javascript" th:inline="javascript">
 
-<script type="application/javascript" th:inline="javascript">
-    var baseUrl = /*[[@{'/'+${moduleName}+'/'+${entityName}}]]*/ +'';
-
-    function showCreate() {
-        location.href = baseUrl + '/create';
-    }
 </script>
-
 </body>
 </html>

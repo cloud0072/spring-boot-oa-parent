@@ -15,25 +15,37 @@ import java.util.Date;
 @Entity
 @Table
 public class OperationLog extends BaseEntity {
-
+    /**
+     * 操作用户
+     */
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
-
+    /**
+     * httpMethod
+     */
     @Column
     private String method;
-
-    @Column
-    private Date createTime;
-
+    /**
+     * 请求URL
+     */
     @Column
     private String requestUrl;
-
+    /**
+     * IP地址
+     */
     @Column
     private String ipAddress;
-
+    /**
+     * SessionId
+     */
     @Column
     private String sessionId;
+    /**
+     * 访问时间
+     */
+    @Column
+    private Date createTime;
 
     public OperationLog() {
     }
@@ -44,6 +56,7 @@ public class OperationLog extends BaseEntity {
         this.requestUrl = requestUrl;
         this.ipAddress = ipAddress;
         this.sessionId = sessionId;
+        this.createTime = new Date();
     }
 
     @Override

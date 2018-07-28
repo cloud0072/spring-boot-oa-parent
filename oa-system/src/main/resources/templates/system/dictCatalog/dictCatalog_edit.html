@@ -28,10 +28,10 @@
                     <div class="panel-heading">
                         <h3 class="panel-title" data-th-text="${op == 'create'? '新建字典':'编辑字典'}">编辑字典</h3>
                         <div class="panel-options">
-                            <button class="btn btn-info" onclick="update()"
+                            <button class="btn btn-info save" data-th-attr="entityid=${id}"
                                     data-th-remove="${op == 'delete'?'all':'none'}">保存
                             </button>
-                            <button class="btn btn-danger" onclick="remove()"
+                            <button class="btn btn-danger remove" data-th-attr="entity_id=${id}"
                                     data-th-remove="${op == 'delete'?'none':'all'}">删除
                             </button>
                         </div>
