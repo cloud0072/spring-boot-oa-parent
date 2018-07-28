@@ -1,7 +1,5 @@
 package com.caolei.system.utils;
 
-import java.util.*;
-
 /**
  * 对象增强
  */
@@ -13,7 +11,6 @@ public class EntityUtils {
     }
 
     /**
-     *
      * @param obj
      * @param orNull
      * @param <T>

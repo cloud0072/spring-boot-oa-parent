@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!-- suppress ALL -->
-<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="zh-CN">
 <body>
 <div th:fragment="main-menu">
 
@@ -83,9 +83,9 @@
         <script th:inline="javascript">
             var menuId = [[${session.menuId}]];
 
-            if (menuId){
-                $(".main-menu").find("li.menu-"+menuId.charAt(0)).addClass("opened active");
-                $(".main-menu").find("li.menu-"+menuId).addClass("opened active");
+            if (menuId) {
+                $(".main-menu").find("li.menu-" + menuId.charAt(0)).addClass("opened active");
+                $(".main-menu").find("li.menu-" + menuId).addClass("opened active");
             }
 
         </script>

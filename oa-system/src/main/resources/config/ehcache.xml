@@ -33,13 +33,13 @@
     />
 
     <!-- 登录次数缓存最大保存30分钟 可在系统中设置更小的过期时间 -->
-    <cache  name="passwordRetryCache"
-            maxEntriesLocalHeap="2000"
-            eternal="false"
-            timeToIdleSeconds="1800"
-            timeToLiveSeconds="0"
-            overflowToDisk="false"
-            statistics="true"
+    <cache name="passwordRetryCache"
+           maxEntriesLocalHeap="2000"
+           eternal="false"
+           timeToIdleSeconds="1800"
+           timeToLiveSeconds="0"
+           overflowToDisk="false"
+           statistics="true"
     />
 
 </ehcache>

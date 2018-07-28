@@ -3,6 +3,7 @@ package com.caolei;
 import com.caolei.system.pojo.User;
 import com.caolei.system.utils.EncryptUtils;
 import com.caolei.system.utils.ReflectUtils;
+import com.caolei.system.utils.StringUtils;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.junit.Test;
 
@@ -127,7 +128,7 @@ public class BaseTest {
         List<Map> result = users.stream()
                 .peek(user -> user.setPassword(user.getPassword() + 0))
                 .filter(user -> Integer.valueOf(user.getPassword()) > 50)
-                .peek(user -> new User(EncryptUtils.UUID32()))
+                .peek(user -> new User(StringUtils.UUID32()))
                 .map(user -> {
                     Map<String, Object> m = new HashMap<>();
                     m.put("account", user.getAccount());

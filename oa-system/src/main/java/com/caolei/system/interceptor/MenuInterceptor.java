@@ -17,6 +17,7 @@ public class MenuInterceptor implements HandlerInterceptor, BaseLogger {
 
     /**
      * 菜单 状态拦截器
+     *
      * @param request
      * @param response
      * @param handler

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="zh-CN"
-      xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      lang="zh-CN">
 <body>
 <div th:fragment="crud_js">
     <form method="post" id="form">
@@ -53,9 +53,9 @@
         $('.btn.save').on('click', function () {
             var id = $(this).attr("entity_id");
             var form = $("#main_form");
-            if (id){
+            if (id) {
                 form.attr({"action": baseUrl + "/update"});
-            }else {
+            } else {
                 form.attr({"action": baseUrl + "/create"});
             }
 

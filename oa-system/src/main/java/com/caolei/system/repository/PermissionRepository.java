@@ -21,5 +21,5 @@ public interface PermissionRepository
      * @param operation
      * @return
      */
-    List<Permission> findPermissionsByEntityResource_CodeInAndOperationLessThanEqual(List<String> codes,Operation operation);
+    List<Permission> findPermissionsByEntityResource_CodeInAndOperationLessThanEqual(List<String> codes, Operation operation);
 }

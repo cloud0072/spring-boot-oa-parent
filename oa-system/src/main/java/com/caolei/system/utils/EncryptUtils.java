@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.util.UUID;
-
 /**
  * 加密工具
  *
@@ -17,14 +15,9 @@ import java.util.UUID;
 @Component
 public class EncryptUtils {
 
-    private EncryptUtils() {
-    }
-
     private static Integer HASH_ITERATIONS;
 
-    @Value("${shiro.hash.iterations}")
-    private void setHashIterations(Integer hashIterations) {
-        HASH_ITERATIONS = hashIterations;
+    private EncryptUtils() {
     }
 
     /**
@@ -42,12 +35,13 @@ public class EncryptUtils {
         return user;
     }
 
-    public static String UUID32() {
-        return UUID.randomUUID().toString().toLowerCase().replaceAll("-", "");
-    }
-
     public static Integer getHashIterations() {
         return HASH_ITERATIONS;
+    }
+
+    @Value("${shiro.hash.iterations}")
+    private void setHashIterations(Integer hashIterations) {
+        HASH_ITERATIONS = hashIterations;
     }
 
 }

@@ -49,6 +49,11 @@ public class ShiroConfig
     @Value("${shiro.remember.me.age}")
     private Integer REMEMBER_ME_AGE;
 
+    @Bean
+    public static LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
+        return new LifecycleBeanPostProcessor();
+    }
+
     /**
      * 密码匹配凭证管理器
      *
@@ -149,12 +154,6 @@ public class ShiroConfig
         creator.setProxyTargetClass(true);
         return creator;
     }
-
-    @Bean
-    public static LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
-        return new LifecycleBeanPostProcessor();
-    }
-
 
     @Bean
     public ShiroFilterFactoryBean shiroFilter() {

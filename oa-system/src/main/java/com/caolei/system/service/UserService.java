@@ -39,6 +39,7 @@ public interface UserService
 
     /**
      * 懒加载
+     *
      * @param account
      * @return
      */
@@ -47,6 +48,7 @@ public interface UserService
 
     /**
      * 返回用户角色
+     *
      * @param account
      * @return
      */

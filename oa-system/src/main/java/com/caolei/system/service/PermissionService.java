@@ -13,12 +13,13 @@ public interface PermissionService
 
     /**
      * 获取 EntityResource 的权限
-     * @author cloud0072
-     * @date 2018/6/12 22:43
+     *
      * @param codes
      * @param operation
      * @return
+     * @author cloud0072
+     * @date 2018/6/12 22:43
      */
-    List<Permission> findPermissionsByResourceCodesAndOperationLess(List<String> codes,String operation);
+    List<Permission> findPermissionsByResourceCodesAndOperationLess(List<String> codes, String operation);
 
 }

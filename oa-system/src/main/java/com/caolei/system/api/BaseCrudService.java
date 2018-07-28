@@ -6,13 +6,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
  * crud服务接口
  *
- * @param <T>  entity class
+ * @param <T> entity class
  * @author cloud0072
  * @date 2018/6/12 22:48
  */

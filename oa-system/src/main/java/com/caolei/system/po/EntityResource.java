@@ -4,8 +4,10 @@ package com.caolei.system.po;
 import com.caolei.system.api.BaseEntity;
 import com.caolei.system.api.NamedEntity;
 
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 /**
  * 实体的名字 和 所属的标签
@@ -54,6 +56,10 @@ public class EntityResource extends BaseEntity implements NamedEntity {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public String tableName() {
         return "实体名";
@@ -62,10 +68,6 @@ public class EntityResource extends BaseEntity implements NamedEntity {
     @Override
     public String moduleName() {
         return "system";
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getLabel() {

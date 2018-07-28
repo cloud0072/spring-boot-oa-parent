@@ -2,9 +2,8 @@ package com.caolei.system.service.impl;
 
 import com.caolei.system.pojo.Role;
 import com.caolei.system.repository.RoleRepository;
-import com.caolei.system.service.RoleService;
 import com.caolei.system.service.PermissionService;
-import com.caolei.system.utils.RequestUtils;
+import com.caolei.system.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;

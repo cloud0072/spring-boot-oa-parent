@@ -1,5 +1,7 @@
 package com.caolei.system.utils;
 
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -24,8 +26,10 @@ import java.util.stream.Stream;
  */
 @SuppressWarnings("AlibabaRemoveCommentedCode")
 public class ReflectUtils {
+
     private ReflectUtils() {
     }
+
     /**
      * 从包package中获取所有的Class
      *
@@ -152,9 +156,8 @@ public class ReflectUtils {
         for (File file : dirfiles) {
             // 如果是目录 则继续扫描
             if (file.isDirectory()) {
-                findAndAddClassesInPackageByFile(packageName + "."
-                                + file.getName(), file.getAbsolutePath(), recursive,
-                        classes);
+                findAndAddClassesInPackageByFile(packageName + "." + file.getName(),
+                        file.getAbsolutePath(), recursive, classes);
             } else {
                 // 如果是java类文件 去掉后面的.class 只留下类名
                 String className = file.getName().substring(0,
@@ -165,8 +168,8 @@ public class ReflectUtils {
                     //经过回复同学的提醒，这里用forName有一些不好，会触发static方法，没有使用classLoader的load干净
                     classes.add(Thread.currentThread().getContextClassLoader().loadClass(packageName + '.' + className));
                 } catch (ClassNotFoundException e) {
-                    // log.error("添加用户自定义视图类错误 找不到此类的.class文件"
-                    e.printStackTrace();
+                    // error("添加用户自定义视图类错误 找不到此类的.class文件");
+                    System.err.println(e.getMessage());
                 }
             }
         }
@@ -178,7 +181,7 @@ public class ReflectUtils {
      * @param subject
      * @param inputMethods
      */
-    public static void invoke(Object subject, String... inputMethods) {
+    /*public static void invoke(Object subject, String... inputMethods) {
         Method[] methods = subject.getClass().getMethods();
         for (String inputMethod : inputMethods) {
             Stream.of(methods).forEach(method -> {
@@ -186,11 +189,34 @@ public class ReflectUtils {
                     try {
                         method.invoke(subject);
                     } catch (IllegalAccessException | InvocationTargetException e) {
-                        e.printStackTrace();
+                        System.err.println(e.getMessage());
                     }
                 }
             });
         }
+    }*/
+
+    /**
+     * 执行私有方法
+     *
+     * @param subject
+     * @param methodName
+     * @return
+     */
+    public static Object invokeDeclaredMethod(Object subject, String methodName, Object... parameters) {
+        Object result = null;
+        try {
+            Class[] classes = new Class[parameters.length];
+            for (int i = 0; i < parameters.length; i++) {
+                classes[i] = parameters[i].getClass();
+            }
+            Method method = subject.getClass().getDeclaredMethod(methodName, classes);
+            method.setAccessible(true);
+            result = method.invoke(subject, parameters);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            System.err.println(e.getMessage());
+        }
+        return result;
     }
 
     /**
@@ -229,6 +255,5 @@ public class ReflectUtils {
 
         return (Class) classTypes[typeIndex];
     }
-
 
 }

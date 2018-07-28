@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="zh-CN"
-      xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      lang="zh-CN">
 <body>
 <div th:fragment="pagination">
 
@@ -44,7 +44,7 @@
     <ul class="pagination" data-th-if="${page.totalPages gt 7}">
         <!-- 首页 -->
         <li class="page-item" data-th-classappend="${(page.number + 1) eq 1} ? 'active' : ''">
-            <a href="javascript:void(0);" class="page-link" data-th-attr="pageIndex=0">1</a>
+            <a href="javascript:void(0);" class="page-link" data-th-attr="pageIndex=0">首页</a>
         </li>
         <!-- 上一页 -->
         <li class="page-item" data-th-classappend="*{page.first} ? 'disabled' : ''">
@@ -52,6 +52,10 @@
                aria-label="Previous">
                 <span aria-hidden="true">«</span>
             </a>
+        </li>
+        <!-- 首页 -->
+        <li class="page-item" data-th-classappend="${(page.number + 1) eq 1} ? 'active' : ''">
+            <a href="javascript:void(0);" class="page-link" data-th-attr="pageIndex=0">1</a>
         </li>
 
         <!-- 当前页面小于等于4 -->
@@ -111,6 +115,12 @@
             </a>
         </li>
 
+
+        <!-- 最后一页 -->
+        <li class="page-item" data-th-classappend="${(page.number + 1) eq page.totalPages} ? 'active' : ''">
+            <a href="javascript:void(0);" class="page-link" data-th-attr="pageIndex=${page.totalPages} - 1">
+                [[${page.totalPages}]]</a>
+        </li>
         <!-- 下一页 -->
         <li class="page-item" data-th-classappend="*{page.last} ? 'disabled' : ''">
             <a href="javascript:void(0);" class="page-link" data-th-attr="pageIndex=${page.number} + 1"
@@ -121,7 +131,7 @@
         <!-- 最后一页 -->
         <li class="page-item" data-th-classappend="${(page.number + 1) eq page.totalPages} ? 'active' : ''">
             <a href="javascript:void(0);" class="page-link" data-th-attr="pageIndex=${page.totalPages} - 1">
-                [[${page.totalPages}]]</a>
+                尾页</a>
         </li>
     </ul>
 

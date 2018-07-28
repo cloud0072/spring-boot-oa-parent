@@ -12,10 +12,11 @@ public interface RoleService
 
     /**
      * 查询
-     * @author cloud0072
-     * @date 2018/6/12 22:47
+     *
      * @param name
      * @return
+     * @author cloud0072
+     * @date 2018/6/12 22:47
      */
     Role findRoleByName(String name);
 

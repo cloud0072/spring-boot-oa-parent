@@ -3,11 +3,14 @@ package com.caolei.system.pojo;
 import com.caolei.system.api.NamedEntity;
 import com.caolei.system.api.SystemEntity;
 import com.caolei.system.utils.EncryptUtils;
+import com.caolei.system.utils.StringUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * 基础用户
@@ -81,7 +84,7 @@ public class User extends SystemEntity implements NamedEntity {
     }
 
     public User setDefaultValue() {
-        this.salt = this.salt == null ? EncryptUtils.UUID32() : salt;
+        this.salt = this.salt == null ? StringUtils.UUID32() : salt;
         this.active = this.active == null ? true : this.active;
         this.superUser = this.superUser == null ? false : this.superUser;
         this.systemEntity = this.systemEntity == null ? false : this.systemEntity;

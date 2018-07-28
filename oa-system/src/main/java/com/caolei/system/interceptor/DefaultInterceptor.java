@@ -1,9 +1,6 @@
 package com.caolei.system.interceptor;
 
 import com.caolei.system.api.BaseLogger;
-import com.caolei.system.utils.RequestUtils;
-import com.caolei.system.utils.StringUtils;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -11,7 +8,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
 
 /**
  * 默认拦截器

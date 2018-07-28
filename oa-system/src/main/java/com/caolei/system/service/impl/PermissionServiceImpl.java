@@ -2,10 +2,10 @@ package com.caolei.system.service.impl;
 
 import com.caolei.system.constant.Operation;
 import com.caolei.system.pojo.Permission;
-import com.caolei.system.repository.PermissionRepository;
 import com.caolei.system.repository.EntityResourceRepository;
-import com.caolei.system.service.RoleService;
+import com.caolei.system.repository.PermissionRepository;
 import com.caolei.system.service.PermissionService;
+import com.caolei.system.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
@@ -39,7 +39,8 @@ public class PermissionServiceImpl
 
     @Override
     public List<Permission> findPermissionsByResourceCodesAndOperationLess(List<String> codes, String operation) {
-        return permissionRepository.findPermissionsByEntityResource_CodeInAndOperationLessThanEqual(codes,Operation.valueOf(operation));
+        return permissionRepository.findPermissionsByEntityResource_CodeInAndOperationLessThanEqual(
+                codes, Operation.valueOf(operation));
     }
 
 }

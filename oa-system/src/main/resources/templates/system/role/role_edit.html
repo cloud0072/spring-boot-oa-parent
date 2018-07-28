@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="zh-CN"
-      xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      lang="zh-CN">
 
 <head th:replace="/fragment/head :: head"></head>
 
@@ -96,7 +96,7 @@
                                     </script>
                                     <select class="form-control" multiple="multiple" id="multi-select"
                                             name="permission-select[]">
-                                        <option data-th-each="p : ${permissions}"  data-th-text="${p.name}"
+                                        <option data-th-each="p : ${permissions}" data-th-text="${p.name}"
                                                 data-th-value="${p.id}" data-th-selected="${p.checked}">
                                         </option>
                                     </select>

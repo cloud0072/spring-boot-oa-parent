@@ -41,7 +41,7 @@ public class SystemTest {
     public void Test01SaveUser() {
         printIndex();
         String key = "cloud0072";
-        User user = new User(key, key, key, null,false).setDefaultValue();
+        User user = new User(key, key, key, null, false).setDefaultValue();
         userService.register(user);
     }
 
@@ -139,7 +139,7 @@ public class SystemTest {
         System.out.println(user.getRoles());
     }
 
-//    @Test
+    //    @Test
     public void Test11UserRemoveRoles() {
         printIndex();
         User user = userService.findAuthorInfoByAccount("cloud0072");
@@ -147,7 +147,7 @@ public class SystemTest {
         userService.save(user);
     }
 
-//    @Test
+    //    @Test
     public void Test13UserRemove() {
         userService.delete(userService.findUserByAccount("cloud0072"));
     }

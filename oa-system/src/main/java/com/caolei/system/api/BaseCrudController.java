@@ -16,9 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 import static com.caolei.system.constant.Constants.*;
 
 /**
+ * @author caolei
  * @ClassName: BaseCrudController
  * @Description: TODO
- * @author caolei
  * @date 2018/7/25 11:41
  */
 public interface BaseCrudController<T extends BaseEntity> extends BaseLogger {

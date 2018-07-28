@@ -18,6 +18,9 @@ public class Creator {
     @Column
     private User modifyUser;
 
+    public Creator() {
+    }
+
     public void modify(User user) {
         if (createTime == null) {
             createTime = new Date();
@@ -27,9 +30,6 @@ public class Creator {
         }
         modifyTime = new Date();
         modifyUser = user;
-    }
-
-    public Creator() {
     }
 
     public Date getCreateTime() {

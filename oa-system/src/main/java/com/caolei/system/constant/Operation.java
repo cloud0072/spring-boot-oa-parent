@@ -14,13 +14,6 @@ public enum Operation {
     //全部
     ALL;
 
-    public String code() {
-        if (this == ALL) {
-            return "*";
-        }
-        return name();
-    }
-
     public static Operation of(String method) {
         switch (method) {
             case OP_FIND:
@@ -38,5 +31,12 @@ public enum Operation {
             default:
                 throw new UnsupportedOperationException("无法识别的操作类型:" + method);
         }
+    }
+
+    public String code() {
+        if (this == ALL) {
+            return "*";
+        }
+        return name();
     }
 }

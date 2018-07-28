@@ -17,6 +17,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 */
 /**
  * 练习项目不再使用redis 使用时再添加
+ *
  * @author cloud0072
  */
 /*
