@@ -12,16 +12,34 @@ import java.util.Date;
  */
 public enum ColumnType {
 
-    VARCHAR(String.class),
-    INTEGER(Integer.class),
-    DECIMAL(BigDecimal.class),
-    DATETIME(Date.class),
-    FILE(File.class);
+    VARCHAR("String"),
+    INTEGER("Integer"),
+    DECIMAL("BigDecimal"),
+    DATETIME("Date"),
+    FILE("File");
 
     private Class clazz;
 
-    ColumnType(Class<?> stringClass) {
-        clazz = stringClass;
+    ColumnType(String className) {
+        switch (className) {
+            case "String":
+                this.clazz = String.class;
+                break;
+            case "Integer":
+                this.clazz = Integer.class;
+                break;
+            case "BigDecimal":
+                this.clazz = BigDecimal.class;
+                break;
+            case "Date":
+                this.clazz = Date.class;
+                break;
+            case "File":
+                this.clazz = File.class;
+                break;
+            default:
+                this.clazz = String.class;
+        }
     }
 
     public Class getClazz() {

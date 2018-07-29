@@ -9,7 +9,7 @@ import com.caolei.system.service.PermissionService;
 import com.caolei.system.service.RoleService;
 import com.caolei.system.service.UserService;
 import com.caolei.system.utils.RequestUtils;
-import com.caolei.system.utils.Result;
+import com.caolei.system.utils.RequestUtils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Controller;

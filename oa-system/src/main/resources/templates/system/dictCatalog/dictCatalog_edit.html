@@ -63,17 +63,46 @@
                                 </div>
                             </div>
 
-                            <div data-th-each="columnEntity ,columnEntityStat : ${dictCatalog.columnConfig}">
+                            <th:block th:each="columnEntity ,index : ${dictCatalog.columnConfig}">
                                 <div class="form-group-separator"></div>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label" for="columnName"
-                                           data-th-text="${'第'+columnEntityStat+1+'列'}">
+                                           data-th-text="${'第'+index+1+'列'}">
                                     </label>
 
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control" name="columnName" placeholder="列名..."
-                                               id="columnName" data-th-value="${columnEntity.columnName}">
+                                    <div class="col-sm-6" th:id="${columnEntity.id}">
+                                        <input type="text" class="form-control" id="columnName"
+                                               name="columnEntity.columnName" placeholder="字段名..."
+                                               data-th-value="${columnEntity.columnName}">
+
+                                        <input type="hidden" name="columnEntity.id"
+                                               data-th-value="${columnEntity.id}">
+                                        <input type="hidden" name="columnEntity.columnType"
+                                               data-th-value="${columnEntity.columnType}">
+                                        <input type="hidden" name="columnEntity.length"
+                                               data-th-value="${columnEntity.length}">
+                                        <input type="hidden" name="columnEntity.fieldOrder"
+                                               data-th-value="${index}">
                                     </div>
+
+                                    <div>
+                                        <button type="button" class="btn btn-info update-column">修改字段</button>
+                                    </div>
+                                </div>
+                            </th:block>
+
+                            <div class="form-group-separator"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="new_column">
+                                    字段名
+                                </label>
+
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" name="new_column" placeholder="字段名..."
+                                           id="new_column">
+                                </div>
+                                <div>
+                                    <button type="button" class="btn btn-info create-column">添加字段</button>
                                 </div>
                             </div>
 
@@ -108,6 +137,12 @@
         if ([[${op == 'find'}]]) {
             $("#account").attr("readOnly");
         }
+    });
+
+    $('.btn.create-column').on('click', function () {
+        var form = $("#main_form");
+        form.attr({"action": baseUrl + "/addColumn"});
+        form.submit();
     });
 
 </script>

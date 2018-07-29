@@ -37,6 +37,23 @@ public class ColumnEntity extends BaseEntity {
     @Column
     private Integer fieldOrder;
 
+    public ColumnEntity() {
+    }
+
+    public ColumnEntity(String columnName, String columnValue, ColumnType columnType, Integer length, Integer fieldOrder) {
+        this.columnName = columnName;
+        this.columnValue = columnValue;
+        this.columnType = columnType;
+        this.length = length;
+        this.fieldOrder = fieldOrder;
+    }
+
+    public ColumnEntity(String columnName) {
+        this.columnName = columnName;
+        this.columnType = ColumnType.VARCHAR;
+        this.length = 255;
+    }
+
     @Override
     public String tableName() {
         return "字段实体";

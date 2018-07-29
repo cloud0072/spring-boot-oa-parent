@@ -93,6 +93,11 @@ public class UserServiceImpl
         return userRepository.findUserByAccount(account);
     }
 
+    /**
+     * 虽然可以用Example查询但是如果想使用事物必须使用repository的查询
+     * @param account
+     * @return
+     */
     @Transactional(rollbackFor = Exception.class)
     @Override
     public User findUserWithLogsByAccount(String account) {
