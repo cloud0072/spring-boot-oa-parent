@@ -6,6 +6,10 @@ import org.slf4j.LoggerFactory;
 
 public interface BaseLogger {
 
+    static Logger logger(String className) {
+        return LoggerFactory.getLogger(className);
+    }
+
     default Logger logger() {
         return LoggerFactory.getLogger(this.getClass());
     }

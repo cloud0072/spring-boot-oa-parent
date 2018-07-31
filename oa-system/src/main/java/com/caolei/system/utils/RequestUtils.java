@@ -2,6 +2,7 @@ package com.caolei.system.utils;
 
 
 import com.caolei.system.api.BaseEntity;
+import com.caolei.system.api.BaseLogger;
 import com.caolei.system.api.NamedEntity;
 import com.caolei.system.api.SystemEntity;
 import com.caolei.system.constant.Constants;
@@ -10,9 +11,14 @@ import com.caolei.system.pojo.User;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.session.Session;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.*;
@@ -27,7 +33,7 @@ import static com.caolei.system.constant.Constants.TXT_UNKNOWN;
  * @author cloud0072
  * @date 2018/6/12 22:38
  */
-public class RequestUtils {
+public class RequestUtils implements BaseLogger {
 
     private RequestUtils() {
     }
@@ -92,6 +98,29 @@ public class RequestUtils {
 
     public static Result error(String message, HttpStatus status) {
         return new Result(message, status.value());
+    }
+
+    /**
+     * 下载文件
+     * @param file
+     * @param fileName
+     * @return
+     */
+    public static ResponseEntity<FileSystemResource> downloadFile(File file, String fileName) {
+        if (file == null) {
+            return null;
+        }
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
+        headers.add("Content-Disposition", "attachment; filename=" + fileName);
+        headers.add("Pragma", "no-cache");
+        headers.add("Expires", "0");
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .contentLength(file.length())
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(new FileSystemResource(file));
     }
 
     /**
@@ -253,7 +282,7 @@ public class RequestUtils {
         private T data;
 
         Result(String message, int code) {
-           this(message,code,null);
+            this(message, code, null);
         }
 
         Result(String message, int code, T data) {

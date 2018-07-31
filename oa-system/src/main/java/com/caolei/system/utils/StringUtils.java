@@ -18,6 +18,7 @@ public class StringUtils {
 
     /**
      * 首字母转小写
+     *
      * @param string
      * @return
      */
@@ -30,6 +31,7 @@ public class StringUtils {
 
     /**
      * 首字母转大写
+     *
      * @param string
      * @return
      */
@@ -42,9 +44,18 @@ public class StringUtils {
 
     /**
      * 生成32位UUID
+     *
      * @return
      */
     public static String UUID32() {
         return UUID.randomUUID().toString().toLowerCase().replaceAll("-", "");
+    }
+
+    public static String extendName(String fileName) {
+        String exendName = null;
+        if (!StringUtils.isEmpty(fileName) && fileName.contains(".")) {
+            exendName = fileName.substring(fileName.lastIndexOf("."));
+        }
+        return exendName;
     }
 }
