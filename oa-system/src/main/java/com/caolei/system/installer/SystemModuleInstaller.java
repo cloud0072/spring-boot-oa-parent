@@ -61,7 +61,7 @@ public class SystemModuleInstaller
      * @date 2018/6/12 22:39
      */
     @Transactional(rollbackFor = Exception.class)
-    void initialize() {
+    protected void initialize() {
         /*
          * 添加实体
          */
@@ -123,7 +123,7 @@ public class SystemModuleInstaller
             User admin = new User(account, account, account, null, true).setDefaultValue();
             admin.setSuperUser(true);
             userService.register(admin);
-            admin = userService.findUserByAccount(account);
+            admin = userService.findAuthorInfoByAccount(account);
             admin.getRoles().addAll(Arrays.asList(superuserRole, userRole));
 //            admin.setPermissions(permissionService.findAll());
             userService.save(admin);

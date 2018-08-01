@@ -41,6 +41,8 @@
                     </div>
                     <div class="panel-body">
 
+                        <!--/*@thymesVar id="columnTypes" type="java.util.List"*/-->
+                        <!--/*@thymesVar id="columnType" type="com.caolei.system.constant.ColumnType"*/-->
                         <!--/*@thymesVar id="dictCatalog" type="com.caolei.system.pojo.DictCatalog"*/-->
                         <form id="main_form" role="form" class="form-horizontal" method="post">
                             <label>
@@ -66,25 +68,72 @@
                                 </div>
                             </div>
 
-                            <th:block th:each="columnEntity ,index : ${dictCatalog.columnConfig}">
+                            <th:block th:each="columnEntity ,status : ${dictCatalog.columnConfig}">
                                 <div class="form-group-separator"></div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label"
-                                           data-th-text="${columnEntity.columnName}">
+                                    <label class="col-sm-2 control-label" data-th-text="${'第'+(status.index+1)+'列'}">
                                     </label>
 
-                                    <div class="col-sm-6">
-                                        <span data-th-text="${columnEntity.columnType}"></span>
-                                        <span data-th-text="${columnEntity.length}"></span>
-                                        <input type="hidden" name="columnEntity.fieldOrder"
-                                               data-th-value="${index}">
+                                    <div class="col-sm-8">
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label" for="columnName">
+                                                列名
+                                            </label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="columnName"
+                                                       data-th-name="${'columnEntity['+status.index+'].columnName'}"
+                                                       placeholder="列名" data-th-value="${columnEntity.columnName}">
+                                            </div>
+                                        </div>
+                                        <div class="form-group-separator"></div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label" for="columnType">
+                                                类型
+                                            </label>
+                                            <div class="col-sm-10">
+                                                <select class="form-control" id="columnType"
+                                                        data-th-name="${'columnEntity['+status.index+'].columnType'}">
+                                                    <option value="VARCHAR" data-th-text="'请选择类型'"
+                                                            data-th-selected="${columnEntity.columnType == null}">
+                                                    </option>
+                                                    <option th:each="columnType: ${columnTypes}"
+                                                            data-th-value="${columnType.name()}"
+                                                            data-th-text="${columnType.name()}"
+                                                            data-th-selected="${columnType.name() == columnEntity.columnType?.name()}">
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group-separator"></div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label" for="length">
+                                                长度
+                                            </label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="length"
+                                                       data-th-name="${'columnEntity['+status.index+'].length'}"
+                                                       placeholder="长度" data-th-value="${columnEntity.length}">
+                                            </div>
+                                        </div>
+                                        <div class="form-group-separator"></div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label" for="fieldOrder">
+                                                顺序
+                                            </label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="fieldOrder"
+                                                       data-th-name="${'columnEntity['+status.index+'].fieldOrder'}"
+                                                       placeholder="顺序" data-th-value="${columnEntity.fieldOrder}">
+                                            </div>
+                                        </div>
                                     </div>
 
-                                    <div>
-                                        <button type="button" class="btn btn-info update-column"
-                                                th:attrappend="columnId=${columnEntity.id}">修改字段
-                                        </button>
-                                    </div>
+                                    <!--<div>-->
+                                    <!--<button type="button" class="btn btn-info update-column"-->
+                                    <!--th:attrappend="columnId=${columnEntity.id}">修改字段-->
+                                    <!--</button>-->
+                                    <!--</div>-->
+
                                 </div>
                             </th:block>
 
@@ -122,6 +171,7 @@
     });
 
     $('.btn.create-column').on('click', function () {
+        console.log(".btn.create-column -> click");
         var form = $("#main_form");
         form.attr({"action": baseUrl + "/addColumn"});
         form.submit();
