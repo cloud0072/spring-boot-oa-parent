@@ -43,7 +43,7 @@ public class FileComponent extends BaseEntity {
     private String datePath;
     /**
      * 文件分类
-     * 那个Entity中的文件
+     * 哪个Entity中的文件
      */
     @Column
     private FileCategory category;
@@ -131,7 +131,7 @@ public class FileComponent extends BaseEntity {
         if (target.createNewFile()) {
             FileCopyUtils.copy(file, target);
         } else {
-            throw new IOException("创建文件失败");
+            throw new IOException("创建文件失败!");
         }
     }
 
@@ -139,22 +139,17 @@ public class FileComponent extends BaseEntity {
      * 如果有则删除原有文件
      */
     public void deleteFile() {
-        try {
-            if (StringUtils.isEmpty(getId())) {
-                //没有保存 直接返回;
-                return;
+        //没有保存过 直接返回;
+        if (StringUtils.isEmpty(getId())) {
+            return;
+        }
+        File file = new File(getAbsolutePath());
+        if (file.exists()) {
+            if (!file.delete()) {
+                throw new UnsupportedOperationException("原有文件无法删除!");
             }
-            File file = new File(getAbsolutePath());
-            if (file.exists()) {
-                if (!file.delete()) {
-                    throw new UnsupportedOperationException("原有文件无法删除");
-                }
-            } else {
-                throw new UnsupportedOperationException("原文件已被移动或删除!");
-            }
-        } catch (UnsupportedOperationException e) {
-            //转化所有异常为 操作异常
-            throw new UnsupportedOperationException(e);
+        } else {
+            throw new UnsupportedOperationException("原文件已被移动或删除!");
         }
     }
 
@@ -165,11 +160,13 @@ public class FileComponent extends BaseEntity {
      * @param file
      * @throws IOException
      */
-    public FileComponent updateFile(String fileName, FileCategory category, File file) throws IOException {
+    public void updateFile(String fileName, FileCategory category, File file) throws IOException {
+        if (StringUtils.isEmpty(getId())) {
+            throw new UnsupportedOperationException("请先保存文件组件才能更新文件!");
+        }
         deleteFile();
         createOrUpdate(fileName, category);
         copyFile(file);
-        return this;
     }
 
     /**
