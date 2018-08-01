@@ -3,7 +3,9 @@
       lang="zh-CN">
 
 <head th:replace="/fragment/head :: head"></head>
-
+<!--/*@thymesVar id="id" type="java.lang.String"*/-->
+<!--/*@thymesVar id="op" type="java.lang.String"*/-->
+<!--/*@thymesVar id="type" type="java.lang.String"*/-->
 <body class="page-body">
 <!-- 顶部用户信息和设置 (平时隐藏) -->
 <div th:include="/fragment/settings-pane :: settings-pane"></div>
@@ -28,6 +30,7 @@
                     <div class="panel-heading">
                         <h3 class="panel-title" data-th-text="${op == 'create'? '新建字典':'编辑字典'}">编辑字典</h3>
                         <div class="panel-options">
+                            <button type="button" class="btn btn-info create-column">添加字段</button>
                             <button class="btn btn-info save" data-th-attr="entityid=${id}"
                                     data-th-remove="${op == 'delete'?'all':'none'}">保存
                             </button>
@@ -66,45 +69,24 @@
                             <th:block th:each="columnEntity ,index : ${dictCatalog.columnConfig}">
                                 <div class="form-group-separator"></div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label" for="columnName"
-                                           data-th-text="${'第'+index+1+'列'}">
+                                    <label class="col-sm-2 control-label"
+                                           data-th-text="${columnEntity.columnName}">
                                     </label>
 
-                                    <div class="col-sm-6" th:id="${columnEntity.id}">
-                                        <input type="text" class="form-control" id="columnName"
-                                               name="columnEntity.columnName" placeholder="字段名..."
-                                               data-th-value="${columnEntity.columnName}">
-
-                                        <input type="hidden" name="columnEntity.id"
-                                               data-th-value="${columnEntity.id}">
-                                        <input type="hidden" name="columnEntity.columnType"
-                                               data-th-value="${columnEntity.columnType}">
-                                        <input type="hidden" name="columnEntity.length"
-                                               data-th-value="${columnEntity.length}">
+                                    <div class="col-sm-6">
+                                        <span data-th-text="${columnEntity.columnType}"></span>
+                                        <span data-th-text="${columnEntity.length}"></span>
                                         <input type="hidden" name="columnEntity.fieldOrder"
                                                data-th-value="${index}">
                                     </div>
 
                                     <div>
-                                        <button type="button" class="btn btn-info update-column">修改字段</button>
+                                        <button type="button" class="btn btn-info update-column"
+                                                th:attrappend="columnId=${columnEntity.id}">修改字段
+                                        </button>
                                     </div>
                                 </div>
                             </th:block>
-
-                            <div class="form-group-separator"></div>
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label" for="new_column">
-                                    字段名
-                                </label>
-
-                                <div class="col-sm-6">
-                                    <input type="text" class="form-control" name="new_column" placeholder="字段名..."
-                                           id="new_column">
-                                </div>
-                                <div>
-                                    <button type="button" class="btn btn-info create-column">添加字段</button>
-                                </div>
-                            </div>
 
                             <div class="form-group-separator"></div>
                             <br>

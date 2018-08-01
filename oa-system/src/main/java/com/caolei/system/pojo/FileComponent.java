@@ -8,18 +8,29 @@ import com.caolei.system.utils.StringUtils;
 import org.springframework.util.FileCopyUtils;
 
 import javax.persistence.Column;
-import javax.persistence.Transient;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
+/**
+ * 文件上传和储存组件
+ * @author caolei
+ */
+@Entity
+@Table
 public class FileComponent extends BaseEntity {
     /**
      * 文件名
      */
     @Column
     private String fileName;
+    /**
+     * 本地储存的uuid名称
+     */
+    @Column(name = "UUID_NAME")
+    private String UUIDName;
     /**
      * 文件扩展名
      */
@@ -57,26 +68,133 @@ public class FileComponent extends BaseEntity {
     @Column
     private User creator;
     /**
-     * 关联文件
+     * 修改人
      */
-    @Transient
-    private File file;
+    @Column
+    private User modifier;
 
     public FileComponent() {
     }
 
-    public FileComponent(File file, String fileName, FileCategory category) {
-        this.file = file;
+    private FileComponent(String fileName, FileCategory category) {
+        createOrUpdate(fileName, category);
+    }
+
+    /**
+     * 拷贝文件至资源文件夹下
+     * 保存文件信息
+     * @param fileName
+     * @param category
+     * @param file
+     * @return
+     */
+    public static FileComponent of(String fileName, FileCategory category, File file) throws IOException {
+        FileComponent component = new FileComponent(fileName, category);
+        component.copyFile(file);
+        return component;
+    }
+
+    /**
+     * 更新文件组件信息
+     * @param fileName
+     * @param category
+     */
+    private void createOrUpdate(String fileName, FileCategory category) {
         this.fileName = fileName;
         this.category = category;
 
         Date date = new Date();
-        this.createTime = date;
-        this.modifyTime = date;
-        this.downloadTimes = 0;
-        this.creator = RequestUtils.getCurrentUser();
         this.datePath = DateUtils.datePathFormat(date);
+        this.UUIDName = StringUtils.UUID32();
         this.extendName = StringUtils.extendName(fileName);
+        this.downloadTimes = 0;
+        if (this.createTime == null) {
+            this.createTime = date;
+        }
+        this.modifyTime = date;
+        if (this.creator == null) {
+            this.creator = RequestUtils.getCurrentUser();
+        }
+        this.modifier = RequestUtils.getCurrentUser();
+    }
+
+    /**
+     * 将保存文件组件实体和复制文件分开
+     * @param file
+     * @throws IOException
+     */
+    private void copyFile(File file) throws IOException {
+        if (StringUtils.isEmpty(getId())) {
+            throw new UnsupportedOperationException("请先保存文件组件才能复制文件!");
+        }
+        File target = new File(getAbsolutePath());
+        if (target.createNewFile()) {
+            FileCopyUtils.copy(file, target);
+        } else {
+            throw new IOException("创建文件失败");
+        }
+    }
+
+    /**
+     * 如果有则删除原有文件
+     */
+    public void deleteFile() {
+        try {
+            if (StringUtils.isEmpty(getId())) {
+                //没有保存 直接返回;
+                return;
+            }
+            File file = new File(getAbsolutePath());
+            if (file.exists()) {
+                if (!file.delete()) {
+                    throw new UnsupportedOperationException("原有文件无法删除");
+                }
+            } else {
+                throw new UnsupportedOperationException("原文件已被移动或删除!");
+            }
+        } catch (UnsupportedOperationException e) {
+            //转化所有异常为 操作异常
+            throw new UnsupportedOperationException(e);
+        }
+    }
+
+    /**
+     * 更新文件信息并拷贝文件到指定路径
+     * @param fileName
+     * @param category
+     * @param file
+     * @throws IOException
+     */
+    public FileComponent updateFile(String fileName, FileCategory category, File file) throws IOException {
+        deleteFile();
+        createOrUpdate(fileName, category);
+        copyFile(file);
+        return this;
+    }
+
+    /**
+     * 获取文件的绝对路径
+     *
+     * @return
+     */
+    public String getAbsolutePath() {
+        if (StringUtils.isEmpty(this.datePath) || this.category.name() == null || this.UUIDName == null) {
+            throw new UnsupportedOperationException("无法获取文件路径信息!");
+        }
+        String path = this.category.name() + File.separator + this.datePath
+                + File.separator + this.UUIDName;
+        if (!StringUtils.isEmpty(extendName)) {
+            path += "." + getExtendName();
+        }
+        return path;
+    }
+
+    public File getFile() {
+        File file = new File(getAbsolutePath());
+        if (!file.exists()) {
+            throw new UnsupportedOperationException("您要找的文件已被移除!");
+        }
+        return file;
     }
 
     @Override
@@ -89,34 +207,6 @@ public class FileComponent extends BaseEntity {
         return "system";
     }
 
-    /**
-     * 获取文件的绝对路径
-     *
-     * @return
-     */
-    public String getAbsolutePath() {
-        if (StringUtils.isEmpty(getId())) {
-            throw new UnsupportedOperationException("文件组件需要先持久化才能获取绝对路径");
-        }
-        if (StringUtils.isEmpty(this.datePath) || getCategory() == null) {
-            throw new UnsupportedOperationException("错误的文件创建方式");
-        }
-        String path = File.separator + getCategory().name() + File.separator + getDatePath()
-                + File.separator + getId();
-        if (!StringUtils.isEmpty(extendName)) {
-            path += "." + getExtendName();
-        }
-        return path;
-    }
-
-    public void copyFile(File file) throws IOException {
-        File target = new File(getAbsolutePath());
-        if (target.exists() || target.createNewFile()) {
-            FileCopyUtils.copy(file, target);
-        } else {
-            throw new UnsupportedEncodingException("无法复制文件到指定路径:\t" + getAbsolutePath());
-        }
-    }
 
     public String getFileName() {
         return fileName;
@@ -124,6 +214,14 @@ public class FileComponent extends BaseEntity {
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+
+    public String getUUIDName() {
+        return UUIDName;
+    }
+
+    public void setUUIDName(String UUIDName) {
+        this.UUIDName = UUIDName;
     }
 
     public String getExtendName() {
@@ -182,11 +280,12 @@ public class FileComponent extends BaseEntity {
         this.creator = creator;
     }
 
-    public File getFile() {
-        return file;
+    public User getModifier() {
+        return modifier;
     }
 
-    public void setFile(File file) {
-        this.file = file;
+    public void setModifier(User modifier) {
+        this.modifier = modifier;
     }
+
 }

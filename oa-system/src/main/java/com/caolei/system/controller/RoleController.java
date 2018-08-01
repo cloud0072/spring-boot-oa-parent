@@ -11,6 +11,12 @@ import com.caolei.system.service.RoleService;
 import com.caolei.system.service.UserService;
 import com.caolei.system.utils.EntityUtils;
 import com.caolei.system.utils.RequestUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.cache.Cache;
+import org.apache.shiro.cache.ehcache.EhCacheManager;
+import org.apache.shiro.mgt.RealmSecurityManager;
+import org.apache.shiro.realm.jdbc.JdbcRealm;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,6 +44,9 @@ public class RoleController
     private final UserService userService;
     private final RoleService roleService;
     private final PermissionService permissionService;
+
+    @Autowired
+    private EhCacheManager shiroCacheManager;
 
     @Autowired
     public RoleController(UserService userService, RoleService roleService, PermissionService permissionService) {
@@ -110,5 +119,29 @@ public class RoleController
         role = service().updateById(role.getId(), role);
         redirectAttributes.addFlashAttribute("message", "新增成功");
         return Constants.REDIRECT_TO + "/" + moduleName() + "/" + entityName() + "/find/" + role.getId();
+    }
+
+    @RequestMapping(value = "/clearRoleCache", method = RequestMethod.GET)
+    public RequestUtils.Result clearRoleCache() {
+        Cache<Object, Object> cache = shiroCacheManager.getCache("org.apache.shiro.realm.jdbc.JdbcRealm.authorizationCache");
+//        shiroCacheManager.destroy();//清除全部缓存
+//        LifecycleUtils.destroy(cache);//清除某个缓存
+        Subject subject = SecurityUtils.getSubject();
+        /*subject.getPrincipal()------>登录名
+        String realmName = subject.getPrincipals().getRealmNames().iterator().next();
+        //第一个参数为用户名,想要操作权限的用户，第二个参数为realmName,
+        SimplePrincipalCollection principals = new SimplePrincipalCollection(subject.getPrincipal(),realmName);
+        */
+        RealmSecurityManager securityManager =
+                (RealmSecurityManager) SecurityUtils.getSecurityManager();
+        JdbcRealm jdbcRealm = (JdbcRealm) securityManager.getRealms().iterator().next();
+        //删除登陆人
+        jdbcRealm.getAuthorizationCache().remove(subject.getPrincipal());
+        //删除登陆人对应的缓存
+        jdbcRealm.getAuthorizationCache().remove(subject.getPrincipals());
+        //重新加载subject
+        subject.releaseRunAs();
+
+        return RequestUtils.success("重新加载权限成功");
     }
 }

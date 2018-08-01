@@ -8,6 +8,7 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.cache.Cache;
+import org.apache.shiro.cache.MemoryConstrainedCacheManager;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.mgt.SecurityManager;
@@ -111,6 +112,11 @@ public class ShiroConfig
         cookieRememberMeManager.setCookie(rememberMeCookie());
         return cookieRememberMeManager;
     }
+
+    /*@Bean
+    public MemoryConstrainedCacheManager shiroCacheManager() {
+        return new MemoryConstrainedCacheManager();
+    }*/
 
     @Bean
     public EhCacheManager ehCacheManager() {

@@ -33,17 +33,16 @@ public class ReflectUtils {
     /**
      * 从包package中获取所有的Class
      *
-     * @param pack
+     * @param pack 包路径
+     * @param recursive 是否循环迭代
      * @return
      * @author cloud0072
      * @date 2018/6/12 22:38
      */
-    public static Set<Class<?>> getClasses(String pack) {
+    public static Set<Class<?>> getClasses(final String pack, final boolean recursive) {
 
         // 第一个class类的集合
         Set<Class<?>> classes = new LinkedHashSet<Class<?>>();
-        // 是否循环迭代
-        boolean recursive = true;
         // 获取包的名字 并进行替换
         String packageName = pack;
         String packageDirName = packageName.replace('.', '/');
@@ -129,6 +128,10 @@ public class ReflectUtils {
         }
 
         return classes;
+    }
+
+    public static Set<Class<?>> getClasses(String pack) {
+        return getClasses(pack, true);
     }
 
     /**
