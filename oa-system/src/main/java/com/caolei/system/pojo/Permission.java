@@ -3,7 +3,7 @@ package com.caolei.system.pojo;
 import com.caolei.system.util.NamedEntity;
 import com.caolei.system.api.SystemEntity;
 import com.caolei.system.constant.Operation;
-import com.caolei.system.po.EntityResource;
+import com.caolei.system.model.EntityResource;
 import com.caolei.system.util.StringUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -86,12 +86,12 @@ public class Permission extends SystemEntity implements NamedEntity {
     }
 
     @Override
-    public String tableName() {
+    protected String getTableName(){
         return "认证权限";
     }
 
     @Override
-    public String moduleName() {
+    protected String getModuleName(){
         return "system";
     }
 

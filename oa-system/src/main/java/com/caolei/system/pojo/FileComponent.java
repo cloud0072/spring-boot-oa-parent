@@ -195,12 +195,12 @@ public class FileComponent extends BaseEntity {
     }
 
     @Override
-    public String tableName() {
+    protected String getTableName(){
         return "文件组件";
     }
 
     @Override
-    public String moduleName() {
+    protected String getModuleName(){
         return "system";
     }
 

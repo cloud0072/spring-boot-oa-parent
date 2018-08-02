@@ -70,12 +70,12 @@ public class OperationLog extends BaseEntity {
     }
 
     @Override
-    public String tableName() {
+    protected String getTableName(){
         return "系统管理日志";
     }
 
     @Override
-    public String moduleName() {
+    protected String getModuleName(){
         return "system";
     }
 

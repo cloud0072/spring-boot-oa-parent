@@ -1,4 +1,4 @@
-package com.caolei.system.po;
+package com.caolei.system.model;
 
 import java.util.ArrayList;
 import java.util.List;

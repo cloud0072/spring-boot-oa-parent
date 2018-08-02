@@ -1,7 +1,6 @@
 package com.caolei.system.api;
 
 import com.caolei.system.util.BaseLogger;
-import com.caolei.system.util.StringUtils;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.GeneratedValue;
@@ -26,6 +25,10 @@ public abstract class BaseEntity implements Serializable, BaseLogger {
     private String id;
 
     @Transient
+    private String tableName;
+    @Transient
+    private String moduleName;
+    @Transient
     private String entityName;
 
     public String getId() {
@@ -34,32 +37,6 @@ public abstract class BaseEntity implements Serializable, BaseLogger {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    /**
-     * 获取表的中文名
-     *
-     * @return
-     */
-    public abstract String tableName();
-
-    /**
-     * 获取模块路径
-     *
-     * @return
-     */
-    public abstract String moduleName();
-
-    /**
-     * 获取实体名
-     *
-     * @return
-     */
-    public String entityName() {
-        if (entityName == null) {
-            entityName = StringUtils.toLowerCaseFirstOne(getClass().getSimpleName());
-        }
-        return entityName;
     }
 
     @Override
@@ -78,4 +55,45 @@ public abstract class BaseEntity implements Serializable, BaseLogger {
         BaseEntity that = (BaseEntity) o;
         return Objects.equals(id, that.id);
     }
+
+    /**
+     * 获取表的中文名
+     *
+     * @return
+     */
+    public final String tableName() {
+        if (tableName == null) {
+            tableName = getTableName();
+        }
+        return tableName;
+    }
+
+    /**
+     * 获取模块路径
+     *
+     * @return
+     */
+    public final String moduleName() {
+        if (moduleName == null) {
+            moduleName = getModuleName();
+        }
+        return moduleName;
+    }
+
+    /**
+     * 获取实体名
+     *
+     * @return
+     */
+    public final String entityName() {
+        if (entityName == null) {
+            entityName = getClass().getSimpleName();
+        }
+        return entityName;
+    }
+
+    protected abstract String getTableName();
+
+    protected abstract String getModuleName();
+
 }

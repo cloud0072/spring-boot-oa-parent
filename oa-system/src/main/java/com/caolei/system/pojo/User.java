@@ -93,12 +93,12 @@ public class User extends SystemEntity implements NamedEntity {
     }
 
     @Override
-    public String tableName() {
+    protected String getTableName() {
         return "基础用户";
     }
 
     @Override
-    public String moduleName() {
+    protected String getModuleName(){
         return "system";
     }
 

@@ -2,7 +2,7 @@ package com.caolei.system.installer;
 
 import com.caolei.system.api.BaseEntity;
 import com.caolei.system.constant.Operation;
-import com.caolei.system.po.EntityResource;
+import com.caolei.system.model.EntityResource;
 import com.caolei.system.pojo.Permission;
 import com.caolei.system.pojo.Role;
 import com.caolei.system.pojo.User;

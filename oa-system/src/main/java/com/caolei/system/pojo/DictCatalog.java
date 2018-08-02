@@ -1,7 +1,7 @@
 package com.caolei.system.pojo;
 
 import com.caolei.system.api.BaseEntity;
-import com.caolei.system.po.ColumnEntity;
+import com.caolei.system.model.ColumnEntity;
 
 import javax.persistence.*;
 import java.util.List;
@@ -39,12 +39,12 @@ public class DictCatalog extends BaseEntity {
 //    private DictEntity root;
 
     @Override
-    public String tableName() {
+    protected String getTableName(){
         return "字典目录";
     }
 
     @Override
-    public String moduleName() {
+    protected String getModuleName() {
         return "system";
     }
 

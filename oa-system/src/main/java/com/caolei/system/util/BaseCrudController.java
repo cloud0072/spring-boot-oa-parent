@@ -143,7 +143,7 @@ public interface BaseCrudController<T extends BaseEntity> extends BaseLogger {
      *
      * @return
      */
-    default String moduleName() {
+    default String moduleName(){
         return instance().moduleName();
     }
 

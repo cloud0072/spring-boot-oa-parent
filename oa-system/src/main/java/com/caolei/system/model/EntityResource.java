@@ -1,4 +1,4 @@
-package com.caolei.system.po;
+package com.caolei.system.model;
 
 
 import com.caolei.system.api.BaseEntity;
@@ -61,12 +61,12 @@ public class EntityResource extends BaseEntity implements NamedEntity {
     }
 
     @Override
-    public String tableName() {
+    protected String getTableName(){
         return "实体名";
     }
 
     @Override
-    public String moduleName() {
+    protected String getModuleName(){
         return "system";
     }
 

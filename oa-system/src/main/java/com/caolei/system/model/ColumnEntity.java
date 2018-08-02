@@ -1,4 +1,4 @@
-package com.caolei.system.po;
+package com.caolei.system.model;
 
 import com.caolei.system.api.BaseEntity;
 import com.caolei.system.constant.ColumnType;
@@ -55,12 +55,12 @@ public class ColumnEntity extends BaseEntity {
     }
 
     @Override
-    public String tableName() {
+    protected String getTableName(){
         return "字段实体";
     }
 
     @Override
-    public String moduleName() {
+    protected String getModuleName(){
         return "system";
     }
 

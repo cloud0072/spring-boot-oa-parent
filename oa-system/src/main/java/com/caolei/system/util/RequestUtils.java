@@ -45,6 +45,7 @@ public class RequestUtils extends LoggerEntity {
 
     /**
      * 判断shiro是否可用
+     *
      * @return
      */
     public static boolean isSubjectAvailable() {
@@ -58,6 +59,7 @@ public class RequestUtils extends LoggerEntity {
 
     /**
      * 获取shiro会话
+     *
      * @return
      */
     public static Session getSession() {
@@ -70,6 +72,7 @@ public class RequestUtils extends LoggerEntity {
 
     /**
      * 获取普通Http会话
+     *
      * @return
      */
     public static HttpSession getHttpSession() {
@@ -90,7 +93,7 @@ public class RequestUtils extends LoggerEntity {
      * @return
      */
     public static User getCurrentUser() {
-        return (User) getSession().getAttribute(Constants.USER_INFO);
+        return (User) getHttpSession().getAttribute(Constants.USER_INFO);
     }
 
     /**
@@ -100,13 +103,14 @@ public class RequestUtils extends LoggerEntity {
      */
     public static void setCurrentUser(User user) {
         if (user == null) {
-            getSession().removeAttribute(Constants.USER_INFO);
+            getHttpSession().removeAttribute(Constants.USER_INFO);
         }
-        getSession().setAttribute(Constants.USER_INFO, user);
+        getHttpSession().setAttribute(Constants.USER_INFO, user);
     }
 
     /**
      * 下载文件
+     *
      * @param file
      * @param fileName
      * @return
