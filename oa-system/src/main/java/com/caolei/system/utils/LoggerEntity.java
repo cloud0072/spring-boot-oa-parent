@@ -1,5 +1,6 @@
 package com.caolei.system.utils;
 
+import com.caolei.system.api.LoggerEntity;
 import com.caolei.system.pojo.User;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,11 +14,11 @@ import org.springframework.util.StringUtils;
  * @date 2018/6/12 22:37
  */
 @Component
-public class EncryptUtils {
+public class LoggerEntity extends LoggerEntity {
 
     private static Integer HASH_ITERATIONS;
 
-    private EncryptUtils() {
+    private LoggerEntity() {
     }
 
     /**

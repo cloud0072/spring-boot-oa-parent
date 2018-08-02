@@ -61,14 +61,6 @@ public class DictCatalogController extends AbstractCrudController<DictCatalog> {
         }
     }
 
-/*    @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String create(HttpServletRequest request, HttpServletResponse response, DictCatalog dictCatalog,
-                         ColumnConfigModel model,RedirectAttributes redirectAttributes) {
-
-
-        return null;
-    }*/
-
     /**
      * 提交创建对象
      */

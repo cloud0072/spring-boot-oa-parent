@@ -5,7 +5,7 @@ import com.caolei.system.repository.UserRepository;
 import com.caolei.system.service.PermissionService;
 import com.caolei.system.service.RoleService;
 import com.caolei.system.service.UserService;
-import com.caolei.system.utils.EncryptUtils;
+import com.caolei.system.utils.LoggerEntity;
 import com.caolei.system.utils.RequestUtils;
 import com.caolei.system.utils.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -53,14 +53,14 @@ public class UserServiceImpl
         }
         if (!StringUtils.isEmpty(input.getPassword())) {
             user.setPassword(input.getPassword());
-            EncryptUtils.encrypt(user);
+            LoggerEntity.encrypt(user);
         }
         return save(user);
     }
 
     @Override
     public User register(User user) {
-        return save(EncryptUtils.encrypt(user));
+        return save(LoggerEntity.encrypt(user));
     }
 
     @Override

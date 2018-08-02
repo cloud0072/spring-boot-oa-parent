@@ -1,13 +1,15 @@
 package com.caolei.system.utils;
 
 
+import com.caolei.system.api.LoggerEntity;
+
 import java.util.UUID;
 
 /**
  * @author cloud0072
  * @date 2018/6/12 22:39
  */
-public class StringUtils {
+public class StringUtils extends LoggerEntity {
 
     private StringUtils() {
     }
@@ -23,10 +25,8 @@ public class StringUtils {
      * @return
      */
     public static String toLowerCaseFirstOne(String string) {
-        if (Character.isLowerCase(string.charAt(0)))
-            return string;
-        else
-            return (new StringBuilder().append(Character.toLowerCase(string.charAt(0))).append(string.substring(1))).toString();
+        return Character.isLowerCase(string.charAt(0)) ? string : (new StringBuilder()
+                .append(Character.toLowerCase(string.charAt(0))).append(string.substring(1))).toString();
     }
 
     /**
@@ -36,10 +36,8 @@ public class StringUtils {
      * @return
      */
     public static String toUpperCaseFirstOne(String string) {
-        if (Character.isUpperCase(string.charAt(0)))
-            return string;
-        else
-            return (new StringBuilder().append(Character.toUpperCase(string.charAt(0))).append(string.substring(1))).toString();
+        return Character.isLowerCase(string.charAt(0)) ? string : (new StringBuilder()
+                .append(Character.toUpperCase(string.charAt(0))).append(string.substring(1))).toString();
     }
 
     /**
@@ -52,10 +50,10 @@ public class StringUtils {
     }
 
     public static String extendName(String fileName) {
-        String exendName = null;
+        String extendName = null;
         if (!StringUtils.isEmpty(fileName) && fileName.contains(".")) {
-            exendName = fileName.substring(fileName.lastIndexOf("."));
+            extendName = fileName.substring(fileName.lastIndexOf("."));
         }
-        return exendName;
+        return extendName;
     }
 }

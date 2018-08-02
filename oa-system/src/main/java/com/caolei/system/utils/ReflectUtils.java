@@ -1,6 +1,6 @@
 package com.caolei.system.utils;
 
-import org.slf4j.LoggerFactory;
+import com.caolei.system.api.LoggerEntity;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +16,6 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import java.util.stream.Stream;
 
 /**
  * 反射工具类
@@ -25,7 +24,7 @@ import java.util.stream.Stream;
  * @date 2018/6/12 22:38
  */
 @SuppressWarnings("AlibabaRemoveCommentedCode")
-public class ReflectUtils {
+public class ReflectUtils  extends LoggerEntity {
 
     private ReflectUtils() {
     }

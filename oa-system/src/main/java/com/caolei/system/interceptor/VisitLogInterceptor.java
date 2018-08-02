@@ -23,19 +23,17 @@ public class VisitLogInterceptor implements HandlerInterceptor, BaseLogger {
 
     /**
      * 访问日志
-     *
      * @param request
      * @param response
      * @param handler
-     * @param modelAndView
+     * @return
      * @throws Exception
      */
     @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
-                           ModelAndView modelAndView) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         info("RequestURL:\t" + request.getRequestURL().toString());
-
         operationLogService.save(new OperationLog(request));
+        return true;
     }
 
 

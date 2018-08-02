@@ -2,13 +2,13 @@ package com.caolei.system.utils;
 
 
 import com.caolei.system.api.BaseEntity;
-import com.caolei.system.api.BaseLogger;
-import com.caolei.system.api.NamedEntity;
+import com.caolei.system.api.LoggerEntity;
 import com.caolei.system.api.SystemEntity;
 import com.caolei.system.constant.Constants;
 import com.caolei.system.constant.Operation;
 import com.caolei.system.pojo.User;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.UnavailableSecurityManagerException;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.session.Session;
 import org.springframework.core.io.FileSystemResource;
@@ -16,12 +16,17 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static com.caolei.system.constant.Constants.TXT_LOCALHOST;
@@ -33,22 +38,50 @@ import static com.caolei.system.constant.Constants.TXT_UNKNOWN;
  * @author cloud0072
  * @date 2018/6/12 22:38
  */
-public class RequestUtils implements BaseLogger {
+public class RequestUtils extends LoggerEntity {
 
     private RequestUtils() {
     }
 
     /**
-     * 获取会话
-     *
+     * 判断shiro是否可用
+     * @return
+     */
+    public static boolean isSubjectAvailable() {
+        try {
+            SecurityUtils.getSubject();
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 获取shiro会话
      * @return
      */
     public static Session getSession() {
-        return SecurityUtils.getSubject().getSession();
+        try {
+            return SecurityUtils.getSubject().getSession();
+        } catch (UnavailableSecurityManagerException e) {
+            throw new UnsupportedOperationException("无法获取当前SHIRO会话!");
+        }
+    }
+
+    /**
+     * 获取普通Http会话
+     * @return
+     */
+    public static HttpSession getHttpSession() {
+        try {
+            return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getSession();
+        } catch (Exception e) {
+            throw new UnsupportedOperationException("无法获取当前HTTP会话!");
+        }
     }
 
     public static String getSessionId() {
-        return (String) getSession().getId();
+        return getHttpSession().getId();
     }
 
     /**
@@ -73,34 +106,6 @@ public class RequestUtils implements BaseLogger {
     }
 
     /**
-     * 返回带有状态码和信息json
-     *
-     * @param message
-     * @param data
-     * @param <T>
-     * @return
-     */
-    public static <T> Result<T> success(String message, T data) {
-        return new Result<>(message, HttpStatus.OK.value(), data);
-    }
-
-    public static Result success(String message) {
-        return new Result<>(message, HttpStatus.OK.value());
-    }
-
-    public static <T> Result<T> success(T data) {
-        return new Result<>("success", HttpStatus.OK.value(), data);
-    }
-
-    public static <T> Result<T> error(String message, HttpStatus status, T data) {
-        return new Result<>(message, status.value(), data);
-    }
-
-    public static Result error(String message, HttpStatus status) {
-        return new Result(message, status.value());
-    }
-
-    /**
      * 下载文件
      * @param file
      * @param fileName
@@ -108,7 +113,7 @@ public class RequestUtils implements BaseLogger {
      */
     public static ResponseEntity<FileSystemResource> downloadFile(File file, String fileName) {
         if (file == null) {
-            return null;
+            throw new UnsupportedOperationException("无法读取要下载的文件!");
         }
         HttpHeaders headers = new HttpHeaders();
         headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
@@ -188,50 +193,6 @@ public class RequestUtils implements BaseLogger {
     }
 
     /**
-     * 转化为 checkbox列表
-     *
-     * @param all
-     * @param has
-     * @param <T>
-     * @return
-     */
-    public static <T extends NamedEntity> List<Map> getCheckedList(Collection<T> all, Collection<T> has) {
-        List<Map> list = new ArrayList<>();
-        for (T t : all) {
-            Map<String, Object> entityMap = new HashMap<>();
-            entityMap.put("id", t.getId());
-            entityMap.put("name", t.getName());
-//            entityMap.put("groupName", t.getGroupName());
-            entityMap.put("checked", has.contains(t));
-            list.add(entityMap);
-        }
-
-        list.sort(Comparator.comparing(m -> "checked").thenComparing(m -> "groupName"));
-        return list;
-    }
-
-    /**
-     * 转换为 select 列表
-     *
-     * @param collection
-     * @param <T>
-     * @return
-     */
-    public static <T extends NamedEntity> LinkedHashMap<String, String> getSelectMap(Collection<T> collection, LinkedHashMap<String, String> map) {
-        ArrayList<T> list = new ArrayList<>(collection);
-        list.sort(Comparator.comparing(NamedEntity::getName));
-        for (T t : list) {
-            map.put(t.getId(), t.getName());
-        }
-        return map;
-    }
-
-    public static <T extends NamedEntity> LinkedHashMap<String, String> getSelectMap(Collection<T> collection) {
-        LinkedHashMap<String, String> map = new LinkedHashMap<>();
-        return getSelectMap(collection, map);
-    }
-
-    /**
      * 获取IP地址
      *
      * @param request
@@ -268,6 +229,34 @@ public class RequestUtils implements BaseLogger {
             }
         }
         return ip;
+    }
+
+    /**
+     * 返回带有状态码和信息json
+     *
+     * @param message
+     * @param data
+     * @param <T>
+     * @return
+     */
+    public static <T> Result<T> success(String message, T data) {
+        return new Result<>(message, HttpStatus.OK.value(), data);
+    }
+
+    public static Result success(String message) {
+        return new Result<>(message, HttpStatus.OK.value());
+    }
+
+    public static <T> Result<T> success(T data) {
+        return new Result<>("success", HttpStatus.OK.value(), data);
+    }
+
+    public static <T> Result<T> error(String message, HttpStatus status, T data) {
+        return new Result<>(message, status.value(), data);
+    }
+
+    public static Result error(String message, HttpStatus status) {
+        return new Result(message, status.value());
     }
 
     /**

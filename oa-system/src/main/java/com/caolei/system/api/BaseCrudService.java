@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -57,7 +58,7 @@ public interface BaseCrudService<T extends BaseEntity>
      * @author cloud0072
      * @date 2018/6/12 22:49
      */
-    default void saveAll(List<T> var) {
+    default void saveAll(Collection<? extends T> var) {
         repository().saveAll(var);
     }
 
@@ -90,7 +91,7 @@ public interface BaseCrudService<T extends BaseEntity>
      * @author cloud0072
      * @date 2018/6/12 22:49
      */
-    default void deleteAll(List<T> list) {
+    default void deleteAll(Collection<? extends T> list) {
         repository().deleteAll(list);
     }
 

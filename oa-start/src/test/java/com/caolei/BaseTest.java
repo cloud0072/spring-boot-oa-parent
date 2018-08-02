@@ -1,13 +1,15 @@
 package com.caolei;
 
 import com.caolei.system.pojo.User;
-import com.caolei.system.utils.EncryptUtils;
+import com.caolei.system.utils.LoggerEntity;
 import com.caolei.system.utils.ReflectUtils;
 import com.caolei.system.utils.StringUtils;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.junit.Test;
 
+import java.lang.reflect.Type;
 import java.util.*;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
@@ -105,7 +107,7 @@ public class BaseTest {
     public void test11() {
         User user = new User();
         user.setPassword("admin");
-        System.out.println(EncryptUtils.encrypt(user).getPassword());
+        System.out.println(LoggerEntity.encrypt(user).getPassword());
 
     }
 
@@ -140,4 +142,49 @@ public class BaseTest {
         System.out.println(result);
     }
 
+    @Test
+    public void test14() {
+        String target = "opt,top,pot,hi,ih,max,hide,pot";
+        //分组
+        String[] stringArr = target.split(",");
+        //结果集
+        Map<String, Set<String>> result = new HashMap<>();
+        Stream.of(stringArr).forEach(s -> {
+            char[] chars = s.toCharArray();
+            Arrays.sort(chars);
+            String key = new String(chars);
+            result.computeIfAbsent(key, v -> new HashSet<>()).add(s);
+        });
+        //输出
+        result.forEach((key, set) -> System.out.println(set));
+    }
+
+
+    @Test
+    public void test15() {
+        try {
+            Type basicType = TestClass.class.getDeclaredField("basic").getType();
+            Type boxType = TestClass.class.getDeclaredField("box").getType();
+
+            System.out.println("Boolean.TYPE.equals(basicType)\t" + Boolean.TYPE.equals(basicType));
+            System.out.println("Boolean.TYPE.equals(boxType)\t" + Boolean.TYPE.equals(boxType));
+            System.out.println("Boolean.TYPE == basicType\t" + (Boolean.TYPE == basicType));
+            System.out.println("Boolean.TYPE == boxType  \t" + (Boolean.TYPE == boxType));
+            System.out.println("Boolean.class == basicType\t" + (Boolean.class == basicType));
+            System.out.println("Boolean.class == boxType  \t" + (Boolean.class == boxType));
+            System.out.println();
+            System.out.println("basicType:\t" + basicType);
+            System.out.println("boxType:\t" + boxType);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Test
+    public void test16() {
+
+//        System.out.println(DayOfWeek.MONDAY.getDisplayName(TextStyle.NARROW, Locale.CHINESE));
+
+    }
 }

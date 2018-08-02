@@ -177,6 +177,7 @@ public class ShiroConfig
         //表示可以匿名访问
         filterChainDefinitionMap.put("/prepare_login", "anon");
         filterChainDefinitionMap.put("/login", "anon");
+        filterChainDefinitionMap.put("/test/**", "anon");
 //        filterChainDefinitionMap.put("/", "authc");
         //表示需要认证才可以访问
         filterChainDefinitionMap.put("/*", "authc");

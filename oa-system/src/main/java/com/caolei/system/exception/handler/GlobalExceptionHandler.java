@@ -1,8 +1,11 @@
 package com.caolei.system.exception.handler;
 
 import com.caolei.system.api.BaseLogger;
+import com.caolei.system.constant.Constants;
+import com.caolei.system.utils.RequestUtils;
 import com.caolei.system.utils.StringUtils;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.UnavailableSecurityManagerException;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -49,8 +52,10 @@ public class GlobalExceptionHandler implements BaseLogger {
      */
     @ExceptionHandler(value = {Exception.class})
     public ModelAndView exceptionHandler(HttpServletRequest request, HttpServletResponse response, Exception ex) {
-        if (!SecurityUtils.getSubject().isAuthenticated()) {
-            return authenticationExceptionHandler(request, response, new AuthenticationException("账号信息异常,请先登录"));
+        if(RequestUtils.isSubjectAvailable()){
+            if (!SecurityUtils.getSubject().isAuthenticated()) {
+                return authenticationExceptionHandler(request, response, new AuthenticationException("账号信息异常,请先登录"));
+            }
         }
 
         ModelAndView modelAndView = new ModelAndView("error");

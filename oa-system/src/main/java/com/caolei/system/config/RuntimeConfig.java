@@ -7,5 +7,10 @@ package com.caolei.system.config;
  */
 public class RuntimeConfig {
 
+    //  设置 Application 级别的属性
+    //  是否允许指定IP访问
+    //  网站主题样式
+    //  
+
 
 }

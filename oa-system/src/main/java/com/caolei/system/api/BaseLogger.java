@@ -1,27 +1,21 @@
 package com.caolei.system.api;
 
-import org.apache.shiro.SecurityUtils;
+import com.caolei.system.utils.RequestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public interface BaseLogger {
-
-    static Logger logger(String className) {
-        return LoggerFactory.getLogger(className);
-    }
 
     default Logger logger() {
         return LoggerFactory.getLogger(this.getClass());
     }
 
     default void error(String errorMessage) {
-        String sessionId = (String) SecurityUtils.getSubject().getSession().getId();
-        logger().error("SessionId : " + sessionId + "\tERROR : " + errorMessage);
+        logger().error("SessionId : " + RequestUtils.getSessionId() + "\tERROR : " + errorMessage);
     }
 
     default void info(String message) {
-        String sessionId = (String) SecurityUtils.getSubject().getSession().getId();
-        logger().info("SessionId : " + sessionId + "\tINFO : " + message);
+        logger().info("SessionId : " + RequestUtils.getSessionId() + "\tINFO : " + message);
     }
 
 }
