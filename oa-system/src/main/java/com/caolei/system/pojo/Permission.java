@@ -1,10 +1,10 @@
 package com.caolei.system.pojo;
 
-import com.caolei.system.api.NamedEntity;
+import com.caolei.system.util.NamedEntity;
 import com.caolei.system.api.SystemEntity;
 import com.caolei.system.constant.Operation;
 import com.caolei.system.po.EntityResource;
-import com.caolei.system.utils.StringUtils;
+import com.caolei.system.util.StringUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;

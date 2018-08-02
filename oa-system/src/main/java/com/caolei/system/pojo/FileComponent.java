@@ -2,9 +2,9 @@ package com.caolei.system.pojo;
 
 import com.caolei.system.api.BaseEntity;
 import com.caolei.system.constant.FileCategory;
-import com.caolei.system.utils.DateUtils;
-import com.caolei.system.utils.RequestUtils;
-import com.caolei.system.utils.StringUtils;
+import com.caolei.system.util.DateUtils;
+import com.caolei.system.util.RequestUtils;
+import com.caolei.system.util.StringUtils;
 import org.springframework.util.FileCopyUtils;
 
 import javax.persistence.Column;

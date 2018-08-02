@@ -1,4 +1,4 @@
-package com.caolei.system.utils;
+package com.caolei.system.util;
 
 import com.caolei.system.api.LoggerEntity;
 
@@ -32,7 +32,7 @@ public class ReflectUtils extends LoggerEntity {
     /**
      * 从包package中获取所有的Class
      *
-     * @param pack 包路径
+     * @param pack      包路径
      * @param recursive 是否循环迭代
      * @return
      * @author cloud0072
@@ -176,27 +176,6 @@ public class ReflectUtils extends LoggerEntity {
             }
         }
     }
-
-    /**
-     * 调用主体对象的无参方法
-     *
-     * @param subject
-     * @param inputMethods
-     */
-    /*public static void invoke(Object subject, String... inputMethods) {
-        Method[] methods = subject.getClass().getMethods();
-        for (String inputMethod : inputMethods) {
-            Stream.of(methods).forEach(method -> {
-                if (method.getName().equals(inputMethod)) {
-                    try {
-                        method.invoke(subject);
-                    } catch (IllegalAccessException | InvocationTargetException e) {
-                        System.err.println(e.getMessage());
-                    }
-                }
-            });
-        }
-    }*/
 
     /**
      * 执行私有方法

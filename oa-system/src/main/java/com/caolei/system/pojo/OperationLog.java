@@ -2,7 +2,7 @@ package com.caolei.system.pojo;
 
 
 import com.caolei.system.api.BaseEntity;
-import com.caolei.system.utils.RequestUtils;
+import com.caolei.system.util.RequestUtils;
 
 import javax.persistence.*;
 import javax.servlet.http.HttpServletRequest;

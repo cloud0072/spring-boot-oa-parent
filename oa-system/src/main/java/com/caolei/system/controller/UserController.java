@@ -1,15 +1,15 @@
 package com.caolei.system.controller;
 
-import com.caolei.system.api.AbstractCrudController;
-import com.caolei.system.api.BaseCrudService;
+import com.caolei.system.util.BaseCrudController;
+import com.caolei.system.util.BaseCrudService;
 import com.caolei.system.constant.Constants;
 import com.caolei.system.pojo.Role;
 import com.caolei.system.pojo.User;
 import com.caolei.system.service.PermissionService;
 import com.caolei.system.service.RoleService;
 import com.caolei.system.service.UserService;
-import com.caolei.system.utils.EntityUtils;
-import com.caolei.system.utils.RequestUtils;
+import com.caolei.system.util.EntityUtils;
+import com.caolei.system.util.RequestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,7 +29,7 @@ import static com.caolei.system.constant.Constants.*;
 @RequestMapping("/system/user")
 @Controller
 public class UserController
-        extends AbstractCrudController<User> {
+        implements BaseCrudController<User> {
 
     private final UserService userService;
     private final RoleService roleService;

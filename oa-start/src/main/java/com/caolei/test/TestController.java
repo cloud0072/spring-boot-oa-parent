@@ -1,6 +1,6 @@
 package com.caolei.test;
 
-import com.caolei.system.utils.DateUtils;
+import com.caolei.system.util.DateUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 

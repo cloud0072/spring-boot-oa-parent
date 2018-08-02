@@ -1,4 +1,4 @@
-package com.caolei.system.api;
+package com.caolei.system.util;
 
 public interface BaseService extends BaseLogger {
 

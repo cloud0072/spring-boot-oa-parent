@@ -1,13 +1,12 @@
 package com.caolei;
 
 import com.caolei.system.pojo.User;
-import com.caolei.system.utils.EncryptUtils;
-import com.caolei.system.utils.ReflectUtils;
-import com.caolei.system.utils.StringUtils;
+import com.caolei.system.util.EncryptUtils;
+import com.caolei.system.util.ReflectUtils;
+import com.caolei.system.util.StringUtils;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.junit.Test;
 
-import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -158,28 +157,6 @@ public class BaseTest {
         //输出
         result.forEach((key, set) -> System.out.println(set));
     }
-
-
-    @Test
-    public void test15() {
-        try {
-            Type basicType = TestClass.class.getDeclaredField("basic").getType();
-            Type boxType = TestClass.class.getDeclaredField("box").getType();
-
-            System.out.println("Boolean.TYPE.equals(basicType)\t" + Boolean.TYPE.equals(basicType));
-            System.out.println("Boolean.TYPE.equals(boxType)\t" + Boolean.TYPE.equals(boxType));
-            System.out.println("Boolean.TYPE == basicType\t" + (Boolean.TYPE == basicType));
-            System.out.println("Boolean.TYPE == boxType  \t" + (Boolean.TYPE == boxType));
-            System.out.println("Boolean.class == basicType\t" + (Boolean.class == basicType));
-            System.out.println("Boolean.class == boxType  \t" + (Boolean.class == boxType));
-            System.out.println();
-            System.out.println("basicType:\t" + basicType);
-            System.out.println("boxType:\t" + boxType);
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        }
-    }
-
 
     @Test
     public void test16() {

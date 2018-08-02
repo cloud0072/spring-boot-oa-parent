@@ -1,6 +1,6 @@
 package com.caolei.system.interceptor;
 
-import com.caolei.system.api.BaseLogger;
+import com.caolei.system.util.BaseLogger;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;

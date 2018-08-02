@@ -10,7 +10,7 @@ import com.caolei.system.repository.EntityResourceRepository;
 import com.caolei.system.service.PermissionService;
 import com.caolei.system.service.RoleService;
 import com.caolei.system.service.UserService;
-import com.caolei.system.utils.ReflectUtils;
+import com.caolei.system.util.ReflectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;

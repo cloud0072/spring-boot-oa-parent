@@ -1,7 +1,7 @@
 package com.caolei.system.controller;
 
-import com.caolei.system.api.AbstractCrudController;
-import com.caolei.system.api.BaseCrudService;
+import com.caolei.system.util.BaseCrudController;
+import com.caolei.system.util.BaseCrudService;
 import com.caolei.system.constant.ColumnType;
 import com.caolei.system.constant.Constants;
 import com.caolei.system.po.ColumnConfigModel;
@@ -9,8 +9,8 @@ import com.caolei.system.po.ColumnEntity;
 import com.caolei.system.pojo.DictCatalog;
 import com.caolei.system.pojo.User;
 import com.caolei.system.service.DictCatalogService;
-import com.caolei.system.utils.RequestUtils;
-import com.caolei.system.utils.StringUtils;
+import com.caolei.system.util.RequestUtils;
+import com.caolei.system.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,7 +28,7 @@ import static com.caolei.system.constant.Constants.*;
 
 @RequestMapping("/system/dictCatalog")
 @Controller
-public class DictCatalogController extends AbstractCrudController<DictCatalog> {
+public class DictCatalogController implements BaseCrudController<DictCatalog> {
 
     private final DictCatalogService dictCatalogService;
 

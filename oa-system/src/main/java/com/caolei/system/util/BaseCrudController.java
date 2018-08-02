@@ -1,7 +1,7 @@
-package com.caolei.system.api;
+package com.caolei.system.util;
 
+import com.caolei.system.api.BaseEntity;
 import com.caolei.system.constant.Constants;
-import com.caolei.system.utils.RequestUtils;
 import org.springframework.data.domain.*;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,7 +36,9 @@ public interface BaseCrudController<T extends BaseEntity> extends BaseLogger {
      *
      * @return
      */
-    T instance();
+    default T instance() {
+        return (T) EntityUtils.interfaceGenericTypeInstance(getClass(), 0, 0);
+    }
 
     /**
      * model增强方法

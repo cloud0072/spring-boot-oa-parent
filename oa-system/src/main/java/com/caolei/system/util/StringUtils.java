@@ -1,4 +1,4 @@
-package com.caolei.system.utils;
+package com.caolei.system.util;
 
 
 import com.caolei.system.api.LoggerEntity;

@@ -1,7 +1,7 @@
-package com.caolei.system.utils;
+package com.caolei.system.util;
 
+import com.caolei.system.api.BaseEntity;
 import com.caolei.system.api.LoggerEntity;
-import com.caolei.system.api.NamedEntity;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -10,10 +10,23 @@ import java.util.stream.Collectors;
  * 对象增强
  */
 public class EntityUtils extends LoggerEntity {
+
+    private static final Map<String, BaseEntity> entityMap = new HashMap<>();
+
     /**
      * 无法实例化，保证只能使用静态方法
      */
     private EntityUtils() {
+    }
+
+    public static BaseEntity interfaceGenericTypeInstance(Class<?> clazz,int interfaceIndex,int typeIndex) {
+        return entityMap.computeIfAbsent(clazz.getName(), v -> {
+            try {
+                return (BaseEntity)ReflectUtils.getInterfaceGenericType(clazz, interfaceIndex, typeIndex).newInstance();
+            } catch (Exception e) {
+                throw new UnsupportedOperationException(e);
+            }
+        });
     }
 
     public static boolean isNull(Object o) {
@@ -42,6 +55,7 @@ public class EntityUtils extends LoggerEntity {
 
     /**
      * 带有名称的对象转换为 下拉框;
+     *
      * @param collection
      * @param <T>
      * @return select 列表
@@ -53,7 +67,6 @@ public class EntityUtils extends LoggerEntity {
     }
 
     /**
-     *
      * @param collection
      * @param defaultTips
      * @param <T>

@@ -2,7 +2,7 @@ package com.caolei.system.po;
 
 
 import com.caolei.system.api.BaseEntity;
-import com.caolei.system.api.NamedEntity;
+import com.caolei.system.util.NamedEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

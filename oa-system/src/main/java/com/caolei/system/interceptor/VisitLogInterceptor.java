@@ -1,6 +1,6 @@
 package com.caolei.system.interceptor;
 
-import com.caolei.system.api.BaseLogger;
+import com.caolei.system.util.BaseLogger;
 import com.caolei.system.pojo.OperationLog;
 import com.caolei.system.service.OperationLogService;
 import org.springframework.beans.factory.annotation.Autowired;

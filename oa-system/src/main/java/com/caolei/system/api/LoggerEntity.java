@@ -1,5 +1,6 @@
 package com.caolei.system.api;
 
+import com.caolei.system.util.BaseLogger;
 import org.slf4j.Logger;
 
 /**

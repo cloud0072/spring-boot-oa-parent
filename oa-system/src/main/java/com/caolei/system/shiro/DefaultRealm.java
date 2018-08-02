@@ -1,10 +1,10 @@
 package com.caolei.system.shiro;
 
 
-import com.caolei.system.api.BaseLogger;
+import com.caolei.system.util.BaseLogger;
 import com.caolei.system.pojo.User;
 import com.caolei.system.service.UserService;
-import com.caolei.system.utils.RequestUtils;
+import com.caolei.system.util.RequestUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
