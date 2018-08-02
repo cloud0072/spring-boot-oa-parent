@@ -28,13 +28,13 @@ public class PermissionServiceImpl
     private RoleService roleService;
 
     @Override
-    public Permission updateById(String id, Permission input) {
-        return null;
+    public JpaRepository<Permission, String> repository() {
+        return permissionRepository;
     }
 
     @Override
-    public JpaRepository<Permission, String> repository() {
-        return permissionRepository;
+    public Permission updateById(String id, Permission input) {
+        return null;
     }
 
     @Override

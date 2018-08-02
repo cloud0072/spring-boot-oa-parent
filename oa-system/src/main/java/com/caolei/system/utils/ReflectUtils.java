@@ -24,7 +24,7 @@ import java.util.jar.JarFile;
  * @date 2018/6/12 22:38
  */
 @SuppressWarnings("AlibabaRemoveCommentedCode")
-public class ReflectUtils  extends LoggerEntity {
+public class ReflectUtils extends LoggerEntity {
 
     private ReflectUtils() {
     }

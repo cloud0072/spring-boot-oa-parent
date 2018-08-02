@@ -1,7 +1,7 @@
 package com.caolei.system.utils;
 
-import com.caolei.system.api.NamedEntity;
 import com.caolei.system.api.LoggerEntity;
+import com.caolei.system.api.NamedEntity;
 
 import java.util.*;
 import java.util.stream.Collectors;

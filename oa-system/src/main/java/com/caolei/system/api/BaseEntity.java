@@ -62,6 +62,11 @@ public abstract class BaseEntity implements Serializable, BaseLogger {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(getId());
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -71,10 +76,5 @@ public abstract class BaseEntity implements Serializable, BaseLogger {
         }
         BaseEntity that = (BaseEntity) o;
         return Objects.equals(id, that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId());
     }
 }

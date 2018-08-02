@@ -1,7 +1,7 @@
 package com.caolei;
 
 import com.caolei.system.pojo.User;
-import com.caolei.system.utils.LoggerEntity;
+import com.caolei.system.utils.EncryptUtils;
 import com.caolei.system.utils.ReflectUtils;
 import com.caolei.system.utils.StringUtils;
 import org.apache.shiro.crypto.hash.Md5Hash;
@@ -107,7 +107,7 @@ public class BaseTest {
     public void test11() {
         User user = new User();
         user.setPassword("admin");
-        System.out.println(LoggerEntity.encrypt(user).getPassword());
+        System.out.println(EncryptUtils.encrypt(user).getPassword());
 
     }
 

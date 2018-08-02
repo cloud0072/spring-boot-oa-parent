@@ -14,11 +14,11 @@ import org.springframework.util.StringUtils;
  * @date 2018/6/12 22:37
  */
 @Component
-public class LoggerEntity extends LoggerEntity {
+public class EncryptUtils extends LoggerEntity {
 
     private static Integer HASH_ITERATIONS;
 
-    private LoggerEntity() {
+    private EncryptUtils() {
     }
 
     /**

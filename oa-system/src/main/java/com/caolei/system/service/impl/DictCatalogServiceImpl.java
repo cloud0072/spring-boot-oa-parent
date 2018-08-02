@@ -39,7 +39,7 @@ public class DictCatalogServiceImpl
     @Override
     public DictCatalog findById(String id) {
         DictCatalog dictCatalog = repository().findById(id).orElseThrow(UnsupportedOperationException::new);
-        if (dictCatalog.getColumnConfig()!=null){
+        if (dictCatalog.getColumnConfig() != null) {
             dictCatalog.getColumnConfig().size();
         }
         return dictCatalog;

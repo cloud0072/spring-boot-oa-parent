@@ -7,11 +7,10 @@ import com.caolei.system.api.LoggerEntity;
  *
  * @author cloud0072
  */
-public class FileUtils  extends LoggerEntity {
+public class FileUtils extends LoggerEntity {
 
     private FileUtils() {
     }
-
 
 
 }
