@@ -68,8 +68,5 @@ public class LoginController
         return "login";
     }
 
-    @RequestMapping("/")
-    public String defaultDispatcher(){
-        return "error";
-    }
+
 }
