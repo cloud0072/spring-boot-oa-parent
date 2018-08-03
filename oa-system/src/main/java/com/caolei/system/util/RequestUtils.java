@@ -52,6 +52,7 @@ public class RequestUtils extends LoggerEntity {
         try {
             SecurityUtils.getSubject();
         } catch (Exception e) {
+            logger.error(e.getMessage());
             return false;
         }
         return true;

@@ -4,7 +4,10 @@ import com.caolei.system.api.BaseEntity;
 import com.caolei.system.api.LoggerEntity;
 
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 对象增强
@@ -19,10 +22,10 @@ public class EntityUtils extends LoggerEntity {
     private EntityUtils() {
     }
 
-    public static BaseEntity interfaceGenericTypeInstance(Class<?> clazz,int interfaceIndex,int typeIndex) {
+    public static BaseEntity interfaceGenericTypeInstance(Class<?> clazz, int interfaceIndex, int typeIndex) {
         return entityMap.computeIfAbsent(clazz.getName(), v -> {
             try {
-                return (BaseEntity)ReflectUtils.getInterfaceGenericType(clazz, interfaceIndex, typeIndex).newInstance();
+                return (BaseEntity) ReflectUtils.getInterfaceGenericType(clazz, interfaceIndex, typeIndex).newInstance();
             } catch (Exception e) {
                 throw new UnsupportedOperationException(e);
             }
@@ -33,7 +36,7 @@ public class EntityUtils extends LoggerEntity {
         return o == null || "".equals(o);
     }
 
-    public static <T> T orDefault(T obj, T orNull) {
+    public static <T> T orNull(T obj, T orNull) {
         return obj == null ? orNull : obj;
     }
 

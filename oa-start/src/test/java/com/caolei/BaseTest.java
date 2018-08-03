@@ -2,6 +2,7 @@ package com.caolei;
 
 import com.caolei.system.pojo.User;
 import com.caolei.system.util.EncryptUtils;
+import com.caolei.system.util.EntityUtils;
 import com.caolei.system.util.ReflectUtils;
 import com.caolei.system.util.StringUtils;
 import org.apache.shiro.crypto.hash.Md5Hash;
@@ -160,8 +161,13 @@ public class BaseTest {
 
     @Test
     public void test16() {
+        Map map1 = new HashMap(); // pageIt 系统查出来的
+        Map map2 = null;    //手动改的
 
-//        System.out.println(DayOfWeek.MONDAY.getDisplayName(TextStyle.NARROW, Locale.CHINESE));
+        System.out.println(map2.get(""));
+
 
     }
+
+
 }

@@ -71,7 +71,7 @@ public class RoleController
             case OP_DELETE:
             case OP_UPDATE:
             case OP_CREATE:
-                List<Permission> hasPermissions = EntityUtils.orDefault(role.getPermissions(), new ArrayList<>());
+                List<Permission> hasPermissions = EntityUtils.orNull(role.getPermissions(), new ArrayList<>());
                 List<Permission> allPermissions = new ArrayList<>();
 
                 //如果是超级用户可以 授权所有角色 否则只能赋予自身拥有的角色

@@ -1,6 +1,7 @@
 package com.caolei.system.api;
 
 import com.caolei.system.util.BaseLogger;
+import com.caolei.system.util.StringUtils;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.GeneratedValue;
@@ -87,7 +88,7 @@ public abstract class BaseEntity implements Serializable, BaseLogger {
      */
     public final String entityName() {
         if (entityName == null) {
-            entityName = getClass().getSimpleName();
+            entityName = StringUtils.toLowerCaseFirstOne(getClass().getSimpleName());
         }
         return entityName;
     }

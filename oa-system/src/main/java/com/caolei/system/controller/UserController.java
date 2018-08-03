@@ -64,7 +64,7 @@ public class UserController
             case OP_UPDATE:
             case OP_DELETE:
             case OP_CREATE:
-                Set<Role> hasRoles = EntityUtils.orDefault(user.getRoles(), new LinkedHashSet<>());
+                Set<Role> hasRoles = EntityUtils.orNull(user.getRoles(), new LinkedHashSet<>());
                 Set<Role> allRoles = currentUser.getRoles();
                 //如果是超级用户可以 授权所有角色 否则只能赋予自身拥有的角色
                 if (currentUser.getSuperUser()) {
