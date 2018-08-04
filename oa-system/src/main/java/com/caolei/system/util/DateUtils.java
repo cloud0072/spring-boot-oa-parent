@@ -1,6 +1,7 @@
 package com.caolei.system.util;
 
-import com.caolei.system.api.LoggerEntity;
+import com.caolei.system.web.BaseLogger;
+import org.slf4j.Logger;
 
 import java.io.File;
 import java.sql.Timestamp;
@@ -16,7 +17,7 @@ import java.util.stream.Stream;
  *
  * @author cloud0072
  */
-public class DateUtils extends LoggerEntity {
+public class DateUtils implements BaseLogger {
 
     private static final SimpleDateFormat defaultDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private static final SimpleDateFormat datePathFormat = new SimpleDateFormat("yyyyMM" + File.separator + "dd");
@@ -43,12 +44,15 @@ public class DateUtils extends LoggerEntity {
             addAll(Arrays.asList("日", "周日", "星期日"));
         }});
     }};
+    private static Logger logger;
 
     private DateUtils() {
+        logger = logger();
     }
 
     /**
      * 将中文转化为星期
+     *
      * @param chinese
      * @return
      */ //java自带的日期枚举类，同类的还有 Month 等
@@ -59,6 +63,7 @@ public class DateUtils extends LoggerEntity {
 
     /**
      * 生成星期选择菜单
+     *
      * @param style
      * @return
      */  //style支持各种长短格式 后台接受select框的value值可以直接生成DayOfWeek枚举类

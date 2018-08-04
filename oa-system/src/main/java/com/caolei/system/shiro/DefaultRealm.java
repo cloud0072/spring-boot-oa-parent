@@ -1,7 +1,7 @@
 package com.caolei.system.shiro;
 
 
-import com.caolei.system.util.BaseLogger;
+import com.caolei.system.web.BaseLogger;
 import com.caolei.system.pojo.User;
 import com.caolei.system.service.UserService;
 import com.caolei.system.util.RequestUtils;

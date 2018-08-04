@@ -1,25 +1,26 @@
 package com.caolei.system.util;
 
 import com.caolei.system.api.BaseEntity;
-import com.caolei.system.api.LoggerEntity;
+import com.caolei.system.api.NamedEntity;
+import com.caolei.system.web.BaseLogger;
+import org.slf4j.Logger;
 
 import java.util.*;
-import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * 对象增强
  */
-public class EntityUtils extends LoggerEntity {
+public class EntityUtils implements BaseLogger {
 
     private static final Map<String, BaseEntity> entityMap = new HashMap<>();
+    private static Logger logger;
 
     /**
      * 无法实例化，保证只能使用静态方法
      */
     private EntityUtils() {
+        logger = logger();
     }
 
     public static BaseEntity interfaceGenericTypeInstance(Class<?> clazz, int interfaceIndex, int typeIndex) {

@@ -1,6 +1,6 @@
 package com.caolei.system.api;
 
-import com.caolei.system.util.BaseLogger;
+import com.caolei.system.web.BaseLogger;
 import com.caolei.system.util.StringUtils;
 import org.hibernate.annotations.GenericGenerator;
 

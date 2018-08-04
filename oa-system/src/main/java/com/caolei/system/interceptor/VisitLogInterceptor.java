@@ -1,6 +1,6 @@
 package com.caolei.system.interceptor;
 
-import com.caolei.system.util.BaseLogger;
+import com.caolei.system.web.BaseLogger;
 import com.caolei.system.pojo.OperationLog;
 import com.caolei.system.service.OperationLogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +30,9 @@ public class VisitLogInterceptor implements HandlerInterceptor, BaseLogger {
      * @throws Exception
      */
     @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         info("RequestURL:\t" + request.getRequestURL().toString());
         operationLogService.save(new OperationLog(request));
+        return true;
     }
 }

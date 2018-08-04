@@ -1,7 +1,8 @@
 package com.caolei.system.util;
 
 
-import com.caolei.system.api.LoggerEntity;
+import com.caolei.system.web.BaseLogger;
+import org.slf4j.Logger;
 
 import java.util.UUID;
 
@@ -9,9 +10,12 @@ import java.util.UUID;
  * @author cloud0072
  * @date 2018/6/12 22:39
  */
-public class StringUtils extends LoggerEntity {
+public class StringUtils implements BaseLogger {
+
+    private static Logger logger;
 
     private StringUtils() {
+        logger = logger();
     }
 
     public static boolean isEmpty(String input) {

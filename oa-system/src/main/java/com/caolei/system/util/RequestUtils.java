@@ -1,16 +1,13 @@
 package com.caolei.system.util;
 
 
-import com.caolei.system.api.BaseEntity;
-import com.caolei.system.api.LoggerEntity;
-import com.caolei.system.api.SystemEntity;
 import com.caolei.system.constant.Constants;
-import com.caolei.system.constant.Operation;
 import com.caolei.system.pojo.User;
+import com.caolei.system.web.BaseLogger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.UnavailableSecurityManagerException;
-import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.session.Session;
+import org.slf4j.Logger;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -24,10 +21,7 @@ import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Stream;
+import java.util.Date;
 
 import static com.caolei.system.constant.Constants.TXT_LOCALHOST;
 import static com.caolei.system.constant.Constants.TXT_UNKNOWN;
@@ -38,24 +32,12 @@ import static com.caolei.system.constant.Constants.TXT_UNKNOWN;
  * @author cloud0072
  * @date 2018/6/12 22:38
  */
-public class RequestUtils extends LoggerEntity {
+public class RequestUtils implements BaseLogger {
+
+    private static Logger logger;
 
     private RequestUtils() {
-    }
-
-    /**
-     * 判断shiro是否可用
-     *
-     * @return
-     */
-    public static boolean isSubjectAvailable() {
-        try {
-            SecurityUtils.getSubject();
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-            return false;
-        }
-        return true;
+        logger = logger();
     }
 
     /**
@@ -67,6 +49,7 @@ public class RequestUtils extends LoggerEntity {
         try {
             return SecurityUtils.getSubject().getSession();
         } catch (UnavailableSecurityManagerException e) {
+            logger.error("无法获取当前SHIRO会话");
             throw new UnsupportedOperationException("无法获取当前SHIRO会话!");
         }
     }
@@ -80,6 +63,7 @@ public class RequestUtils extends LoggerEntity {
         try {
             return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getSession();
         } catch (Exception e) {
+            logger.error("无法获取当前HTTP会话");
             throw new UnsupportedOperationException("无法获取当前HTTP会话!");
         }
     }
@@ -125,76 +109,13 @@ public class RequestUtils extends LoggerEntity {
         headers.add("Content-Disposition", "attachment; filename=" + fileName);
         headers.add("Pragma", "no-cache");
         headers.add("Expires", "0");
+        logger.info("download: " + fileName + "\ttime: " + DateUtils.defaultDateFormat(new Date()));
         return ResponseEntity
                 .ok()
                 .headers(headers)
                 .contentLength(file.length())
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(new FileSystemResource(file));
-    }
-
-    /**
-     * 检查当前用户 是否包含其中一个角色
-     *
-     * @param roles
-     */
-    public static void checkAnyRole(String... roles) {
-        List<Boolean> flag = new ArrayList<>();
-        Stream.of(roles).forEach(role -> flag.add(SecurityUtils.getSubject().hasRole(role.toLowerCase())));
-        if (!flag.contains(true)) {
-            String name = SecurityUtils.getSubject().getPrincipal().toString();
-            throw new AuthorizationException(name + " do not has role " + Arrays.asList(roles));
-        }
-    }
-
-    /**
-     * 检查当前用户 是否包含其中一个权限
-     *
-     * @param permissions
-     */
-    public static void checkAnyPermission(String... permissions) {
-        List<Boolean> flag = new ArrayList<>();
-        Stream.of(permissions).forEach(permission -> flag.add(SecurityUtils.getSubject().isPermitted(permission.toLowerCase())));
-        if (!flag.contains(true)) {
-            String name = SecurityUtils.getSubject().getPrincipal().toString();
-            throw new AuthorizationException(name + " do not has permission " + Arrays.asList(permissions));
-        }
-    }
-
-    /**
-     * 判断当前用户是否有权限进行操作 OP_LIST 需要 FIND_ALL 权限
-     * FIXME: 另一种策略是 有多少权限就能查到多少元素，待完善
-     *
-     * @param entityName
-     * @param operation
-     * @param resourceId
-     */
-    public static void checkOperation(String entityName, String operation, String resourceId) {
-        String op = Operation.of(operation).name();
-        String id = resourceId == null ? "*" : resourceId;
-        String permission = entityName + ":" + op + ":" + id;
-        RequestUtils.checkAnyPermission(permission);
-    }
-
-    /**
-     * 判断当前用户是否有权限进行操作 默认为所有元素操作
-     * 适用于 create 和 list
-     *
-     * @param entityName
-     * @param operation
-     */
-    public static void checkOperation(String entityName, String operation) {
-        checkOperation(entityName, operation, null);
-    }
-
-    public static void checkOperation(String operation, BaseEntity entity) {
-        if (entity instanceof SystemEntity) {
-            SystemEntity systemEntity = (SystemEntity) entity;
-            if (systemEntity.isSystemEntity() && !getCurrentUser().isSuperUser()) {
-                throw new UnsupportedOperationException("您无权操作系统对象");
-            }
-        }
-        checkOperation(entity.entityName(), operation, entity.getId());
     }
 
     /**
@@ -236,77 +157,4 @@ public class RequestUtils extends LoggerEntity {
         return ip;
     }
 
-    /**
-     * 返回带有状态码和信息json
-     *
-     * @param message
-     * @param data
-     * @param <T>
-     * @return
-     */
-    public static <T> Result<T> success(String message, T data) {
-        return new Result<>(message, HttpStatus.OK.value(), data);
-    }
-
-    public static Result success(String message) {
-        return new Result<>(message, HttpStatus.OK.value());
-    }
-
-    public static <T> Result<T> success(T data) {
-        return new Result<>("success", HttpStatus.OK.value(), data);
-    }
-
-    public static <T> Result<T> error(String message, HttpStatus status, T data) {
-        return new Result<>(message, status.value(), data);
-    }
-
-    public static Result error(String message, HttpStatus status) {
-        return new Result(message, status.value());
-    }
-
-    /**
-     * 返回消息实体
-     *
-     * @param
-     */
-    public static class Result<T> {
-
-        private String message;
-        private int code;
-        private T data;
-
-        Result(String message, int code) {
-            this(message, code, null);
-        }
-
-        Result(String message, int code, T data) {
-            this.message = message;
-            this.code = code;
-            this.data = data;
-        }
-
-        public String getMessage() {
-            return message;
-        }
-
-        public void setMessage(String message) {
-            this.message = message;
-        }
-
-        public int getCode() {
-            return code;
-        }
-
-        public void setCode(int code) {
-            this.code = code;
-        }
-
-        public T getData() {
-            return data;
-        }
-
-        public void setData(T data) {
-            this.data = data;
-        }
-    }
 }

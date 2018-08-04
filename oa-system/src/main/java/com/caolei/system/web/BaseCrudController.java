@@ -1,7 +1,10 @@
-package com.caolei.system.util;
+package com.caolei.system.web;
 
 import com.caolei.system.api.BaseEntity;
 import com.caolei.system.constant.Constants;
+import com.caolei.system.util.EntityUtils;
+import com.caolei.system.util.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.data.domain.*;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +24,7 @@ import static com.caolei.system.constant.Constants.*;
  * @Description: TODO
  * @date 2018/7/25 11:41
  */
+@RequiresAuthentication
 public interface BaseCrudController<T extends BaseEntity> extends BaseLogger {
 
     /**
@@ -59,7 +63,7 @@ public interface BaseCrudController<T extends BaseEntity> extends BaseLogger {
                         @RequestParam(value = "direction", defaultValue = "ASC") String direction,
                         @RequestParam(value = "sortField", defaultValue = "id") String sortField,
                         Model model, T t) {
-        RequestUtils.checkOperation(OP_LIST, t);
+        SecurityUtils.checkOperation(t, OP_LIST);
         Pageable pageable = PageRequest.of(pageNumber, pageSize, new Sort(Sort.Direction.fromString(direction), sortField));
         Page<T> list = service().findAll(Example.of(t), pageable);
         model.addAttribute("page", list);
@@ -74,7 +78,7 @@ public interface BaseCrudController<T extends BaseEntity> extends BaseLogger {
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     default String showCreateForm(HttpServletRequest request, HttpServletResponse response,
                                   Model model) {
-        RequestUtils.checkOperation(OP_CREATE, instance());
+        SecurityUtils.checkOperation(instance(), OP_CREATE);
         putModel(model, OP_CREATE, instance(), TY_ADMIN);
         return "/" + moduleName() + "/" + entityName() + "/" + entityName() + "_edit";
     }
@@ -86,7 +90,7 @@ public interface BaseCrudController<T extends BaseEntity> extends BaseLogger {
     default String showForm(HttpServletRequest request, HttpServletResponse response,
                             @PathVariable("id") String id, @PathVariable("operation") String operation, Model model) {
         T t = service().findById(id);
-        RequestUtils.checkOperation(operation, t);
+        SecurityUtils.checkOperation(t, operation);
         putModel(model, operation, t, TY_ADMIN);
         String prefix = operation.equals(OP_FIND) ? "_view" : "_edit";
         return "/" + moduleName() + "/" + entityName() + "/" + entityName() + prefix;
@@ -98,10 +102,10 @@ public interface BaseCrudController<T extends BaseEntity> extends BaseLogger {
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     default String create(HttpServletRequest request, HttpServletResponse response,
                           T t, RedirectAttributes redirectAttributes) {
-        RequestUtils.checkOperation(OP_CREATE, t);
+        SecurityUtils.checkOperation(t, OP_CREATE);
         service().save(t);
         redirectAttributes.addFlashAttribute("message", "新增成功");
-        return Constants.REDIRECT_TO + "/" + moduleName() + "/" + entityName() + "/list";
+        return REDIRECT_TO + "/" + moduleName() + "/" + entityName() + "/list";
     }
 
     /**
@@ -110,10 +114,10 @@ public interface BaseCrudController<T extends BaseEntity> extends BaseLogger {
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     default String update(HttpServletRequest request, HttpServletResponse response,
                           T t, RedirectAttributes redirectAttributes) {
-        RequestUtils.checkOperation(OP_UPDATE, t);
+        SecurityUtils.checkOperation(t, OP_UPDATE);
         service().updateById(t.getId(), t);
         redirectAttributes.addFlashAttribute("message", "修改成功");
-        return Constants.REDIRECT_TO + "/" + moduleName() + "/" + entityName() + "/find/" + t.getId();
+        return REDIRECT_TO + "/" + moduleName() + "/" + entityName() + "/find/" + t.getId();
     }
 
     /**
@@ -123,10 +127,10 @@ public interface BaseCrudController<T extends BaseEntity> extends BaseLogger {
     default String delete(HttpServletRequest request, HttpServletResponse response,
                           T t, RedirectAttributes redirectAttributes) {
         t = service().findById(t.getId());
-        RequestUtils.checkOperation(OP_DELETE, t);
+        SecurityUtils.checkOperation(t, OP_DELETE);
         service().deleteById(t.getId());
         redirectAttributes.addFlashAttribute("message", "删除成功");
-        return Constants.REDIRECT_TO + "/" + moduleName() + "/" + entityName() + "/list";
+        return REDIRECT_TO + "/" + moduleName() + "/" + entityName() + "/list";
     }
 
     /**
@@ -143,7 +147,7 @@ public interface BaseCrudController<T extends BaseEntity> extends BaseLogger {
      *
      * @return
      */
-    default String moduleName(){
+    default String moduleName() {
         return instance().moduleName();
     }
 

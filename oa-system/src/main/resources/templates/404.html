@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  lang="zh-CN">
+
+<head th:replace="/fragment/head :: head"></head>
+
+<body class="page-body page-error-env">
+
+	<div class="page-error centered">
+		
+		<div class="error-symbol">
+			<i class="fa-warning"></i>
+		</div>
+
+		<h2>
+			Error 404
+			<small>Page not found!</small>
+		</h2>
+		
+		<p>我们没有找到您想访问的页面</p>
+		<p>你可以试试搜索一下您想要的功能</p>
+		
+	</div>
+	
+	<div class="page-error-search centered">
+
+        <!-- 搜索框
+		<form class="form-half" method="get" action="" >
+			<input type="text" class="form-control input-lg" placeholder="Search..." />
+			
+			<button type="submit" class="btn-unstyled">
+				<i class="linecons-search"></i>
+			</button>
+		</form>
+		-->
+		<!--<a href="#" th:href="@{go_back_url}" class="go-back">-->
+		<a href="#" class="go-back">
+			<i class="fa-angle-left"></i>
+			返回
+		</a>
+	</div>
+
+	<!-- 引入js文件 -->
+	<div th:include="/fragment/onload_js :: onloadJS"></div>
+
+	<script type="text/javascript">
+
+	</script>
+
+</body>
+</html>

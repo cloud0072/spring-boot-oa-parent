@@ -1,5 +1,6 @@
-package com.caolei.system.util;
+package com.caolei.system.web;
 
+import com.caolei.system.util.RequestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

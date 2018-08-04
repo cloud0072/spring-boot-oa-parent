@@ -1,6 +1,7 @@
 package com.caolei.system.util;
 
-import com.caolei.system.api.LoggerEntity;
+import com.caolei.system.web.BaseLogger;
+import org.slf4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,9 +25,12 @@ import java.util.jar.JarFile;
  * @date 2018/6/12 22:38
  */
 @SuppressWarnings("AlibabaRemoveCommentedCode")
-public class ReflectUtils extends LoggerEntity {
+public class ReflectUtils implements BaseLogger {
+
+    private static Logger logger;
 
     private ReflectUtils() {
+        logger = logger();
     }
 
     /**

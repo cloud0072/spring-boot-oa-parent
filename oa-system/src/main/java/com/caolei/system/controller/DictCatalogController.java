@@ -1,7 +1,5 @@
 package com.caolei.system.controller;
 
-import com.caolei.system.util.BaseCrudController;
-import com.caolei.system.util.BaseCrudService;
 import com.caolei.system.constant.ColumnType;
 import com.caolei.system.constant.Constants;
 import com.caolei.system.model.ColumnConfigModel;
@@ -10,7 +8,10 @@ import com.caolei.system.pojo.DictCatalog;
 import com.caolei.system.pojo.User;
 import com.caolei.system.service.DictCatalogService;
 import com.caolei.system.util.RequestUtils;
+import com.caolei.system.util.SecurityUtils;
 import com.caolei.system.util.StringUtils;
+import com.caolei.system.web.BaseCrudController;
+import com.caolei.system.web.BaseCrudService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -67,7 +68,7 @@ public class DictCatalogController implements BaseCrudController<DictCatalog> {
     @RequestMapping(value = "/addColumn", method = RequestMethod.POST)
     public String addColumn(HttpServletRequest request, HttpServletResponse response,
                             DictCatalog dictCatalog, ColumnConfigModel model, RedirectAttributes redirectAttributes) {
-        RequestUtils.checkOperation(OP_CREATE, dictCatalog);
+        SecurityUtils.checkOperation(dictCatalog, OP_CREATE);
 
         if (StringUtils.isEmpty(dictCatalog.getId())) {
             //create
@@ -81,7 +82,7 @@ public class DictCatalogController implements BaseCrudController<DictCatalog> {
         }
 
         redirectAttributes.addFlashAttribute("message", "新增成功");
-        return Constants.REDIRECT_TO + "/" + moduleName() + "/" + entityName() +
+        return REDIRECT_TO + "/" + moduleName() + "/" + entityName() +
                 "/update/" + dictCatalog.getId();
     }
 

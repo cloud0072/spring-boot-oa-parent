@@ -1,7 +1,5 @@
 package com.caolei.system.controller;
 
-import com.caolei.system.util.BaseCrudController;
-import com.caolei.system.util.BaseCrudService;
 import com.caolei.system.constant.Constants;
 import com.caolei.system.pojo.Role;
 import com.caolei.system.pojo.User;
@@ -10,6 +8,9 @@ import com.caolei.system.service.RoleService;
 import com.caolei.system.service.UserService;
 import com.caolei.system.util.EntityUtils;
 import com.caolei.system.util.RequestUtils;
+import com.caolei.system.util.SecurityUtils;
+import com.caolei.system.web.BaseCrudController;
+import com.caolei.system.web.BaseCrudService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -93,14 +94,14 @@ public class UserController
     @Override
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String create(HttpServletRequest request, HttpServletResponse response, User user, RedirectAttributes redirectAttributes) {
-        RequestUtils.checkOperation(OP_CREATE, instance());
+        SecurityUtils.checkOperation(instance(), OP_CREATE);
         List<String> roleIds = Arrays.asList(request.getParameterValues("role-checked"));
         List<Role> roles = new ArrayList<>();
         roleIds.forEach(roleId -> roles.add(roleService.findById(roleId)));
         user.getRoles().addAll(roles);
         userService.register(user.setDefaultValue());
         redirectAttributes.addFlashAttribute("message", "新增成功");
-        return Constants.REDIRECT_TO + "/" + moduleName() + "/" + entityName() + "/list";
+        return REDIRECT_TO + "/" + moduleName() + "/" + entityName() + "/list";
     }
 
     /**
@@ -116,14 +117,14 @@ public class UserController
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public String update(HttpServletRequest request, HttpServletResponse response,
                          User user, RedirectAttributes redirectAttributes) {
-        RequestUtils.checkOperation(OP_UPDATE, user);
+        SecurityUtils.checkOperation(user, OP_UPDATE);
         List<String> roleIds = Arrays.asList(request.getParameterValues("role-checked"));
         List<Role> roles = new ArrayList<>();
         roleIds.forEach(roleId -> roles.add(roleService.findById(roleId)));
         user.getRoles().addAll(roles);
         user = service().updateById(user.getId(), user);
         redirectAttributes.addFlashAttribute("message", "修改成功");
-        return Constants.REDIRECT_TO + "/" + moduleName() + "/" + entityName() + "/find/" + user.getId();
+        return REDIRECT_TO + "/" + moduleName() + "/" + entityName() + "/find/" + user.getId();
     }
 
     /**
@@ -133,7 +134,7 @@ public class UserController
     public String findSelf(Model model) {
         String id = RequestUtils.getCurrentUser().getId();
         User user = service().findById(id);
-        RequestUtils.checkOperation(OP_FIND, user);
+        SecurityUtils.checkOperation(user, OP_FIND);
         putModel(model, OP_FIND, user, TY_SELF);
         return "/" + moduleName() + "/" + entityName() + "/" + entityName() + "_view";
     }
@@ -162,7 +163,7 @@ public class UserController
         } else {
             redirectAttributes.addFlashAttribute("message", "修改失败");
         }
-        return Constants.REDIRECT_TO + "/" + moduleName() + "/" + entityName() + "/find/" + id;
+        return REDIRECT_TO + "/" + moduleName() + "/" + entityName() + "/find/" + id;
     }
 
 }

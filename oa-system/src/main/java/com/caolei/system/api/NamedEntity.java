@@ -1,4 +1,4 @@
-package com.caolei.system.util;
+package com.caolei.system.api;
 
 public interface NamedEntity {
 

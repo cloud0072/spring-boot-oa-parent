@@ -5,10 +5,9 @@ import com.caolei.system.repository.UserRepository;
 import com.caolei.system.service.PermissionService;
 import com.caolei.system.service.RoleService;
 import com.caolei.system.service.UserService;
-import com.caolei.system.util.EncryptUtils;
 import com.caolei.system.util.RequestUtils;
+import com.caolei.system.util.SecurityUtils;
 import com.caolei.system.util.StringUtils;
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,14 +52,14 @@ public class UserServiceImpl
         }
         if (!StringUtils.isEmpty(input.getPassword())) {
             user.setPassword(input.getPassword());
-            EncryptUtils.encrypt(user);
+            SecurityUtils.encrypt(user);
         }
         return save(user);
     }
 
     @Override
     public User register(User user) {
-        return save(EncryptUtils.encrypt(user));
+        return save(SecurityUtils.encrypt(user));
     }
 
     @Override

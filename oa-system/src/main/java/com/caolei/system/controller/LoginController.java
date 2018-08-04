@@ -1,6 +1,6 @@
 package com.caolei.system.controller;
 
-import com.caolei.system.util.BaseController;
+import com.caolei.system.web.BaseController;
 import com.caolei.system.pojo.User;
 import com.caolei.system.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

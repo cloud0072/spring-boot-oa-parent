@@ -1,8 +1,5 @@
 package com.caolei.system.controller;
 
-import com.caolei.system.util.BaseCrudController;
-import com.caolei.system.util.BaseCrudService;
-import com.caolei.system.constant.Constants;
 import com.caolei.system.pojo.Permission;
 import com.caolei.system.pojo.Role;
 import com.caolei.system.pojo.User;
@@ -11,13 +8,17 @@ import com.caolei.system.service.RoleService;
 import com.caolei.system.service.UserService;
 import com.caolei.system.util.EntityUtils;
 import com.caolei.system.util.RequestUtils;
-import org.apache.shiro.SecurityUtils;
+import com.caolei.system.util.SecurityUtils;
+import com.caolei.system.web.BaseCrudController;
+import com.caolei.system.web.BaseCrudService;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.mgt.RealmSecurityManager;
 import org.apache.shiro.realm.jdbc.JdbcRealm;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -97,32 +98,32 @@ public class RoleController
     @Override
     public String create(HttpServletRequest request, HttpServletResponse response,
                          Role role, RedirectAttributes redirectAttributes) {
-        RequestUtils.checkOperation(OP_CREATE, role);
+        SecurityUtils.checkOperation(role, OP_CREATE);
         List<String> permissionIds = Arrays.asList(request.getParameterValues("permission-select[]"));
         List<Permission> permissions = new ArrayList<>();
         permissionIds.forEach(permissionId -> permissions.add(permissionService.findById(permissionId)));
         role.setPermissions(permissions);
         service().save(role);
         redirectAttributes.addFlashAttribute("message", "新增成功");
-        return Constants.REDIRECT_TO + "/" + moduleName() + "/" + entityName() + "/list";
+        return REDIRECT_TO + "/" + moduleName() + "/" + entityName() + "/list";
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @Override
     public String update(HttpServletRequest request, HttpServletResponse response,
                          Role role, RedirectAttributes redirectAttributes) {
-        RequestUtils.checkOperation(OP_UPDATE, role);
+        SecurityUtils.checkOperation(role, OP_UPDATE);
         List<String> permissionIds = Arrays.asList(request.getParameterValues("permission-select[]"));
         List<Permission> permissions = new ArrayList<>();
         permissionIds.forEach(permissionId -> permissions.add(permissionService.findById(permissionId)));
         role.setPermissions(permissions);
         role = service().updateById(role.getId(), role);
         redirectAttributes.addFlashAttribute("message", "新增成功");
-        return Constants.REDIRECT_TO + "/" + moduleName() + "/" + entityName() + "/find/" + role.getId();
+        return REDIRECT_TO + "/" + moduleName() + "/" + entityName() + "/find/" + role.getId();
     }
 
     @RequestMapping(value = "/clearRoleCache", method = RequestMethod.GET)
-    public RequestUtils.Result clearRoleCache() {
+    public ResponseEntity<String> clearRoleCache() {
         Cache<Object, Object> cache = shiroCacheManager.getCache("org.apache.shiro.realm.jdbc.JdbcRealm.authorizationCache");
 //        shiroCacheManager.destroy();//清除全部缓存
 //        LifecycleUtils.destroy(cache);//清除某个缓存
@@ -142,6 +143,6 @@ public class RoleController
         //重新加载subject
         subject.releaseRunAs();
 
-        return RequestUtils.success("重新加载权限成功");
+        return ResponseEntity.ok("重新加载权限成功");
     }
 }

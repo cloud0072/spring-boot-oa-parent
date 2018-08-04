@@ -1,7 +1,7 @@
 package com.caolei.system.controller;
 
-import com.caolei.system.util.BaseCrudController;
-import com.caolei.system.util.BaseCrudService;
+import com.caolei.system.web.BaseCrudController;
+import com.caolei.system.web.BaseCrudService;
 import com.caolei.system.pojo.OperationLog;
 import com.caolei.system.service.OperationLogService;
 import org.springframework.beans.factory.annotation.Autowired;
