@@ -16,6 +16,7 @@ import java.util.Date;
 
 /**
  * 文件上传和储存组件
+ *
  * @author caolei
  */
 @Entity
@@ -83,6 +84,7 @@ public class FileComponent extends BaseEntity {
     /**
      * 拷贝文件至资源文件夹下
      * 保存文件信息
+     *
      * @param fileName
      * @param category
      * @param file
@@ -96,6 +98,7 @@ public class FileComponent extends BaseEntity {
 
     /**
      * 更新文件组件信息
+     *
      * @param fileName
      * @param category
      */
@@ -120,6 +123,7 @@ public class FileComponent extends BaseEntity {
 
     /**
      * 将保存文件组件实体和复制文件分开
+     *
      * @param file
      * @throws IOException
      */
@@ -155,6 +159,7 @@ public class FileComponent extends BaseEntity {
 
     /**
      * 更新文件信息并拷贝文件到指定路径
+     *
      * @param fileName
      * @param category
      * @param file
@@ -195,12 +200,12 @@ public class FileComponent extends BaseEntity {
     }
 
     @Override
-    protected String getTableName(){
+    protected String getTableName() {
         return "文件组件";
     }
 
     @Override
-    protected String getModuleName(){
+    protected String getModuleName() {
         return "system";
     }
 

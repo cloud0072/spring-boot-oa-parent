@@ -19,7 +19,7 @@ public class OperationLog extends BaseEntity {
     /**
      * 操作用户
      */
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
     /**
@@ -70,12 +70,12 @@ public class OperationLog extends BaseEntity {
     }
 
     @Override
-    protected String getTableName(){
+    protected String getTableName() {
         return "系统管理日志";
     }
 
     @Override
-    protected String getModuleName(){
+    protected String getModuleName() {
         return "system";
     }
 

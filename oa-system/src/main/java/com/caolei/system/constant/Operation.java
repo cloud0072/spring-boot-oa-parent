@@ -1,18 +1,22 @@
 package com.caolei.system.constant;
 
+import com.caolei.system.api.NamedEntity;
+
 import static com.caolei.system.constant.Constants.*;
 
-public enum Operation {
-    //查询
-    FIND,
-    //创建
-    CREATE,
-    //删除
-    DELETE,
-    //修改
-    UPDATE,
-    //全部
-    ALL;
+public enum Operation{
+    FIND("查询"),
+    CREATE("创建"),
+    DELETE("删除"),
+    UPDATE("修改"),
+    ALL("全部"),
+    ;
+
+    private String text;
+
+    Operation(String text) {
+        this.text = text;
+    }
 
     public static Operation of(String method) {
         switch (method) {
@@ -38,5 +42,13 @@ public enum Operation {
             return "*";
         }
         return name();
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 }

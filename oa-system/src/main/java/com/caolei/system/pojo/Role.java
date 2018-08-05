@@ -52,12 +52,12 @@ public class Role extends SystemEntity implements NamedEntity {
     }
 
     @Override
-    protected String getTableName(){
+    protected String getTableName() {
         return "认证角色";
     }
 
     @Override
-    protected String getModuleName(){
+    protected String getModuleName() {
         return "system";
     }
 

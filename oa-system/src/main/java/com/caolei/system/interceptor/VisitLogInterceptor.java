@@ -1,12 +1,11 @@
 package com.caolei.system.interceptor;
 
-import com.caolei.system.web.BaseLogger;
 import com.caolei.system.pojo.OperationLog;
 import com.caolei.system.service.OperationLogService;
+import com.caolei.system.web.BaseLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,6 +22,7 @@ public class VisitLogInterceptor implements HandlerInterceptor, BaseLogger {
 
     /**
      * 访问日志
+     *
      * @param request
      * @param response
      * @param handler

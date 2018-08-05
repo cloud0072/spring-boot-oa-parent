@@ -133,11 +133,7 @@
 <script data-th-src="@{/assets/js/multiselect/js/jquery.multi-select.js}"></script>
 <div th:include="/fragment/crud_js :: crud_js"></div>
 <script type="text/javascript" th:inline="javascript">
-    $(function () {
-        if ([[${op == 'find'}]]) {
-            $("#account").attr("readOnly");
-        }
-    });
+
 </script>
 </body>
 </html>

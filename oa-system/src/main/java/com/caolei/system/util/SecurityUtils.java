@@ -104,7 +104,7 @@ public class SecurityUtils extends org.apache.shiro.SecurityUtils implements Bas
         checkOperation(entityName, operation, null);
     }
 
-    public static void checkOperation(BaseEntity entity,String operation) {
+    public static void checkOperation(BaseEntity entity, String operation) {
         if (entity instanceof SystemEntity) {
             SystemEntity systemEntity = (SystemEntity) entity;
             if (systemEntity.isSystemEntity() && !getCurrentUser().isSuperUser()) {

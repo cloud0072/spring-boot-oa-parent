@@ -17,7 +17,6 @@ import org.apache.shiro.mgt.RealmSecurityManager;
 import org.apache.shiro.realm.jdbc.JdbcRealm;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,10 +41,12 @@ import static com.caolei.system.constant.Constants.*;
 public class RoleController
         implements BaseCrudController<Role> {
 
-    private final UserService userService;
-    private final RoleService roleService;
-    private final PermissionService permissionService;
-
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private RoleService roleService;
+    @Autowired
+    private PermissionService permissionService;
     @Autowired
     private EhCacheManager shiroCacheManager;
 

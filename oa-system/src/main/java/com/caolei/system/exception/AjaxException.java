@@ -2,6 +2,7 @@ package com.caolei.system.exception;
 
 /**
  * 抛出是自动返回json
+ *
  * @author cloud0072
  */
 public class AjaxException extends RuntimeException {

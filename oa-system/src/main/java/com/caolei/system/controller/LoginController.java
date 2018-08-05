@@ -1,8 +1,8 @@
 package com.caolei.system.controller;
 
-import com.caolei.system.web.BaseController;
 import com.caolei.system.pojo.User;
 import com.caolei.system.service.UserService;
+import com.caolei.system.web.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,13 +18,8 @@ import static com.caolei.system.constant.Constants.FORWARD_TO;
 @Controller
 public class LoginController
         implements BaseController {
-
-    private final UserService userService;
-
     @Autowired
-    public LoginController(UserService userService) {
-        this.userService = userService;
-    }
+    private UserService userService;
 
     /**
      * 登陆

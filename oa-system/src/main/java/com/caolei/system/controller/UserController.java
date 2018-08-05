@@ -1,6 +1,5 @@
 package com.caolei.system.controller;
 
-import com.caolei.system.constant.Constants;
 import com.caolei.system.pojo.Role;
 import com.caolei.system.pojo.User;
 import com.caolei.system.service.PermissionService;
@@ -32,16 +31,13 @@ import static com.caolei.system.constant.Constants.*;
 public class UserController
         implements BaseCrudController<User> {
 
-    private final UserService userService;
-    private final RoleService roleService;
-    private final PermissionService permissionService;
-
     @Autowired
-    public UserController(UserService userService, RoleService roleService, PermissionService permissionService) {
-        this.userService = userService;
-        this.roleService = roleService;
-        this.permissionService = permissionService;
-    }
+    private UserService userService;
+    @Autowired
+    private RoleService roleService;
+    @Autowired
+    private PermissionService permissionService;
+
 
     @Override
     public BaseCrudService<User> service() {

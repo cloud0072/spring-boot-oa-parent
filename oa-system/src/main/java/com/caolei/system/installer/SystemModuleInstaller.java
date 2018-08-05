@@ -125,7 +125,6 @@ public class SystemModuleInstaller
             userService.register(admin);
             admin = userService.findAuthorInfoByAccount(account);
             admin.getRoles().addAll(Arrays.asList(superuserRole, userRole));
-//            admin.setPermissions(permissionService.findAll());
             userService.save(admin);
         }
 

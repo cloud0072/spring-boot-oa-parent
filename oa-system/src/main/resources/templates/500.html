@@ -1,54 +1,54 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-	  lang="zh-CN">
+      lang="zh-CN">
 
 <head th:replace="/fragment/head :: head"></head>
 
 <body class="page-body page-error-env">
 
-	<div class="page-error centered">
-		
-		<div class="error-symbol">
-			<i class="fa-warning"></i>
-		</div>
+<div class="page-error centered">
 
-		<h2>
-			Error 500
-			<small>Web Server Error!</small>
-		</h2>
-		
-        <!--/*@thymesVar id="error" type="java.lang.String"*/-->
-        <div th:if="${error != null}">
-            <p th:text="${error}"></p>
-        </div>
-		<p>请重试或者联系管理员了解详情</p>
+    <div class="error-symbol">
+        <i class="fa-warning"></i>
+    </div>
 
-	</div>
-	
-	<div class="page-error-search centered">
+    <h2>
+        Error 500
+        <small>Web Server Error!</small>
+    </h2>
 
-        <!-- 搜索框
-		<form class="form-half" method="get" action="" >
-			<input type="text" class="form-control input-lg" placeholder="Search..." />
-			
-			<button type="submit" class="btn-unstyled">
-				<i class="linecons-search"></i>
-			</button>
-		</form>
-		-->
-		<!--<a href="#" th:href="@{go_back_url}" class="go-back">-->
-		<a href="#" class="go-back">
-			<i class="fa-angle-left"></i>
-			返回
-		</a>
-	</div>
+    <!--/*@thymesVar id="error" type="java.lang.String"*/-->
+    <div th:if="${error != null}">
+        <p th:text="${error}"></p>
+    </div>
+    <p>请重试或者联系管理员了解详情</p>
 
-	<!-- 引入js文件 -->
-	<div th:include="/fragment/onload_js :: onloadJS"></div>
+</div>
 
-	<script type="text/javascript">
+<div class="page-error-search centered">
 
-	</script>
+    <!-- 搜索框
+    <form class="form-half" method="get" action="" >
+        <input type="text" class="form-control input-lg" placeholder="Search..." />
+
+        <button type="submit" class="btn-unstyled">
+            <i class="linecons-search"></i>
+        </button>
+    </form>
+    -->
+    <!--<a href="#" th:href="@{go_back_url}" class="go-back">-->
+    <a href="#" class="go-back">
+        <i class="fa-angle-left"></i>
+        返回
+    </a>
+</div>
+
+<!-- 引入js文件 -->
+<div th:include="/fragment/onload_js :: onloadJS"></div>
+
+<script type="text/javascript">
+
+</script>
 
 </body>
 </html>

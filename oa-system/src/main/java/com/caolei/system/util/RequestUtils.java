@@ -10,7 +10,6 @@ import org.apache.shiro.session.Session;
 import org.slf4j.Logger;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -69,7 +68,11 @@ public class RequestUtils implements BaseLogger {
     }
 
     public static String getSessionId() {
-        return getHttpSession().getId();
+        try {
+            return getHttpSession().getId();
+        }catch (Exception e){
+            return "session is not available";
+        }
     }
 
     /**

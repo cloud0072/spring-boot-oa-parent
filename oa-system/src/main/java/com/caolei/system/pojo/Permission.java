@@ -86,12 +86,12 @@ public class Permission extends SystemEntity implements NamedEntity {
     }
 
     @Override
-    protected String getTableName(){
+    protected String getTableName() {
         return "认证权限";
     }
 
     @Override
-    protected String getModuleName(){
+    protected String getModuleName() {
         return "system";
     }
 

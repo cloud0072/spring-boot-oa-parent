@@ -98,7 +98,7 @@ public class User extends SystemEntity implements NamedEntity {
     }
 
     @Override
-    protected String getModuleName(){
+    protected String getModuleName() {
         return "system";
     }
 

@@ -1,8 +1,5 @@
 package com.caolei.system.constant;
 
-import java.io.File;
-import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * @author caolei
@@ -12,41 +9,23 @@ import java.util.Date;
  */
 public enum ColumnType {
 
-    VARCHAR("String"),
-    INTEGER("Integer"),
-    DECIMAL("BigDecimal"),
-    DATETIME("Date"),
-    FILE("File");
+    VARCHAR("文本"),
+    INTEGER("整数"),
+    DECIMAL("小数"),
+    DATETIME("日期"),
+    ;
 
-    private Class clazz;
+    private String text;
 
-    ColumnType(String className) {
-        switch (className) {
-            case "String":
-                this.clazz = String.class;
-                break;
-            case "Integer":
-                this.clazz = Integer.class;
-                break;
-            case "BigDecimal":
-                this.clazz = BigDecimal.class;
-                break;
-            case "Date":
-                this.clazz = Date.class;
-                break;
-            case "File":
-                this.clazz = File.class;
-                break;
-            default:
-                this.clazz = String.class;
-        }
+    ColumnType(String text) {
+        this.text = text;
     }
 
-    public Class getClazz() {
-        return clazz;
+    public String getText() {
+        return text;
     }
 
-    public void setClazz(Class clazz) {
-        this.clazz = clazz;
+    public void setText(String text) {
+        this.text = text;
     }
 }

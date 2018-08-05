@@ -120,11 +120,7 @@
 <div th:include="/fragment/onload_js :: onloadJS"></div>
 <div th:include="/fragment/crud_js :: crud_js"></div>
 <script type="text/javascript" th:inline="javascript">
-    $(function () {
-        if ([[${op == 'find'}]]) {
-            $("#account").attr("readOnly");
-        }
-    });
+
 
 </script>
 </body>

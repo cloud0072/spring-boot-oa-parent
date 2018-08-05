@@ -1,7 +1,7 @@
 package com.caolei.system.interceptor;
 
-import com.caolei.system.web.BaseLogger;
 import com.caolei.system.util.StringUtils;
+import com.caolei.system.web.BaseLogger;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;

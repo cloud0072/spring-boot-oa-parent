@@ -1,7 +1,8 @@
 package com.caolei.system.service;
 
-import com.caolei.system.web.BaseCrudService;
+import com.caolei.system.model.ColumnConfig;
 import com.caolei.system.pojo.DictCatalog;
+import com.caolei.system.web.BaseCrudService;
 
 /**
  * @author cloud0072
@@ -9,4 +10,27 @@ import com.caolei.system.pojo.DictCatalog;
 public interface DictCatalogService
         extends BaseCrudService<DictCatalog> {
 
+    /**
+     * 新建一行
+     *
+     * @param id
+     * @param columnConfig
+     * @return
+     */
+    DictCatalog addColumn(String id, ColumnConfig columnConfig);
+
+    /**
+     * 查询ColumnConfig
+     *
+     * @param id
+     * @return
+     */
+    ColumnConfig findColumnConfigById(String id);
+
+    /**
+     * 删除ColumnConfig
+     * @param id
+     * @return
+     */
+    void deleteColumnConfigById(String id);
 }

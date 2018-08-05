@@ -61,12 +61,12 @@ public class EntityResource extends BaseEntity implements NamedEntity {
     }
 
     @Override
-    protected String getTableName(){
+    protected String getTableName() {
         return "实体名";
     }
 
     @Override
-    protected String getModuleName(){
+    protected String getModuleName() {
         return "system";
     }
 

@@ -1,7 +1,7 @@
 package com.caolei.system.api;
 
-import com.caolei.system.web.BaseLogger;
 import com.caolei.system.util.StringUtils;
+import com.caolei.system.web.BaseLogger;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.GeneratedValue;

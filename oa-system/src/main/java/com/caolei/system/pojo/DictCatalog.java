@@ -1,10 +1,11 @@
 package com.caolei.system.pojo;
 
 import com.caolei.system.api.BaseEntity;
-import com.caolei.system.model.ColumnEntity;
+import com.caolei.system.model.ColumnConfig;
+import com.caolei.system.model.DictEntity;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 /**
  * @author caolei
@@ -28,18 +29,16 @@ public class DictCatalog extends BaseEntity {
     /**
      * 成员属性配置
      */
-    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
-    @JoinColumn(name = "dict_catalog_id")
-    private List<ColumnEntity> columnConfig;
-
-//    /**
-//     * 分类的根元素
-//     */
-//    @Column
-//    private DictEntity root;
+    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "dictCatalog", fetch = FetchType.LAZY)
+    private Set<ColumnConfig> configs;
+    /**
+     * 成员属性配置
+     */
+    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "dictCatalog", fetch = FetchType.LAZY)
+    private Set<DictEntity> entities;
 
     @Override
-    protected String getTableName(){
+    protected String getTableName() {
         return "字典目录";
     }
 
@@ -64,12 +63,19 @@ public class DictCatalog extends BaseEntity {
         this.description = description;
     }
 
-    public List<ColumnEntity> getColumnConfig() {
-        return columnConfig;
+    public Set<ColumnConfig> getConfigs() {
+        return configs;
     }
 
-    public void setColumnConfig(List<ColumnEntity> columnConfig) {
-        this.columnConfig = columnConfig;
+    public void setConfigs(Set<ColumnConfig> configs) {
+        this.configs = configs;
     }
 
+    public Set<DictEntity> getEntities() {
+        return entities;
+    }
+
+    public void setEntities(Set<DictEntity> entities) {
+        this.entities = entities;
+    }
 }

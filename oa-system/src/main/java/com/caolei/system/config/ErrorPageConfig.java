@@ -20,6 +20,6 @@ public class ErrorPageConfig implements ErrorPageRegistrar {
         //错误类型为404，找不到网页的，默认显示404.html网页
         ErrorPage e404 = new ErrorPage(HttpStatus.NOT_FOUND, "/error/404");
 
-        registry.addErrorPages(e401,e404);
+        registry.addErrorPages(e401, e404);
     }
 }

@@ -1,16 +1,14 @@
 package com.caolei.system.controller;
 
-import com.caolei.system.util.SecurityUtils;
-import com.caolei.system.web.BaseCrudController;
-import com.caolei.system.web.BaseCrudService;
 import com.caolei.system.pojo.Permission;
 import com.caolei.system.pojo.Role;
 import com.caolei.system.pojo.User;
 import com.caolei.system.service.PermissionService;
 import com.caolei.system.service.RoleService;
 import com.caolei.system.service.UserService;
-import com.caolei.system.util.RequestUtils;
-
+import com.caolei.system.util.SecurityUtils;
+import com.caolei.system.web.BaseCrudController;
+import com.caolei.system.web.BaseCrudService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.http.ResponseEntity;
@@ -32,16 +30,12 @@ import java.util.List;
 public class PermissionController
         implements BaseCrudController<Permission> {
 
-    private final UserService userService;
-    private final RoleService roleService;
-    private final PermissionService permissionService;
-
     @Autowired
-    public PermissionController(UserService userService, RoleService roleService, PermissionService permissionService) {
-        this.userService = userService;
-        this.roleService = roleService;
-        this.permissionService = permissionService;
-    }
+    private UserService userService;
+    @Autowired
+    private RoleService roleService;
+    @Autowired
+    private PermissionService permissionService;
 
     @Override
     public BaseCrudService<Permission> service() {
@@ -54,7 +48,7 @@ public class PermissionController
     @RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<List<Permission>> findUserPermission(@PathVariable(name = "userId") String userId,
-                                             Model model, Permission permission) {
+                                                               Model model, Permission permission) {
         User user = userService.findById(userId);
         permission.setUsers(Collections.singletonList(user));
         return ResponseEntity.ok(permissionService.findAll(Example.of(permission)));
@@ -66,7 +60,7 @@ public class PermissionController
     @RequestMapping(value = "/role/{roleId}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<List<Permission>> findRolePermission(@PathVariable(name = "roleId") String roleId,
-                                     Model model, Permission permission) {
+                                                               Model model, Permission permission) {
         //检查权限
         SecurityUtils.checkAnyRole("superuser");
         Role role = roleService.findById(roleId);
