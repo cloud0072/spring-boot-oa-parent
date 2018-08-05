@@ -49,8 +49,10 @@ public class DictCatalogServiceImpl
     @Override
     public DictCatalog addColumn(String id, ColumnConfig config) {
         DictCatalog catalog = findById(id);
-        catalog.getConfigs().add(config);
-        return save(catalog);
+        //多端保存
+        config.setDictCatalog(catalog);
+        columnConfigRepository.save(config);
+        return catalog;
     }
 
     @Override

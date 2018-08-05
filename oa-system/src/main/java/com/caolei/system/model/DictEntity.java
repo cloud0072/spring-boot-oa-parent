@@ -18,7 +18,7 @@ public class DictEntity extends BaseEntity {
     /**
      * 子节点
      */
-    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
+    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "parent", fetch = FetchType.LAZY)
     private Set<DictEntity> children;
     /**
      * 字典分类
