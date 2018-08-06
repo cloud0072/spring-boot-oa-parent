@@ -4,6 +4,7 @@ package com.caolei.system.util;
 import com.caolei.system.web.BaseLogger;
 import org.slf4j.Logger;
 
+import java.text.MessageFormat;
 import java.util.UUID;
 
 /**

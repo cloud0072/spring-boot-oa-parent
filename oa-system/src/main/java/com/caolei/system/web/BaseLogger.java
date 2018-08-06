@@ -11,11 +11,11 @@ public interface BaseLogger {
     }
 
     default void error(String errorMessage) {
-        logger().error("SessionId : " + RequestUtils.getSessionId() + "\tERROR : " + errorMessage);
+        logger().error("{}\tSessionId : {}", errorMessage, RequestUtils.getSessionId());
     }
 
     default void info(String message) {
-        logger().info("SessionId : " + RequestUtils.getSessionId() + "\tINFO : " + message);
+        logger().info("{}\tSessionId : {}", message, RequestUtils.getSessionId());
     }
 
 }

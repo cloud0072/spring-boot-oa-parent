@@ -70,7 +70,7 @@ public class RequestUtils implements BaseLogger {
     public static String getSessionId() {
         try {
             return getHttpSession().getId();
-        }catch (Exception e){
+        } catch (Exception e) {
             return "session is not available";
         }
     }
@@ -112,7 +112,7 @@ public class RequestUtils implements BaseLogger {
         headers.add("Content-Disposition", "attachment; filename=" + fileName);
         headers.add("Pragma", "no-cache");
         headers.add("Expires", "0");
-        logger.info("download: " + fileName + "\ttime: " + DateUtils.defaultDateFormat(new Date()));
+        logger.info("download: {}\ttime: {}", fileName, DateUtils.defaultDateFormat(new Date()));
         return ResponseEntity
                 .ok()
                 .headers(headers)

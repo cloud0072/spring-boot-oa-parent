@@ -1,12 +1,13 @@
 package com.caolei;
 
 import com.caolei.system.pojo.User;
-import com.caolei.system.util.SecurityUtils;
 import com.caolei.system.util.ReflectUtils;
+import com.caolei.system.util.SecurityUtils;
 import com.caolei.system.util.StringUtils;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.junit.Test;
 
+import java.text.MessageFormat;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -165,6 +166,50 @@ public class BaseTest {
 
         System.out.println(map2.get(""));
 
+
+    }
+
+    @Test
+    public void test17() {
+        String modelPath = "system";
+        String entityName = "user";
+        int times = 1000 * 1000 * 100;
+        String template = "/{0}/{1}/{2}_edit";
+        String template2 = "/%s/%s/%s_edit";
+        long startTime = System.currentTimeMillis();
+
+
+        //执行200,000,000次,耗时4,399毫秒
+//        for (int i = 0; i < times; i++) {
+        //执行100,000,000次,耗时5,311毫秒
+//            String temp = "/" + modelPath + "/" + entityName + "/" + i + "_edit";
+//        }
+
+        //执行10,000,000次,耗时6,345毫秒   MessageFormat 效率好低啊
+//        for (int i = 0; i < times; i++) {
+//            执行100,000,000次,耗时57,248毫秒
+//            String index = "" + i;
+//            new String(MessageFormat.format(template, modelPath,entityName, index));
+//        }
+//
+        //执行10,000,000次,耗时13,068毫秒
+//        for (int i = 0; i < times; i++) {
+//            执行100,000,000次,耗时128,889毫秒
+//            int index = i;
+//            new String(String.format(template2, modelPath,entityName, index));
+//        }
+
+        //执行100,000,000次,耗时4,105毫秒
+//        for (int i = 0; i < times; i++) {
+//            StringBuilder builder = new StringBuilder().append("/").append(modelPath).append("/").append(entityName)
+//                    .append("/").append(i).append("_edit");
+//            builder.toString();
+//        }
+
+
+        System.out.println(MessageFormat.format("执行{0}次,耗时{1}毫秒", times, (System.currentTimeMillis() - startTime)));
+
+//        System.out.println(MessageFormat.format("现在时间是 {0}",new Date()));
 
     }
 
