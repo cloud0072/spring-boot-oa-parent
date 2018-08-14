@@ -5,9 +5,9 @@ import com.caolei.system.repository.UserRepository;
 import com.caolei.system.service.PermissionService;
 import com.caolei.system.service.RoleService;
 import com.caolei.system.service.UserService;
-import com.caolei.system.util.RequestUtils;
+
 import com.caolei.system.util.SecurityUtils;
-import com.caolei.system.util.StringUtils;
+import com.caolei.common.util.StringUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,7 +77,7 @@ public class UserServiceImpl
             logger().info(user.getAccount() + " 登陆成功...");
             return true;
         } else {
-            RequestUtils.setCurrentUser(null);
+            SecurityUtils.setCurrentUser(null);
         }
         return false;
     }
@@ -102,7 +102,7 @@ public class UserServiceImpl
     @Override
     public User findUserWithLogsByAccount(String account) {
         User user = userRepository.findUserByAccount(account);
-        user.getLogs().size();
+        user.getExtend().getLogs().size();
         return user;
     }
 

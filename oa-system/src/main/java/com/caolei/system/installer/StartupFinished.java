@@ -1,6 +1,6 @@
 package com.caolei.system.installer;
 
-import com.caolei.system.web.BaseLogger;
+import com.caolei.common.api.BaseLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;

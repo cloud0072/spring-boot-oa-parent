@@ -6,8 +6,8 @@ import com.caolei.system.pojo.User;
 import com.caolei.system.service.PermissionService;
 import com.caolei.system.service.RoleService;
 import com.caolei.system.service.UserService;
-import com.caolei.system.util.EntityUtils;
-import com.caolei.system.util.RequestUtils;
+import com.caolei.common.util.EntityUtils;
+
 import com.caolei.system.util.SecurityUtils;
 import com.caolei.system.web.BaseCrudController;
 import com.caolei.system.web.BaseCrudService;
@@ -31,7 +31,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static com.caolei.system.constant.Constants.*;
+import static com.caolei.common.constant.Constants.*;
 
 /**
  * 使用RequiresRoles时需要使用open class 不然会报错 final 类不能 subclass
@@ -68,7 +68,7 @@ public class RoleController
         Role role = (Role) map.get(entityName());
         String operation = (String) map.get("op");
 
-        User currentUser = RequestUtils.getCurrentUser();
+        User currentUser = SecurityUtils.getCurrentUser();
         switch (operation) {
             case OP_DELETE:
             case OP_UPDATE:

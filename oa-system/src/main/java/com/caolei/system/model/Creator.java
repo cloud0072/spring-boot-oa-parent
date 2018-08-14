@@ -1,4 +1,4 @@
-package com.caolei.system.api;
+package com.caolei.system.model;
 
 import com.caolei.system.pojo.User;
 

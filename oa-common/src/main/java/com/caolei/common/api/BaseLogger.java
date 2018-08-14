@@ -1,8 +1,9 @@
-package com.caolei.system.web;
+package com.caolei.common.api;
 
-import com.caolei.system.util.RequestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static com.caolei.common.util.HttpUtils.sessionId;
 
 public interface BaseLogger {
 
@@ -11,11 +12,10 @@ public interface BaseLogger {
     }
 
     default void error(String errorMessage) {
-        logger().error("{}\tSessionId : {}", errorMessage, RequestUtils.getSessionId());
+        logger().error("{}\tSessionId : {}", errorMessage, sessionId());
     }
 
     default void info(String message) {
-        logger().info("{}\tSessionId : {}", message, RequestUtils.getSessionId());
+        logger().info("{}\tSessionId : {}", message, sessionId());
     }
-
 }

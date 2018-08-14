@@ -1,6 +1,6 @@
 package com.caolei.system.repository;
 
-import com.caolei.system.constant.Operation;
+import com.caolei.common.constant.Operation;
 import com.caolei.system.pojo.Permission;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -22,4 +22,6 @@ public interface PermissionRepository
      * @return
      */
     List<Permission> findPermissionsByEntityResource_CodeInAndOperationLessThanEqual(List<String> codes, Operation operation);
+
+    List<Permission> findPermissionsByRoles_Users_AccountEquals(String name);
 }

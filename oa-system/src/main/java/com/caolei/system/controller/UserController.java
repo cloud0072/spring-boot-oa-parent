@@ -5,8 +5,8 @@ import com.caolei.system.pojo.User;
 import com.caolei.system.service.PermissionService;
 import com.caolei.system.service.RoleService;
 import com.caolei.system.service.UserService;
-import com.caolei.system.util.EntityUtils;
-import com.caolei.system.util.RequestUtils;
+import com.caolei.common.util.EntityUtils;
+
 import com.caolei.system.util.SecurityUtils;
 import com.caolei.system.web.BaseCrudController;
 import com.caolei.system.web.BaseCrudService;
@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
-import static com.caolei.system.constant.Constants.*;
+import static com.caolei.common.constant.Constants.*;
 
 /**
  * 使用RequiresRoles时需要使用open class 不然会报错 final 类不能 subclass
@@ -56,7 +56,7 @@ public class UserController
         User user = (User) map.get(entityName());
         String operation = (String) map.get("op");
 
-        User currentUser = RequestUtils.getCurrentUser();
+        User currentUser = SecurityUtils.getCurrentUser();
         switch (operation) {
             case OP_UPDATE:
             case OP_DELETE:
@@ -128,7 +128,7 @@ public class UserController
      */
     @RequestMapping(value = "/find/self", method = RequestMethod.GET)
     public String findSelf(Model model) {
-        String id = RequestUtils.getCurrentUser().getId();
+        String id = SecurityUtils.getCurrentUser().getId();
         User user = service().findById(id);
         SecurityUtils.checkOperation(user, OP_FIND);
         putModel(model, OP_FIND, user, TY_SELF);
@@ -140,7 +140,7 @@ public class UserController
      */
     @RequestMapping(value = "/update/self", method = RequestMethod.GET)
     public String showUpdateSelfForm(Model model) {
-        String id = RequestUtils.getCurrentUser().getId();
+        String id = SecurityUtils.getCurrentUser().getId();
         model.addAttribute("op", OP_UPDATE);
         model.addAttribute("type", TY_SELF);
         model.addAttribute(entityName(), service().findById(id));
@@ -152,7 +152,7 @@ public class UserController
      */
     @RequestMapping(value = "/update/self", method = RequestMethod.POST)
     public String updateSelf(User user, RedirectAttributes redirectAttributes) {
-        String id = RequestUtils.getCurrentUser().getId();
+        String id = SecurityUtils.getCurrentUser().getId();
         if (id.equals(user.getId())) {
             userService.updateById(id, user);
             redirectAttributes.addFlashAttribute("message", "修改成功");

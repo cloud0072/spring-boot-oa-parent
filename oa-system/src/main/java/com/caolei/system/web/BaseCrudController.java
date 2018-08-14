@@ -1,7 +1,8 @@
 package com.caolei.system.web;
 
-import com.caolei.system.api.BaseEntity;
-import com.caolei.system.util.EntityUtils;
+import com.caolei.common.api.BaseLogger;
+import com.caolei.common.api.BaseEntity;
+import com.caolei.common.util.EntityUtils;
 import com.caolei.system.util.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.data.domain.*;
@@ -15,7 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static com.caolei.system.constant.Constants.*;
+import static com.caolei.common.constant.Constants.*;
 
 /**
  * @author caolei

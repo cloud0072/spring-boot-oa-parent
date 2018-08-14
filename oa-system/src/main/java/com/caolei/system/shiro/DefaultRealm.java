@@ -3,8 +3,8 @@ package com.caolei.system.shiro;
 
 import com.caolei.system.pojo.User;
 import com.caolei.system.service.UserService;
-import com.caolei.system.util.RequestUtils;
-import com.caolei.system.web.BaseLogger;
+
+import com.caolei.common.api.BaseLogger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -51,7 +51,7 @@ public class DefaultRealm extends AuthorizingRealm implements BaseLogger {
         if (null == user) {
             throw new UnknownAccountException("账号不存在");
         } else {
-            RequestUtils.setCurrentUser(user);
+            com.caolei.system.util.SecurityUtils.setCurrentUser(user);
             return new SimpleAuthenticationInfo(user.getUserName(), user.getPassword(),
                     ByteSource.Util.bytes(user.getSalt()), super.getName());
         }

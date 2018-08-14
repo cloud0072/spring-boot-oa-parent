@@ -1,10 +1,12 @@
 package com.caolei.system.util;
 
-import com.caolei.system.api.BaseEntity;
-import com.caolei.system.api.SystemEntity;
-import com.caolei.system.constant.Operation;
+import com.caolei.common.api.BaseEntity;
+import com.caolei.common.api.SystemEntity;
+import com.caolei.common.constant.Constants;
+import com.caolei.common.constant.Operation;
+import com.caolei.common.util.HttpUtils;
 import com.caolei.system.pojo.User;
-import com.caolei.system.web.BaseLogger;
+import com.caolei.common.api.BaseLogger;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.slf4j.Logger;
@@ -16,8 +18,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
-
-import static com.caolei.system.util.RequestUtils.getCurrentUser;
 
 /**
  * 加密工具
@@ -112,6 +112,27 @@ public class SecurityUtils extends org.apache.shiro.SecurityUtils implements Bas
             }
         }
         checkOperation(entity.entityName(), operation, entity.getId());
+    }
+
+    /**
+     * 获取当前用户
+     *
+     * @return
+     */
+    public static User getCurrentUser() {
+        return (User) HttpUtils.httpSession().getAttribute(Constants.USER_INFO);
+    }
+
+    /**
+     * 重新设置当前用户属性
+     *
+     * @param user
+     */
+    public static void setCurrentUser(User user) {
+        if (user == null) {
+            HttpUtils.httpSession().removeAttribute(Constants.USER_INFO);
+        }
+        HttpUtils.httpSession().setAttribute(Constants.USER_INFO, user);
     }
 
     /**

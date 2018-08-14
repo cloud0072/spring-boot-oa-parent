@@ -1,10 +1,11 @@
 package com.caolei.system.pojo;
 
-import com.caolei.system.api.BaseEntity;
-import com.caolei.system.constant.FileCategory;
-import com.caolei.system.util.DateUtils;
-import com.caolei.system.util.RequestUtils;
-import com.caolei.system.util.StringUtils;
+import com.caolei.common.api.BaseEntity;
+import com.caolei.common.constant.FileType;
+import com.caolei.common.util.DateUtils;
+
+import com.caolei.common.util.StringUtils;
+import com.caolei.system.util.SecurityUtils;
 import org.springframework.util.FileCopyUtils;
 
 import javax.persistence.Column;
@@ -47,7 +48,7 @@ public class FileComponent extends BaseEntity {
      * 哪个Entity中的文件
      */
     @Column
-    private FileCategory category;
+    private FileType category;
     /**
      * 下载次数
      */
@@ -77,7 +78,7 @@ public class FileComponent extends BaseEntity {
     public FileComponent() {
     }
 
-    private FileComponent(String fileName, FileCategory category) {
+    private FileComponent(String fileName, FileType category) {
         createOrUpdate(fileName, category);
     }
 
@@ -90,7 +91,7 @@ public class FileComponent extends BaseEntity {
      * @param file
      * @return
      */
-    public static FileComponent of(String fileName, FileCategory category, File file) throws IOException {
+    public static FileComponent of(String fileName, FileType category, File file) throws IOException {
         FileComponent component = new FileComponent(fileName, category);
         component.copyFile(file);
         return component;
@@ -102,7 +103,7 @@ public class FileComponent extends BaseEntity {
      * @param fileName
      * @param category
      */
-    private void createOrUpdate(String fileName, FileCategory category) {
+    private void createOrUpdate(String fileName, FileType category) {
         this.fileName = fileName;
         this.category = category;
 
@@ -116,9 +117,9 @@ public class FileComponent extends BaseEntity {
         }
         this.modifyTime = date;
         if (this.creator == null) {
-            this.creator = RequestUtils.getCurrentUser();
+            this.creator = SecurityUtils.getCurrentUser();
         }
-        this.modifier = RequestUtils.getCurrentUser();
+        this.modifier = SecurityUtils.getCurrentUser();
     }
 
     /**
@@ -165,7 +166,7 @@ public class FileComponent extends BaseEntity {
      * @param file
      * @throws IOException
      */
-    public void updateFile(String fileName, FileCategory category, File file) throws IOException {
+    public void updateFile(String fileName, FileType category, File file) throws IOException {
         if (StringUtils.isEmpty(getId())) {
             throw new UnsupportedOperationException("请先保存文件组件才能更新文件!");
         }
@@ -242,11 +243,11 @@ public class FileComponent extends BaseEntity {
         this.datePath = datePath;
     }
 
-    public FileCategory getCategory() {
+    public FileType getCategory() {
         return category;
     }
 
-    public void setCategory(FileCategory category) {
+    public void setCategory(FileType category) {
         this.category = category;
     }
 

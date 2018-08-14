@@ -1,6 +1,6 @@
 package com.caolei.system.service.impl;
 
-import com.caolei.system.constant.Operation;
+import com.caolei.common.constant.Operation;
 import com.caolei.system.pojo.Permission;
 import com.caolei.system.repository.EntityResourceRepository;
 import com.caolei.system.repository.PermissionRepository;

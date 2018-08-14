@@ -2,7 +2,7 @@ package com.caolei.controller;
 
 import com.caolei.system.exception.AjaxException;
 import com.caolei.system.pojo.User;
-import com.caolei.system.util.DateUtils;
+import com.caolei.common.util.DateUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 

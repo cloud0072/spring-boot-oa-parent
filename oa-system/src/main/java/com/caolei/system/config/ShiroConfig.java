@@ -2,7 +2,7 @@ package com.caolei.system.config;
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import com.caolei.system.shiro.DefaultRealm;
-import com.caolei.system.web.BaseLogger;
+import com.caolei.common.api.BaseLogger;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.ExcessiveAttemptsException;

@@ -1,8 +1,8 @@
-package com.caolei.system.util;
+package com.caolei.common.util;
 
-import com.caolei.system.api.BaseEntity;
-import com.caolei.system.api.NamedEntity;
-import com.caolei.system.web.BaseLogger;
+import com.caolei.common.api.BaseEntity;
+import com.caolei.common.api.BaseLogger;
+import com.caolei.common.api.NamedEntity;
 import org.slf4j.Logger;
 
 import java.util.*;

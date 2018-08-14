@@ -1,7 +1,6 @@
-package com.caolei.system.api;
+package com.caolei.common.api;
 
-import com.caolei.system.util.StringUtils;
-import com.caolei.system.web.BaseLogger;
+import com.caolei.common.util.StringUtils;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.GeneratedValue;

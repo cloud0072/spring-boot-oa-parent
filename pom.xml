@@ -12,6 +12,7 @@
     <modules>
         <module>oa-system</module>
         <module>oa-start</module>
+        <module>oa-common</module>
     </modules>
 
     <parent>

@@ -1,8 +1,9 @@
 package com.caolei.system.pojo;
 
-import com.caolei.system.api.NamedEntity;
-import com.caolei.system.api.SystemEntity;
-import com.caolei.system.util.StringUtils;
+import com.caolei.common.api.NamedEntity;
+import com.caolei.common.api.SystemEntity;
+import com.caolei.common.util.StringUtils;
+import com.caolei.system.model.UserExtend;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -37,16 +38,23 @@ public class User extends SystemEntity implements NamedEntity {
     private Boolean active;
     @Column
     private Boolean superUser;
-
+    /**
+     * 祖册时间
+     */
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column
     private Date createTime;
+    /**
+     * 最后登录时间
+     */
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column
     private Date lastLoginTime;
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Column
-    private Date birthday;
+    /**
+     * 用户详情
+     */
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private UserExtend extend;
 
     @JsonIgnore
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
@@ -59,11 +67,6 @@ public class User extends SystemEntity implements NamedEntity {
     @JoinTable(name = "auth_user_permission", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "auth_permission_id"))
     private Set<Permission> permissions;
-
-    @JsonIgnore
-    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private Set<OperationLog> logs;
 
     public User() {
     }
@@ -203,13 +206,6 @@ public class User extends SystemEntity implements NamedEntity {
         this.lastLoginTime = lastLoginTime;
     }
 
-    public Date getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
-    }
 
     public Set<Role> getRoles() {
         if (roles == null) {
@@ -233,15 +229,11 @@ public class User extends SystemEntity implements NamedEntity {
         this.permissions = permissions;
     }
 
-    public Set<OperationLog> getLogs() {
-        if (logs == null) {
-            logs = new HashSet<>();
-        }
-        return logs;
+    public UserExtend getExtend() {
+        return extend;
     }
 
-    public void setLogs(Set<OperationLog> logs) {
-        this.logs = logs;
+    public void setExtend(UserExtend extend) {
+        this.extend = extend;
     }
-
 }

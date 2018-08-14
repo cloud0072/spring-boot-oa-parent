@@ -1,10 +1,11 @@
 package com.caolei;
 
-import com.caolei.system.constant.Operation;
+import com.caolei.common.constant.Operation;
 import com.caolei.system.pojo.OperationLog;
 import com.caolei.system.pojo.Permission;
 import com.caolei.system.pojo.Role;
 import com.caolei.system.pojo.User;
+import com.caolei.system.repository.PermissionRepository;
 import com.caolei.system.service.PermissionService;
 import com.caolei.system.service.RoleService;
 import com.caolei.system.service.UserService;
@@ -35,6 +36,8 @@ public class SystemTest {
     UserService userService;
     @Autowired
     RoleService roleService;
+    @Autowired
+    PermissionRepository permissionRepository;
 
     private void printIndex() {
         System.err.println(">>>>>>>>>>>>>>>>>" + index++);
@@ -110,6 +113,7 @@ public class SystemTest {
         userService.save(user);
     }
 
+    @Transactional
     @Test
     public void Test08UserAddLogs() {
         printIndex();
@@ -119,17 +123,18 @@ public class SystemTest {
         log.setCreateTime(new Date());
         log.setUser(user);
 
-        user.getLogs().addAll(Collections.singletonList(log));
+        user.getExtend().getLogs().addAll(Collections.singletonList(log));
 
         userService.save(user);
     }
 
+    @Transactional
     @Test
     public void Test09UserRemoveLogs() {
         printIndex();
         User user = userService.findUserWithLogsByAccount("cloud0072");
 
-        user.getLogs().clear();
+        user.getExtend().getLogs().clear();
 
         userService.save(user);
     }
@@ -153,6 +158,15 @@ public class SystemTest {
     //    @Test
     public void Test13UserRemove() {
         userService.delete(userService.findUserByAccount("cloud0072"));
+    }
+
+
+    @Test
+    public void Test14JoinFind() {
+
+        List<Permission> permissions = permissionRepository.findPermissionsByRoles_Users_AccountEquals("admin");
+
+        permissions.forEach(permission -> System.out.println(permission.getName()));
     }
 }
 

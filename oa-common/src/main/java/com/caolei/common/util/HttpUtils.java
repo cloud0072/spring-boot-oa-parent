@@ -1,9 +1,6 @@
-package com.caolei.system.util;
+package com.caolei.common.util;
 
-
-import com.caolei.system.constant.Constants;
-import com.caolei.system.pojo.User;
-import com.caolei.system.web.BaseLogger;
+import com.caolei.common.api.BaseLogger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.UnavailableSecurityManagerException;
 import org.apache.shiro.session.Session;
@@ -22,21 +19,29 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Date;
 
-import static com.caolei.system.constant.Constants.TXT_LOCALHOST;
-import static com.caolei.system.constant.Constants.TXT_UNKNOWN;
+import static com.caolei.common.constant.Constants.TXT_LOCALHOST;
+import static com.caolei.common.constant.Constants.TXT_UNKNOWN;
 
-/**
- * 请求工具类
- *
- * @author cloud0072
- * @date 2018/6/12 22:38
- */
-public class RequestUtils implements BaseLogger {
+public class HttpUtils implements BaseLogger {
 
     private static Logger logger;
 
-    private RequestUtils() {
+    private HttpUtils() {
         logger = logger();
+    }
+    /**
+     * 获取普通Http会话
+     *
+     * @return
+     */
+    public static HttpSession httpSession() {
+        try {
+            return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                    .getRequest().getSession();
+        } catch (Exception e) {
+            logger.error("无法获取当前HTTP会话");
+            throw new UnsupportedOperationException("无法获取当前HTTP会话!");
+        }
     }
 
     /**
@@ -44,7 +49,7 @@ public class RequestUtils implements BaseLogger {
      *
      * @return
      */
-    public static Session getSession() {
+    public static Session shiroSession() {
         try {
             return SecurityUtils.getSubject().getSession();
         } catch (UnavailableSecurityManagerException e) {
@@ -54,47 +59,17 @@ public class RequestUtils implements BaseLogger {
     }
 
     /**
-     * 获取普通Http会话
-     *
+     * 获取sessionId
      * @return
      */
-    public static HttpSession getHttpSession() {
+    public static String sessionId() {
         try {
-            return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest().getSession();
+            return httpSession().getId();
         } catch (Exception e) {
-            logger.error("无法获取当前HTTP会话");
-            throw new UnsupportedOperationException("无法获取当前HTTP会话!");
+            return "-1";
         }
     }
 
-    public static String getSessionId() {
-        try {
-            return getHttpSession().getId();
-        } catch (Exception e) {
-            return "session is not available";
-        }
-    }
-
-    /**
-     * 获取当前用户
-     *
-     * @return
-     */
-    public static User getCurrentUser() {
-        return (User) getHttpSession().getAttribute(Constants.USER_INFO);
-    }
-
-    /**
-     * 重新设置当前用户属性
-     *
-     * @param user
-     */
-    public static void setCurrentUser(User user) {
-        if (user == null) {
-            getHttpSession().removeAttribute(Constants.USER_INFO);
-        }
-        getHttpSession().setAttribute(Constants.USER_INFO, user);
-    }
 
     /**
      * 下载文件
@@ -159,5 +134,4 @@ public class RequestUtils implements BaseLogger {
         }
         return ip;
     }
-
 }

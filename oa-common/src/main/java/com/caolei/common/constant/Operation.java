@@ -1,16 +1,13 @@
-package com.caolei.system.constant;
+package com.caolei.common.constant;
 
-import com.caolei.system.api.NamedEntity;
+import static com.caolei.common.constant.Constants.*;
 
-import static com.caolei.system.constant.Constants.*;
-
-public enum Operation{
+public enum Operation {
     FIND("查询"),
     CREATE("创建"),
     DELETE("删除"),
     UPDATE("修改"),
-    ALL("全部"),
-    ;
+    ALL("全部"),;
 
     private String text;
 

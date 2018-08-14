@@ -1,8 +1,9 @@
 package com.caolei.system.pojo;
 
 
-import com.caolei.system.api.BaseEntity;
-import com.caolei.system.util.RequestUtils;
+import com.caolei.common.api.BaseEntity;
+import com.caolei.common.util.HttpUtils;
+import com.caolei.system.util.SecurityUtils;
 
 import javax.persistence.*;
 import javax.servlet.http.HttpServletRequest;
@@ -61,10 +62,10 @@ public class OperationLog extends BaseEntity {
     }
 
     public OperationLog(HttpServletRequest request) {
-        this.user = RequestUtils.getCurrentUser();
+        this.user = SecurityUtils.getCurrentUser();
         this.method = request.getMethod();
         this.requestUrl = request.getRequestURL().toString();
-        this.ipAddress = RequestUtils.IPAddress(request);
+        this.ipAddress = HttpUtils.IPAddress(request);
         this.sessionId = getSessionId();
         this.createTime = new Date();
     }

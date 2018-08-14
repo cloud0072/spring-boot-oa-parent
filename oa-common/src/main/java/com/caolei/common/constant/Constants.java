@@ -1,4 +1,4 @@
-package com.caolei.system.constant;
+package com.caolei.common.constant;
 
 import java.io.File;
 

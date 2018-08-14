@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import static com.caolei.system.constant.Constants.FORWARD_TO;
+import static com.caolei.common.constant.Constants.FORWARD_TO;
 
 /**
  * 用户登录控制器
