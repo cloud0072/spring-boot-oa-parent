@@ -10,6 +10,7 @@ import com.caolei.system.pojo.User;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -26,13 +27,13 @@ import java.util.stream.Stream;
  * @date 2018/6/12 22:37
  */
 @Component
-public class SecurityUtils extends org.apache.shiro.SecurityUtils implements BaseLogger {
+public class SecurityUtils extends org.apache.shiro.SecurityUtils {
 
     private static Integer HASH_ITERATIONS;
-    private static Logger logger;
+    private static final Logger logger =  LoggerFactory.getLogger(SecurityUtils.class);
 
     private SecurityUtils() {
-        logger = logger();
+
     }
 
     /**

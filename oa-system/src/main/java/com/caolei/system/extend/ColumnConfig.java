@@ -1,4 +1,4 @@
-//package com.caolei.system.model;
+//package com.caolei.system.extend;
 //
 //import com.caolei.common.api.BaseEntity;
 //import com.caolei.common.constant.ColumnType;

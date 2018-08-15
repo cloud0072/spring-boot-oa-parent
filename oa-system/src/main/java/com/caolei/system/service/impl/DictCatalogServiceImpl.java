@@ -1,6 +1,6 @@
 //package com.caolei.system.service.impl;
 //
-////import com.caolei.system.model.ColumnConfig;
+////import com.caolei.system.extend.ColumnConfig;
 ////import com.caolei.system.pojo.DictCatalog;
 //import com.caolei.system.repository.ColumnConfigRepository;
 //import com.caolei.system.repository.DictCatalogRepository;

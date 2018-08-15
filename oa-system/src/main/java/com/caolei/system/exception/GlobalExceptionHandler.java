@@ -5,7 +5,6 @@ import com.caolei.common.util.StringUtils;
 import com.caolei.system.util.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -20,27 +19,24 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalExceptionHandler implements BaseLogger {
 
-    private static Logger logger;
-
     private GlobalExceptionHandler() {
-        logger = logger();
     }
 
-    private static void printErrorMessage(Exception ex) {
-        logger.error(ex.getStackTrace()[0].toString());
-        logger.error(ex.getClass().getName());
-        logger.error(ex.getMessage());
-    }
-
-    private static void addErrorMessage(ModelAndView modelAndView, Exception ex) {
+    private void addErrorMessage(ModelAndView modelAndView, Exception ex) {
         String message = !StringUtils.isEmpty(ex.getMessage()) ? "您的请求出错了!" : ex.getMessage();
         modelAndView.addObject("error", message);
+    }
+
+    private void printErrorMessage(Exception ex) {
+        logger().error(ex.getStackTrace()[0].toString());
+        logger().error(ex.getClass().getName());
+        logger().error(ex.getMessage());
     }
 
     /**
      * 认证异常统一返回登录页重新登录
      * 可接受所有的 AuthenticationException 及其子类的异常
-     *
+     * code = 401
      * @param request
      * @param ex
      * @return
@@ -62,7 +58,7 @@ public class GlobalExceptionHandler implements BaseLogger {
     /**
      * 自定义ajaxException
      * 返回预设的json数据
-     *
+     * code=400
      * @param request
      * @param ex
      * @return
@@ -80,7 +76,7 @@ public class GlobalExceptionHandler implements BaseLogger {
 
     /**
      * 全局异常处理逻辑...默认返回 错误页
-     *
+     * code=500
      * @param request
      * @param ex
      * @return

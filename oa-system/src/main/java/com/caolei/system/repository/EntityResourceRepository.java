@@ -1,6 +1,6 @@
 package com.caolei.system.repository;
 
-import com.caolei.system.model.EntityResource;
+import com.caolei.system.extend.EntityResource;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,6 +1,6 @@
 //package com.caolei.system.repository;
 //
-//import com.caolei.system.model.DictEntity;
+//import com.caolei.system.extend.DictEntity;
 //import org.springframework.data.jpa.repository.JpaRepository;
 //import org.springframework.stereotype.Repository;
 //

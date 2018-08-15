@@ -1,23 +1,23 @@
 //package com.caolei.system.controller;
 //
 //import com.caolei.common.constant.ColumnType;
-//import com.caolei.system.model.ColumnConfig;
+//import com.caolei.system.extend.ColumnConfig;
 //import com.caolei.system.pojo.DictCatalog;
 //import com.caolei.system.pojo.User;
 //import com.caolei.system.service.DictCatalogService;
 //
 //import com.caolei.system.util.SecurityUtils;
 //import com.caolei.common.util.StringUtils;
-//import com.caolei.system.web.BaseCrudController;
-//import com.caolei.system.web.BaseCrudService;
+//import com.caolei.system.api.BaseCrudController;
+//import com.caolei.system.api.BaseCrudService;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.http.ResponseEntity;
 //import org.springframework.stereotype.Controller;
 //import org.springframework.ui.Model;
-//import org.springframework.web.bind.annotation.RequestMapping;
-//import org.springframework.web.bind.annotation.RequestMethod;
-//import org.springframework.web.bind.annotation.ResponseBody;
-//import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+//import org.springframework.api.bind.annotation.RequestMapping;
+//import org.springframework.api.bind.annotation.RequestMethod;
+//import org.springframework.api.bind.annotation.ResponseBody;
+//import org.springframework.api.servlet.mvc.support.RedirectAttributes;
 //
 //import javax.servlet.http.HttpServletRequest;
 //import javax.servlet.http.HttpServletResponse;
@@ -40,8 +40,8 @@
 //    }
 //
 //    @Override
-//    public void modelAdvice(Model model) {
-//        Map<String, Object> map = model.asMap();
+//    public void modelAdvice(Model extend) {
+//        Map<String, Object> map = extend.asMap();
 //        DictCatalog dictCatalog = (DictCatalog) map.get(entityName());
 //        String operation = (String) map.get("op");
 //
@@ -51,9 +51,9 @@
 //            case OP_UPDATE:
 //            case OP_CREATE:
 //            case OP_FIND:
-//                model.addAttribute("columnTypes", ColumnType.values());
+//                extend.addAttribute("columnTypes", ColumnType.values());
 //                if (dictCatalog.getConfigs() != null) {
-//                    model.addAttribute("configs", dictCatalog.getConfigs().stream()
+//                    extend.addAttribute("configs", dictCatalog.getConfigs().stream()
 //                            .sorted(Comparator.comparing(ColumnConfig::getFieldOrder)).collect(toList()));
 //                }
 //                break;

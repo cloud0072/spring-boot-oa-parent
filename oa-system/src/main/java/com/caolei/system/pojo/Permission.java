@@ -4,7 +4,7 @@ import com.caolei.common.api.NamedEntity;
 import com.caolei.common.api.SystemEntity;
 import com.caolei.common.constant.Operation;
 import com.caolei.common.util.StringUtils;
-import com.caolei.system.model.EntityResource;
+import com.caolei.system.extend.EntityResource;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;

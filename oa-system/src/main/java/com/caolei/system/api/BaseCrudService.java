@@ -1,4 +1,4 @@
-package com.caolei.system.web;
+package com.caolei.system.api;
 
 
 import com.caolei.common.api.BaseEntity;

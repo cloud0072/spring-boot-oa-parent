@@ -1,8 +1,8 @@
 //package com.caolei.system.pojo;
 //
 //import com.caolei.common.api.BaseEntity;
-////import com.caolei.system.model.ColumnConfig;
-//import com.caolei.system.model.DictEntity;
+////import com.caolei.system.extend.ColumnConfig;
+//import com.caolei.system.extend.DictEntity;
 //
 //import javax.persistence.*;
 //import java.util.Set;

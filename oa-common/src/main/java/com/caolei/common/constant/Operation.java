@@ -7,7 +7,7 @@ public enum Operation {
     CREATE("创建"),
     DELETE("删除"),
     UPDATE("修改"),
-    ALL("全部"),;
+    ALL("全部");
 
     private String text;
 

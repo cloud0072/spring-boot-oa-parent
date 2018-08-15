@@ -1,9 +1,9 @@
 package com.caolei.common.util;
 
 import com.caolei.common.api.BaseEntity;
-import com.caolei.common.api.BaseLogger;
 import com.caolei.common.api.NamedEntity;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -11,26 +11,19 @@ import java.util.stream.Collectors;
 /**
  * 对象增强
  */
-public class EntityUtils implements BaseLogger {
+public class EntityUtils {
 
+    private static final Logger logger = LoggerFactory.getLogger(EntityUtils.class);
+
+    /**
+     * 实体类缓存
+     */
     private static final Map<String, BaseEntity> entityMap = new HashMap<>();
-    private static Logger logger;
 
     /**
      * 无法实例化，保证只能使用静态方法
      */
     private EntityUtils() {
-        logger = logger();
-    }
-
-    public static BaseEntity interfaceGenericTypeInstance(Class<?> clazz, int interfaceIndex, int typeIndex) {
-        return entityMap.computeIfAbsent(clazz.getName(), v -> {
-            try {
-                return (BaseEntity) ReflectUtils.getInterfaceGenericType(clazz, interfaceIndex, typeIndex).newInstance();
-            } catch (Exception e) {
-                throw new UnsupportedOperationException(e);
-            }
-        });
     }
 
     public static boolean isNull(Object o) {
@@ -39,6 +32,23 @@ public class EntityUtils implements BaseLogger {
 
     public static <T> T orNull(T obj, T orNull) {
         return obj == null ? orNull : obj;
+    }
+
+    /**
+     * 创建实例方法
+     * @param clazz
+     * @param interfaceIndex
+     * @param typeIndex
+     * @return
+     */
+    public static BaseEntity interfaceGenericTypeInstance(Class<?> clazz, int interfaceIndex, int typeIndex) {
+        return entityMap.computeIfAbsent(clazz.getName(), v -> {
+            try {
+                return (BaseEntity) ReflectUtils.getInterfaceGenericType(clazz, interfaceIndex, typeIndex).newInstance();
+            } catch (Exception e) {
+                throw new UnsupportedOperationException(e);
+            }
+        });
     }
 
     /**

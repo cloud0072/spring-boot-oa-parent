@@ -1,7 +1,7 @@
 package com.caolei.common.util;
 
-import com.caolei.common.api.BaseLogger;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.sql.Timestamp;
@@ -17,7 +17,9 @@ import java.util.stream.Stream;
  *
  * @author cloud0072
  */
-public class DateUtils implements BaseLogger {
+public class DateUtils {
+
+    private static final Logger logger = LoggerFactory.getLogger(DateUtils.class);
 
     private static final SimpleDateFormat defaultDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private static final SimpleDateFormat datePathFormat = new SimpleDateFormat("yyyyMM" + File.separator + "dd");
@@ -44,10 +46,8 @@ public class DateUtils implements BaseLogger {
             addAll(Arrays.asList("日", "周日", "星期日"));
         }});
     }};
-    private static Logger logger;
 
     private DateUtils() {
-        logger = logger();
     }
 
     /**
@@ -55,8 +55,10 @@ public class DateUtils implements BaseLogger {
      *
      * @param chinese
      * @return
-     */ //java自带的日期枚举类，同类的还有 Month 等
+     */
     public static DayOfWeek parseDayOfWeek(String chinese) {
+        logger.info("parseDayOfWeek - > {}", chinese);
+        //java自带的日期枚举类，同类的还有 Month 等
         return weekMap.entrySet().stream().filter(entry -> entry.getValue().contains(chinese)).findFirst()
                 .orElseThrow(UnsupportedOperationException::new).getKey();
     }
@@ -66,8 +68,9 @@ public class DateUtils implements BaseLogger {
      *
      * @param style
      * @return
-     */  //style支持各种长短格式 后台接受select框的value值可以直接生成DayOfWeek枚举类
+     */
     public static List<Map<String, String>> getDayOfWeekSelect(TextStyle style) {
+        //style支持各种长短格式 后台接受select框的value值可以直接生成DayOfWeek枚举类
         return Stream.of(DayOfWeek.values()).map(week -> new HashMap<String, String>() {{
             put(week.name(), week.getDisplayName(style, Locale.CHINESE));
         }}).collect(Collectors.toList());

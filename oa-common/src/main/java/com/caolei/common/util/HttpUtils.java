@@ -1,10 +1,10 @@
 package com.caolei.common.util;
 
-import com.caolei.common.api.BaseLogger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.UnavailableSecurityManagerException;
 import org.apache.shiro.session.Session;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -22,12 +22,12 @@ import java.util.Date;
 import static com.caolei.common.constant.Constants.TXT_LOCALHOST;
 import static com.caolei.common.constant.Constants.TXT_UNKNOWN;
 
-public class HttpUtils implements BaseLogger {
+public class HttpUtils {
 
-    private static Logger logger;
+    private static final Logger logger = LoggerFactory.getLogger(HttpUtils.class);
 
     private HttpUtils() {
-        logger = logger();
+
     }
 
     /**

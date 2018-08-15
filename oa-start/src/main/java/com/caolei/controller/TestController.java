@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletResponse;
  * @Description: TODO
  * @date 2018/8/2 19:17
  */
-
 @RequestMapping("/test")
 @RestController
 public class TestController {
@@ -37,6 +36,11 @@ public class TestController {
         u.getRoles();
         Integer i = 1 / 0;
         return null;
+    }
+
+    @RequestMapping("/04")
+    public Object test04(HttpServletRequest request, HttpServletResponse response) {
+        return  DateUtils.parseDayOfWeek("周一");
     }
 
 

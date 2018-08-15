@@ -7,6 +7,9 @@ public enum FileType {
 
     HEAD_PHOTO("头像"),
     TEST("测试");
+    /**
+     * 说明
+     */
     String text;
 
     FileType(String text) {
@@ -20,4 +23,5 @@ public enum FileType {
     public String getPath() {
         return name().toLowerCase();
     }
+
 }

@@ -1,8 +1,8 @@
 package com.caolei.common.util;
 
-
 import com.caolei.common.api.BaseLogger;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.UUID;
 
@@ -12,10 +12,9 @@ import java.util.UUID;
  */
 public class StringUtils implements BaseLogger {
 
-    private static Logger logger;
+    private static final Logger logger = LoggerFactory.getLogger(StringUtils.class);
 
     private StringUtils() {
-        logger = logger();
     }
 
     public static boolean isEmpty(String input) {

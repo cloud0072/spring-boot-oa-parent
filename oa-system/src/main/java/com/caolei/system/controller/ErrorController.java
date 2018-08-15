@@ -1,6 +1,6 @@
 package com.caolei.system.controller;
 
-import com.caolei.system.web.BaseController;
+import com.caolei.system.api.BaseController;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
