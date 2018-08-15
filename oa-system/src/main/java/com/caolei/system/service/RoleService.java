@@ -22,4 +22,8 @@ public interface RoleService
 
     Role findRoleByCode(String code);
 
+    /**
+     * 清空权限缓存 并重新加载
+     */
+    void clearRoleCache();
 }

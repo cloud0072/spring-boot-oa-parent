@@ -1,8 +1,8 @@
 package com.caolei.system.exception;
 
-import com.caolei.system.util.SecurityUtils;
-import com.caolei.common.util.StringUtils;
 import com.caolei.common.api.BaseLogger;
+import com.caolei.common.util.StringUtils;
+import com.caolei.system.util.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.slf4j.Logger;

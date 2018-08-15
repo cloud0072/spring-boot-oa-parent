@@ -1,12 +1,12 @@
 package com.caolei.system.util;
 
 import com.caolei.common.api.BaseEntity;
+import com.caolei.common.api.BaseLogger;
 import com.caolei.common.api.SystemEntity;
 import com.caolei.common.constant.Constants;
 import com.caolei.common.constant.Operation;
 import com.caolei.common.util.HttpUtils;
 import com.caolei.system.pojo.User;
-import com.caolei.common.api.BaseLogger;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.slf4j.Logger;

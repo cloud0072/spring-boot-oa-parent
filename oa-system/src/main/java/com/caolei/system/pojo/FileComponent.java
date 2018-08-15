@@ -3,7 +3,6 @@ package com.caolei.system.pojo;
 import com.caolei.common.api.BaseEntity;
 import com.caolei.common.constant.FileType;
 import com.caolei.common.util.DateUtils;
-
 import com.caolei.common.util.StringUtils;
 import com.caolei.system.util.SecurityUtils;
 import org.springframework.util.FileCopyUtils;

@@ -1,7 +1,7 @@
 package com.caolei.system.web;
 
-import com.caolei.common.api.BaseLogger;
 import com.caolei.common.api.BaseEntity;
+import com.caolei.common.api.BaseLogger;
 import com.caolei.common.util.EntityUtils;
 import com.caolei.system.util.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;

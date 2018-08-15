@@ -16,7 +16,9 @@ import javax.persistence.UniqueConstraint;
  */
 @Entity
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "label"})})
-public class EntityResource extends BaseEntity implements NamedEntity {
+public class EntityResource
+        extends BaseEntity
+        implements NamedEntity {
 
     @Column
     private String name;

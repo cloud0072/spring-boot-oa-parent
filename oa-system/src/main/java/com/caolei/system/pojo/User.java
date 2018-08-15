@@ -53,7 +53,7 @@ public class User extends SystemEntity implements NamedEntity {
     /**
      * 用户详情
      */
-    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private UserExtend extend;
 
     @JsonIgnore

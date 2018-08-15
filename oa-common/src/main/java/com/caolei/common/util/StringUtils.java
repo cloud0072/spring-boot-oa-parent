@@ -53,6 +53,11 @@ public class StringUtils implements BaseLogger {
         return UUID.randomUUID().toString().toLowerCase().replaceAll("-", "");
     }
 
+    /**
+     * 获取扩展名
+     * @param fileName
+     * @return
+     */
     public static String extendName(String fileName) {
         String extendName = null;
         if (!StringUtils.isEmpty(fileName) && fileName.contains(".")) {

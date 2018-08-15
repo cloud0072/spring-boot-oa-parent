@@ -12,8 +12,7 @@ public enum ColumnType {
     VARCHAR("文本"),
     INTEGER("整数"),
     DECIMAL("小数"),
-    DATETIME("日期"),
-    ;
+    DATETIME("日期"),;
 
     private String text;
 

@@ -29,6 +29,7 @@ public class HttpUtils implements BaseLogger {
     private HttpUtils() {
         logger = logger();
     }
+
     /**
      * 获取普通Http会话
      *
