@@ -5,6 +5,7 @@ import com.caolei.common.util.StringUtils;
 import com.caolei.system.util.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -48,6 +49,25 @@ public class GlobalExceptionHandler implements BaseLogger {
         if (ex instanceof IncorrectCredentialsException) {
             ex = new IncorrectCredentialsException("用户名或密码错误");
         }
+
+        addErrorMessage(modelAndView, ex);
+        printErrorMessage(ex);
+
+        return modelAndView;
+    }
+
+    /**
+     * 授权异常返回错误页
+     * 可接受所有的 AuthenticationException 及其子类的异常
+     * code = 400
+     * @param request
+     * @param ex
+     * @return
+     */
+    @ExceptionHandler(value = {UnauthorizedException.class})
+    public ModelAndView unauthorizedExceptionExceptionHandler(HttpServletRequest request, HttpServletResponse response, Exception ex) {
+
+        ModelAndView modelAndView = new ModelAndView("500");
 
         addErrorMessage(modelAndView, ex);
         printErrorMessage(ex);

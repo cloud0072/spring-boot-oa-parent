@@ -137,6 +137,26 @@
                 </div>
 
             </div>
+
+            <div class="col-sm-6">
+
+                <div class="panel panel-default">
+
+                    <div class="panel-heading">
+                        <div class="panel-title">
+                            Basic Initialization
+                        </div>
+                    </div>
+
+                    <div class="panel-body">
+
+                        <!-- Auto initialization -->
+                        <form th:action="@{/system/user/upload/portrait}" class="dropzone"></form>
+
+                    </div>
+                </div>
+
+            </div>
         </div>
 
 
@@ -157,6 +177,11 @@
 <div th:include="/fragment/crud_js :: crud_js"></div>
 <script th:src="@{/assets/js/datepicker/bootstrap-datepicker.js}" type="text/javascript"></script>
 <script th:src="@{/assets/js/timepicker/bootstrap-timepicker.min.js}" type="text/javascript"></script>
+<!-- Imported styles on this page -->
+<link rel="stylesheet" th:href="@{/assets/js/dropzone/css/dropzone.css}">
+<!-- Imported scripts on this page -->
+<script  th:src="@{/assets/js/dropzone/dropzone.min.js}"></script>
+
 <script type="text/javascript" th:inline="javascript">
     $(function () {
         if ([[${op == 'find'}]]) {

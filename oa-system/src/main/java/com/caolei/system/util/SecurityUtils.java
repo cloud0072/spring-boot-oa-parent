@@ -8,6 +8,7 @@ import com.caolei.common.constant.Operation;
 import com.caolei.common.util.HttpUtils;
 import com.caolei.system.pojo.User;
 import org.apache.shiro.authz.AuthorizationException;
+import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,7 +62,7 @@ public class SecurityUtils extends org.apache.shiro.SecurityUtils {
         Stream.of(roles).forEach(role -> flag.add(getSubject().hasRole(role.toLowerCase())));
         if (!flag.contains(true)) {
             String name = getSubject().getPrincipal().toString();
-            throw new AuthorizationException(name + " do not has role " + Arrays.asList(roles));
+            throw new UnauthorizedException(name + " do not has role " + Arrays.asList(roles));
         }
     }
 
@@ -75,7 +76,7 @@ public class SecurityUtils extends org.apache.shiro.SecurityUtils {
         Stream.of(permissions).forEach(permission -> flag.add(getSubject().isPermitted(permission.toLowerCase())));
         if (!flag.contains(true)) {
             String name = getSubject().getPrincipal().toString();
-            throw new AuthorizationException(name + " do not has permission " + Arrays.asList(permissions));
+            throw new UnauthorizedException(name + " do not has permission " + Arrays.asList(permissions));
         }
     }
 
@@ -109,7 +110,7 @@ public class SecurityUtils extends org.apache.shiro.SecurityUtils {
         if (entity instanceof SystemEntity) {
             SystemEntity systemEntity = (SystemEntity) entity;
             if (systemEntity.isSystemEntity() && !getCurrentUser().isSuperUser()) {
-                throw new UnsupportedOperationException("您无权操作系统对象");
+                throw new UnauthorizedException("您无权操作系统对象");
             }
         }
         checkOperation(entity.entityName(), operation, entity.getId());

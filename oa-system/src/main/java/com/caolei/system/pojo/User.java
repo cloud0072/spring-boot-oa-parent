@@ -53,6 +53,7 @@ public class User extends SystemEntity implements NamedEntity {
     /**
      * 用户详情
      */
+    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private UserExtend extend;
 
@@ -92,6 +93,7 @@ public class User extends SystemEntity implements NamedEntity {
         this.systemEntity = this.systemEntity == null ? false : this.systemEntity;
         this.createTime = this.createTime == null ? new Date() : this.createTime;
         this.lastLoginTime = this.lastLoginTime == null ? new Date() : this.lastLoginTime;
+        this.extend = new UserExtend();
         return this;
     }
 

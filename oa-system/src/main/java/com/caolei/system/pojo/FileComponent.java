@@ -3,13 +3,13 @@ package com.caolei.system.pojo;
 import com.caolei.common.api.BaseEntity;
 import com.caolei.common.constant.FileType;
 import com.caolei.common.util.DateUtils;
+import com.caolei.common.util.FileUtils;
 import com.caolei.common.util.StringUtils;
 import com.caolei.system.util.SecurityUtils;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.util.FileCopyUtils;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
@@ -56,44 +56,29 @@ public class FileComponent extends BaseEntity {
     /**
      * 创建时间
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column
     private Date createTime;
     /**
      * 修改时间
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column
     private Date modifyTime;
     /**
      * 创建人
      */
-    @Column
+    @OneToOne
+    @JoinColumn(name = "creator_id")
     private User creator;
     /**
      * 修改人
      */
-    @Column
+    @OneToOne
+    @JoinColumn(name = "modifier_id")
     private User modifier;
 
     public FileComponent() {
-    }
-
-    private FileComponent(String fileName, FileType category) {
-        createOrUpdate(fileName, category);
-    }
-
-    /**
-     * 拷贝文件至资源文件夹下
-     * 保存文件信息
-     *
-     * @param fileName
-     * @param category
-     * @param file
-     * @return
-     */
-    public static FileComponent of(String fileName, FileType category, File file) throws IOException {
-        FileComponent component = new FileComponent(fileName, category);
-        component.copyFile(file);
-        return component;
     }
 
     /**
@@ -162,16 +147,10 @@ public class FileComponent extends BaseEntity {
      *
      * @param fileName
      * @param category
-     * @param file
-     * @throws IOException
      */
-    public void updateFile(String fileName, FileType category, File file) throws IOException {
-        if (StringUtils.isEmpty(getId())) {
-            throw new UnsupportedOperationException("请先保存文件组件才能更新文件!");
-        }
+    public void createOrUpdateFile(String fileName, FileType category) {
         deleteFile();
         createOrUpdate(fileName, category);
-        copyFile(file);
     }
 
     /**
@@ -183,20 +162,46 @@ public class FileComponent extends BaseEntity {
         if (StringUtils.isEmpty(this.datePath) || this.category.name() == null || this.UUIDName == null) {
             throw new UnsupportedOperationException("无法获取文件路径信息!");
         }
-        String path = this.category.name() + File.separator + this.datePath
-                + File.separator + this.UUIDName;
+        String path = FileUtils.uploadPath() + "/" + this.category.name() + "/" + this.datePath
+                + "/" + this.UUIDName;
         if (!StringUtils.isEmpty(extendName)) {
-            path += "." + getExtendName();
+            path += "." + extendName;
         }
         return path;
     }
 
+    /**
+     * 获取文件
+     *
+     * @return
+     */
     public File getFile() {
         File file = new File(getAbsolutePath());
         if (!file.exists()) {
-            throw new UnsupportedOperationException("您要找的文件已被移除!");
+            if (!file.getParentFile().exists()) {
+                file.getParentFile().mkdirs();
+            }
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                throw new UnsupportedOperationException("创建文件失败!");
+            }
         }
         return file;
+    }
+
+    /**
+     * 是否是空文件
+     *
+     * @return
+     */
+    public Boolean isEmptyFile() {
+        File file = new File(getAbsolutePath());
+        if (!file.exists()) {
+            throw new UnsupportedOperationException("文件已被移动或删除!");
+        } else {
+            return file.length() == 0;
+        }
     }
 
     @Override

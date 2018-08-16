@@ -22,7 +22,7 @@ public class DateUtils {
     private static final Logger logger = LoggerFactory.getLogger(DateUtils.class);
 
     private static final SimpleDateFormat defaultDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    private static final SimpleDateFormat datePathFormat = new SimpleDateFormat("yyyyMM" + File.separator + "dd");
+    private static final SimpleDateFormat datePathFormat = new SimpleDateFormat("yyyyMM/dd");
     private static final Map<DayOfWeek, Set<String>> weekMap = new HashMap<DayOfWeek, Set<String>>() {{
         put(DayOfWeek.MONDAY, new HashSet<String>() {{
             addAll(Arrays.asList("一", "周一", "星期一"));

@@ -43,4 +43,6 @@ public class Constants {
 
     public static final String FILE_SEPARATOR = File.separator;
 
+    public static final String LIUNX = "Linux";
+    public static final String WINDOWS = "Windows";
 }

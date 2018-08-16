@@ -1,6 +1,7 @@
 package com.caolei.controller;
 
 import com.caolei.common.util.DateUtils;
+import com.caolei.common.util.FileUtils;
 import com.caolei.system.exception.AjaxException;
 import com.caolei.system.pojo.User;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,7 +41,15 @@ public class TestController {
 
     @RequestMapping("/04")
     public Object test04(HttpServletRequest request, HttpServletResponse response) {
-        return  DateUtils.parseDayOfWeek("周一");
+        return DateUtils.parseDayOfWeek("周一");
+    }
+
+
+    @RequestMapping("/06")
+    public Object test06(HttpServletRequest request, HttpServletResponse response) {
+        String catalina = System.getProperty("catalina.home");
+        String uploadPath = FileUtils.uploadPath();
+        return uploadPath;
     }
 
 

@@ -1,19 +1,24 @@
 package com.caolei.system.controller;
 
 import com.caolei.common.util.EntityUtils;
+import com.caolei.common.util.StringUtils;
+import com.caolei.system.api.BaseCrudController;
+import com.caolei.system.api.BaseCrudService;
 import com.caolei.system.pojo.Role;
 import com.caolei.system.pojo.User;
 import com.caolei.system.service.PermissionService;
 import com.caolei.system.service.RoleService;
 import com.caolei.system.service.UserService;
 import com.caolei.system.util.SecurityUtils;
-import com.caolei.system.api.BaseCrudController;
-import com.caolei.system.api.BaseCrudService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,7 +41,6 @@ public class UserController
     private RoleService roleService;
     @Autowired
     private PermissionService permissionService;
-
 
     @Override
     public BaseCrudService<User> service() {
@@ -161,4 +165,9 @@ public class UserController
         return REDIRECT_TO + "/" + moduleName() + "/" + entityName() + "/find/" + id;
     }
 
+    @RequestMapping(value = "/upload/portrait", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity uploadHeadPhoto(String userId, @RequestParam("file") MultipartFile file) {
+        return userService.uploadHeadPhoto(userId, file);
+    }
 }

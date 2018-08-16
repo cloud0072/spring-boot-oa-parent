@@ -2,6 +2,8 @@ package com.caolei.system.service;
 
 import com.caolei.system.pojo.User;
 import com.caolei.system.api.BaseCrudService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author cloud0072
@@ -55,4 +57,11 @@ public interface UserService
     User findAuthorInfoByAccount(String account);
 
 
+    /**
+     * 上传头像
+     * @param userId
+     * @param file
+     * @return
+     */
+    ResponseEntity uploadHeadPhoto(String userId, MultipartFile file);
 }

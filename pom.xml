@@ -48,6 +48,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-cache</artifactId>
         </dependency>
+        <!-- devtools插件，热部署 -->
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.boot</groupId>-->
+            <!--<artifactId>spring-boot-devtools</artifactId>-->
+            <!--<optional>true</optional>-->
+            <!--<scope>true</scope>-->
+        <!--</dependency>-->
         <!--不再使用jdbcTemplate-->
         <!--        <dependency>
                     <groupId>org.springframework.boot</groupId>

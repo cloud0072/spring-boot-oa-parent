@@ -3,6 +3,7 @@ package com.caolei.system.extend;
 import com.caolei.common.api.BaseEntity;
 import com.caolei.system.pojo.FileComponent;
 import com.caolei.system.pojo.OperationLog;
+import com.caolei.system.pojo.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -16,10 +17,12 @@ import java.util.Set;
 @Entity
 @Table
 public class UserExtend extends BaseEntity {
+
     /**
      * 头像
      */
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "headPhoto_id")
     private FileComponent headPhoto;
     /**
      * 生日

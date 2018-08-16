@@ -1,6 +1,10 @@
 package com.caolei.system.service.impl;
 
+import com.caolei.common.constant.FileType;
+import com.caolei.common.util.EntityUtils;
 import com.caolei.common.util.StringUtils;
+import com.caolei.system.extend.UserExtend;
+import com.caolei.system.pojo.FileComponent;
 import com.caolei.system.pojo.User;
 import com.caolei.system.repository.UserRepository;
 import com.caolei.system.service.PermissionService;
@@ -11,8 +15,14 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Date;
+
+import static com.caolei.common.constant.Constants.OP_UPDATE;
 
 /**
  * @author cloud0072
@@ -73,7 +83,10 @@ public class UserServiceImpl
         subject.login(token);
         //验证是否成功登录的方法
         if (subject.isAuthenticated()) {
-            logger().info(user.getAccount() + " 登陆成功...");
+            User u = SecurityUtils.getCurrentUser();
+            u.setLastLoginTime(new Date());
+            save(u);
+            info(user.getAccount() + " 登陆成功...");
             return true;
         } else {
             SecurityUtils.setCurrentUser(null);
@@ -114,4 +127,34 @@ public class UserServiceImpl
         return user;
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public ResponseEntity uploadHeadPhoto(String userId, MultipartFile file) {
+        User user;
+        if (StringUtils.isEmpty(userId)) {
+            user = findById(SecurityUtils.getCurrentUser().getId());
+        } else {
+            user = findById(userId);
+            SecurityUtils.checkOperation(user, OP_UPDATE);
+        }
+        try {
+            if (file.isEmpty()) {
+                throw new UnsupportedOperationException("上传文件为空！");
+            }
+            if (user.getExtend() == null){
+                user.setExtend(new UserExtend());
+            }
+            UserExtend extend = user.getExtend();
+
+            FileComponent component = EntityUtils.orNull(extend.getHeadPhoto(), new FileComponent());
+            component.createOrUpdateFile(file.getName(), FileType.PORTRAIT);
+            user.getExtend().setHeadPhoto(component);
+            save(user);
+
+            file.transferTo(component.getFile());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("文件上传失败！");
+        }
+        return ResponseEntity.ok("文件上传成功！");
+    }
 }

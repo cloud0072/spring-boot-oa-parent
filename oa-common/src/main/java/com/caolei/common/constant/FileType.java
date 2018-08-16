@@ -5,8 +5,9 @@ package com.caolei.common.constant;
  */
 public enum FileType {
 
-    HEAD_PHOTO("头像"),
+    PORTRAIT("头像"),
     TEST("测试");
+
     /**
      * 说明
      */
