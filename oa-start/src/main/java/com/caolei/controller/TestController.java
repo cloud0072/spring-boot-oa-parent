@@ -2,13 +2,22 @@ package com.caolei.controller;
 
 import com.caolei.common.util.DateUtils;
 import com.caolei.common.util.FileUtils;
+import com.caolei.testpojo.Student;
+import com.caolei.testpojo.Teacher;
 import com.caolei.system.exception.AjaxException;
 import com.caolei.system.pojo.User;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -41,7 +50,30 @@ public class TestController {
 
     @RequestMapping("/04")
     public Object test04(HttpServletRequest request, HttpServletResponse response) {
-        return DateUtils.parseDayOfWeek("周一");
+        return  DateUtils.parseDayOfWeek("周一");
+    }
+
+    @RequestMapping("/05")
+    public Object test05(HttpServletRequest request, HttpServletResponse response) {
+        Teacher teacher = new Teacher();
+        teacher.setName("李华");
+        Set<Student> set = new HashSet<>();
+        set.add(new Student("小明", teacher));
+        set.add(new Student("小红", teacher));
+        set.add(new Student("小黄", teacher));
+        teacher.setStudents(set);
+
+        try {
+            ObjectOutputStream oo = new ObjectOutputStream(new FileOutputStream(
+                    new File("D:/123/Person.txt")));
+            oo.writeObject(teacher);
+            oo.flush();
+            oo.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return ResponseEntity.ok("序列化成功");
     }
 
 

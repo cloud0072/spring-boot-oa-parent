@@ -1,12 +1,17 @@
 package com.caolei;
 
-import com.caolei.system.pojo.User;
 import com.caolei.common.util.ReflectUtils;
-import com.caolei.system.util.SecurityUtils;
 import com.caolei.common.util.StringUtils;
+import com.caolei.system.pojo.User;
+import com.caolei.system.util.SecurityUtils;
+import com.caolei.testpojo.Student;
+import com.caolei.testpojo.Teacher;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.junit.Test;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.stream.Stream;
@@ -14,7 +19,6 @@ import java.util.stream.Stream;
 import static java.util.stream.Collectors.toList;
 
 public class BaseTest {
-
 
     @Test
     public void test01() {
@@ -211,6 +215,50 @@ public class BaseTest {
 
 //        System.out.println(MessageFormat.format("现在时间是 {0}",new Date()));
 
+    }
+
+    @Test
+    public void test19() throws IOException {
+        BufferedImage img = ImageIO.read(new FileInputStream(new File("d:\\123\\test.bmp")));
+
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        ImageIO.write(img, "bmp", os);
+
+        File file = new File("D:\\123\\out.bmp");
+
+        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
+        byte[] bytes = os.toByteArray();
+        bos.write(bytes);
+        bos.flush();
+        bos.close();
+    }
+
+    @Test
+    public void test20() throws IOException {
+        Teacher teacher = new Teacher();
+        teacher.setName("李华");
+        Set<Student> set = new HashSet<>();
+        set.add(new Student("小明", teacher));
+        set.add(new Student("小红", teacher));
+        set.add(new Student("小黄", teacher));
+        teacher.setStudents(set);
+
+        ObjectOutputStream oo = new ObjectOutputStream(new FileOutputStream(
+                new File("D:/123/Person.txt")));
+
+        oo.writeObject(teacher);
+        oo.flush();
+        oo.close();
+
+    }
+
+    @Test
+    public void test21() throws IOException, ClassNotFoundException {
+        ObjectInputStream oi = new ObjectInputStream(new FileInputStream(
+                new File("D:/123/Person.txt")));
+        Teacher teacher = (Teacher) oi.readObject();
+
+        System.out.println(teacher.getName());
     }
 
 
