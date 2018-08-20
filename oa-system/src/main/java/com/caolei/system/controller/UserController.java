@@ -1,24 +1,23 @@
 package com.caolei.system.controller;
 
+import com.caolei.common.constant.FileType;
 import com.caolei.common.util.EntityUtils;
 import com.caolei.common.util.StringUtils;
 import com.caolei.system.api.BaseCrudController;
 import com.caolei.system.api.BaseCrudService;
+import com.caolei.system.pojo.FileComponent;
 import com.caolei.system.pojo.Role;
 import com.caolei.system.pojo.User;
+import com.caolei.system.service.FileComponentService;
 import com.caolei.system.service.PermissionService;
 import com.caolei.system.service.RoleService;
 import com.caolei.system.service.UserService;
 import com.caolei.system.util.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -41,6 +40,8 @@ public class UserController
     private RoleService roleService;
     @Autowired
     private PermissionService permissionService;
+    @Autowired
+    private FileComponentService fileComponentService;
 
     @Override
     public BaseCrudService<User> service() {
@@ -94,10 +95,21 @@ public class UserController
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String create(HttpServletRequest request, HttpServletResponse response, User user, RedirectAttributes redirectAttributes) {
         SecurityUtils.checkOperation(instance(), OP_CREATE);
+        user.setDefaultValue();
+
         List<String> roleIds = Arrays.asList(request.getParameterValues("role-checked"));
         List<Role> roles = new ArrayList<>();
         roleIds.forEach(roleId -> roles.add(roleService.findById(roleId)));
         user.getRoles().addAll(roles);
+
+        String fileId = request.getParameter("head_photo_id");
+        if (!StringUtils.isEmpty(fileId)) {
+            FileComponent headPhoto = fileComponentService.findById(fileId);
+            if (headPhoto.getCategory() == FileType.PORTRAIT) {
+                user.getExtend().setHeadPhoto(headPhoto);
+            }
+        }
+
         userService.register(user.setDefaultValue());
         redirectAttributes.addFlashAttribute("message", "新增成功");
         return REDIRECT_TO + "/" + moduleName() + "/" + entityName() + "/list";
@@ -117,10 +129,20 @@ public class UserController
     public String update(HttpServletRequest request, HttpServletResponse response,
                          User user, RedirectAttributes redirectAttributes) {
         SecurityUtils.checkOperation(user, OP_UPDATE);
+
         List<String> roleIds = Arrays.asList(request.getParameterValues("role-checked"));
         List<Role> roles = new ArrayList<>();
         roleIds.forEach(roleId -> roles.add(roleService.findById(roleId)));
         user.getRoles().addAll(roles);
+
+        String fileId = request.getParameter("head_photo_id");
+        if (!StringUtils.isEmpty(fileId)) {
+            FileComponent headPhoto = fileComponentService.findById(fileId);
+            if (headPhoto.getCategory() == FileType.PORTRAIT) {
+                user.getExtend().setHeadPhoto(headPhoto);
+            }
+        }
+
         user = service().updateById(user.getId(), user);
         redirectAttributes.addFlashAttribute("message", "修改成功");
         return REDIRECT_TO + "/" + moduleName() + "/" + entityName() + "/find/" + user.getId();
@@ -154,9 +176,19 @@ public class UserController
      * 提交个人信息修改
      */
     @RequestMapping(value = "/update/self", method = RequestMethod.POST)
-    public String updateSelf(User user, RedirectAttributes redirectAttributes) {
+    public String updateSelf(HttpServletRequest request, HttpServletResponse response,
+                             User user, RedirectAttributes redirectAttributes) {
         String id = SecurityUtils.getCurrentUser().getId();
         if (id.equals(user.getId())) {
+
+            String fileId = request.getParameter("head_photo_id");
+            if (!StringUtils.isEmpty(fileId)) {
+                FileComponent headPhoto = fileComponentService.findById(fileId);
+                if (headPhoto.getCategory() == FileType.PORTRAIT) {
+                    user.getExtend().setHeadPhoto(headPhoto);
+                }
+            }
+
             userService.updateById(id, user);
             redirectAttributes.addFlashAttribute("message", "修改成功");
         } else {
@@ -165,9 +197,4 @@ public class UserController
         return REDIRECT_TO + "/" + moduleName() + "/" + entityName() + "/find/" + id;
     }
 
-    @RequestMapping(value = "/upload/portrait", method = RequestMethod.POST)
-    @ResponseBody
-    public ResponseEntity uploadHeadPhoto(String userId, @RequestParam("file") MultipartFile file) {
-        return userService.uploadHeadPhoto(userId, file);
-    }
 }

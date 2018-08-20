@@ -15,4 +15,8 @@ public class AjaxException extends RuntimeException {
         super(message);
     }
 
+    public AjaxException(Exception e) {
+        super(e);
+    }
+
 }

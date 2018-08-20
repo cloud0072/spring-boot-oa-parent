@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,7 +25,7 @@ public class GlobalExceptionHandler implements BaseLogger {
     }
 
     private void addErrorMessage(ModelAndView modelAndView, Exception ex) {
-        String message = !StringUtils.isEmpty(ex.getMessage()) ? "您的请求出错了!" : ex.getMessage();
+        String message = StringUtils.isEmpty(ex.getMessage()) ? "您的请求出错了!" : ex.getMessage();
         modelAndView.addObject("error", message);
     }
 
@@ -43,7 +44,8 @@ public class GlobalExceptionHandler implements BaseLogger {
      * @return
      */
     @ExceptionHandler(value = {AuthenticationException.class})
-    public ModelAndView authenticationExceptionHandler(HttpServletRequest request, HttpServletResponse response, Exception ex) {
+    public ModelAndView authenticationExceptionHandler(HttpServletRequest request, HttpServletResponse response,
+                                                       Exception ex) {
 
         ModelAndView modelAndView = new ModelAndView("forward:/prepare_login");
         if (ex instanceof IncorrectCredentialsException) {
@@ -65,7 +67,8 @@ public class GlobalExceptionHandler implements BaseLogger {
      * @return
      */
     @ExceptionHandler(value = {UnauthorizedException.class})
-    public ModelAndView unauthorizedExceptionExceptionHandler(HttpServletRequest request, HttpServletResponse response, Exception ex) {
+    public ModelAndView unauthorizedExceptionExceptionHandler(HttpServletRequest request,
+                                                              HttpServletResponse response, Exception ex) {
 
         ModelAndView modelAndView = new ModelAndView("500");
 
@@ -84,9 +87,10 @@ public class GlobalExceptionHandler implements BaseLogger {
      * @return
      */
     @ExceptionHandler(value = {AjaxException.class})
-    public ResponseEntity<Map> ajaxExceptionHandler(HttpServletRequest request, HttpServletResponse response, Exception ex) {
+    @ResponseBody
+    public ResponseEntity<Map> ajaxExceptionHandler(HttpServletRequest request, HttpServletResponse response,
+                                                    Exception ex) {
         Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("code", 400);
         resultMap.put("message", ex.getMessage());
 
         printErrorMessage(ex);
@@ -102,9 +106,11 @@ public class GlobalExceptionHandler implements BaseLogger {
      * @return
      */
     @ExceptionHandler(value = {Exception.class})
-    public ModelAndView exceptionHandler(HttpServletRequest request, HttpServletResponse response, Exception ex) {
+    public ModelAndView exceptionHandler(HttpServletRequest request, HttpServletResponse response,
+                                         Exception ex) {
         if (SecurityUtils.isSubjectAvailable() && !SecurityUtils.getSubject().isAuthenticated()) {
-            return authenticationExceptionHandler(request, response, new AuthenticationException("账号信息异常,请先登录"));
+            return authenticationExceptionHandler(request, response,
+                    new AuthenticationException("账号信息异常,请先登录"));
         }
         ModelAndView modelAndView = new ModelAndView("500");
 

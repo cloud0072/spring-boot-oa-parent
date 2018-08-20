@@ -55,6 +55,7 @@ public class User extends SystemEntity implements NamedEntity {
      */
     @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "extend_id")
     private UserExtend extend;
 
     @JsonIgnore

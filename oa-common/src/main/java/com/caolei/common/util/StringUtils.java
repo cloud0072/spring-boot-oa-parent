@@ -60,7 +60,7 @@ public class StringUtils implements BaseLogger {
     public static String extendName(String fileName) {
         String extendName = null;
         if (!StringUtils.isEmpty(fileName) && fileName.contains(".")) {
-            extendName = fileName.substring(fileName.lastIndexOf("."));
+            extendName = fileName.substring(fileName.lastIndexOf(".") + 1);
         }
         return extendName;
     }

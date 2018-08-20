@@ -1,10 +1,7 @@
 package com.caolei.system.service.impl;
 
-import com.caolei.common.constant.FileType;
-import com.caolei.common.util.EntityUtils;
 import com.caolei.common.util.StringUtils;
 import com.caolei.system.extend.UserExtend;
-import com.caolei.system.pojo.FileComponent;
 import com.caolei.system.pojo.User;
 import com.caolei.system.repository.UserRepository;
 import com.caolei.system.service.PermissionService;
@@ -15,14 +12,10 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
-
-import static com.caolei.common.constant.Constants.OP_UPDATE;
 
 /**
  * @author cloud0072
@@ -63,6 +56,17 @@ public class UserServiceImpl
             user.setPassword(input.getPassword());
             SecurityUtils.encrypt(user);
         }
+
+        if (input.getExtend() != null) {
+            UserExtend extend = input.getExtend();
+            if (extend.getHeadPhoto() != null) {
+                user.getExtend().setHeadPhoto(extend.getHeadPhoto());
+            }
+            if (extend.getBirthday() != null) {
+               user.getExtend().setBirthday(extend.getBirthday());
+            }
+        }
+
         return save(user);
     }
 
@@ -127,6 +131,8 @@ public class UserServiceImpl
         return user;
     }
 
+    /*
+    改为统一文件上传
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ResponseEntity uploadHeadPhoto(String userId, MultipartFile file) {
@@ -141,14 +147,14 @@ public class UserServiceImpl
             if (file.isEmpty()) {
                 throw new UnsupportedOperationException("上传文件为空！");
             }
-            if (user.getExtend() == null){
+            if (user.getExtend() == null) {
                 user.setExtend(new UserExtend());
             }
             UserExtend extend = user.getExtend();
 
             FileComponent component = EntityUtils.orNull(extend.getHeadPhoto(), new FileComponent());
-            component.createOrUpdateFile(file.getName(), FileType.PORTRAIT);
-            user.getExtend().setHeadPhoto(component);
+            component.createOrUpdateFile(file.getOriginalFilename(), FileType.PORTRAIT, user);
+            extend.setHeadPhoto(component);
             save(user);
 
             file.transferTo(component.getFile());
@@ -156,5 +162,5 @@ public class UserServiceImpl
             return ResponseEntity.badRequest().body("文件上传失败！");
         }
         return ResponseEntity.ok("文件上传成功！");
-    }
+    }*/
 }

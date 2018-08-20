@@ -56,12 +56,4 @@ public interface UserService
      */
     User findAuthorInfoByAccount(String account);
 
-
-    /**
-     * 上传头像
-     * @param userId
-     * @param file
-     * @return
-     */
-    ResponseEntity uploadHeadPhoto(String userId, MultipartFile file);
 }

@@ -4,8 +4,8 @@ import com.caolei.common.api.BaseEntity;
 import com.caolei.common.constant.FileType;
 import com.caolei.common.util.DateUtils;
 import com.caolei.common.util.FileUtils;
+import com.caolei.common.util.HttpUtils;
 import com.caolei.common.util.StringUtils;
-import com.caolei.system.util.SecurityUtils;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.util.FileCopyUtils;
 
@@ -68,13 +68,13 @@ public class FileComponent extends BaseEntity {
     /**
      * 创建人
      */
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinColumn(name = "creator_id")
     private User creator;
     /**
      * 修改人
      */
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinColumn(name = "modifier_id")
     private User modifier;
 
@@ -87,7 +87,7 @@ public class FileComponent extends BaseEntity {
      * @param fileName
      * @param category
      */
-    private void createOrUpdate(String fileName, FileType category) {
+    private void createOrUpdate(String fileName, FileType category, User user) {
         this.fileName = fileName;
         this.category = category;
 
@@ -101,9 +101,9 @@ public class FileComponent extends BaseEntity {
         }
         this.modifyTime = date;
         if (this.creator == null) {
-            this.creator = SecurityUtils.getCurrentUser();
+            this.creator = user;
         }
-        this.modifier = SecurityUtils.getCurrentUser();
+        this.modifier = user;
     }
 
     /**
@@ -127,18 +127,19 @@ public class FileComponent extends BaseEntity {
     /**
      * 如果有则删除原有文件
      */
-    public void deleteFile() {
+    private void deleteFile() {
         //没有保存过 直接返回;
         if (StringUtils.isEmpty(getId())) {
             return;
         }
         File file = new File(getAbsolutePath());
         if (file.exists()) {
+            logger().info("正在删除文件...类型:{},\tID:{}", getCategory(), getId());
             if (!file.delete()) {
                 throw new UnsupportedOperationException("原有文件无法删除!");
             }
         } else {
-            throw new UnsupportedOperationException("原文件已被移动或删除!");
+//            throw new UnsupportedOperationException("原文件已被移动或删除!");
         }
     }
 
@@ -148,22 +149,28 @@ public class FileComponent extends BaseEntity {
      * @param fileName
      * @param category
      */
-    public void createOrUpdateFile(String fileName, FileType category) {
+    public void createOrUpdateFile(String fileName, FileType category, User user) {
         deleteFile();
-        createOrUpdate(fileName, category);
+        createOrUpdate(fileName, category, user);
     }
 
     /**
      * 获取文件的绝对路径
-     *
      * @return
      */
     public String getAbsolutePath() {
+        return FileUtils.uploadPath() + getPath();
+    }
+
+    /**
+     * 获取文件的相对路径
+     * @return
+     */
+    public String getPath() {
         if (StringUtils.isEmpty(this.datePath) || this.category.name() == null || this.UUIDName == null) {
             throw new UnsupportedOperationException("无法获取文件路径信息!");
         }
-        String path = FileUtils.uploadPath() + "/" + this.category.name() + "/" + this.datePath
-                + "/" + this.UUIDName;
+        String path = "/" + this.category.name() + "/" + this.datePath + "/" + this.UUIDName;
         if (!StringUtils.isEmpty(extendName)) {
             path += "." + extendName;
         }
@@ -202,6 +209,18 @@ public class FileComponent extends BaseEntity {
         } else {
             return file.length() == 0;
         }
+    }
+
+    /**
+     * 获取访问路径
+     * @return
+     */
+    public String getUrl() {
+        if (StringUtils.isEmpty(getId())) {
+            throw new UnsupportedOperationException("请先保存文件组件才能获取访问路径!");
+        }
+
+        return HttpUtils.getServerAddress() + "/static" + getPath();
     }
 
     @Override

@@ -60,7 +60,7 @@ public class FileUtils {
      */
     @Value("${file.upload.path}")
     private void setUploadPath(String uploadPath) {
-        FileUtils.uploadPath = uploadPath;
+        FileUtils.uploadPath = uploadPath + "/static/";
 
         if (uploadDir == null) {
             uploadDir = new File(uploadPath());

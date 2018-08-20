@@ -31,18 +31,27 @@ public class HttpUtils {
     }
 
     /**
+     * 获取当前Http请求
+     *
+     * @return
+     */
+    public static HttpServletRequest httpServletRequest() {
+        try {
+            return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                    .getRequest();
+        } catch (Exception e) {
+            logger.error("无法获取当前HTTP请求");
+            throw new UnsupportedOperationException("无法获取当前HTTP请求!");
+        }
+    }
+
+    /**
      * 获取普通Http会话
      *
      * @return
      */
     public static HttpSession httpSession() {
-        try {
-            return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
-                    .getRequest().getSession();
-        } catch (Exception e) {
-            logger.error("无法获取当前HTTP会话");
-            throw new UnsupportedOperationException("无法获取当前HTTP会话!");
-        }
+        return httpServletRequest().getSession();
     }
 
     /**
@@ -71,6 +80,16 @@ public class HttpUtils {
         }
     }
 
+    /**
+     * 获取服务器地址
+     * @return
+     */
+    public static String getServerAddress() {
+        HttpServletRequest request = httpServletRequest();
+        StringBuffer url = request.getRequestURL();
+        return url.delete(url.length() - request.getRequestURI().length(),
+                url.length()).append(request.getServletContext().getContextPath()).append("/").toString();
+    }
 
     /**
      * 下载文件
