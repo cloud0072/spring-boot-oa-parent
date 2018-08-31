@@ -1,6 +1,5 @@
 package com.caolei.testpojo;
 
-import com.caolei.common.api.BaseLogger;
 
 import java.io.Serializable;
 import java.util.Set;

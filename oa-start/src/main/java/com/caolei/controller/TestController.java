@@ -2,10 +2,10 @@ package com.caolei.controller;
 
 import com.caolei.common.util.DateUtils;
 import com.caolei.common.util.FileUtils;
-import com.caolei.testpojo.Student;
-import com.caolei.testpojo.Teacher;
 import com.caolei.system.exception.AjaxException;
 import com.caolei.system.pojo.User;
+import com.caolei.testpojo.Student;
+import com.caolei.testpojo.Teacher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -50,7 +50,7 @@ public class TestController {
 
     @RequestMapping("/04")
     public Object test04(HttpServletRequest request, HttpServletResponse response) {
-        return  DateUtils.parseDayOfWeek("周一");
+        return DateUtils.parseDayOfWeek("周一");
     }
 
     @RequestMapping("/05")
@@ -75,7 +75,6 @@ public class TestController {
 
         return ResponseEntity.ok("序列化成功");
     }
-
 
     @RequestMapping("/06")
     public Object test06(HttpServletRequest request, HttpServletResponse response) {

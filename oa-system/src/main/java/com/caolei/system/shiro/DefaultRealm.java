@@ -1,10 +1,10 @@
 package com.caolei.system.shiro;
 
 
-import com.caolei.common.api.BaseLogger;
 import com.caolei.system.pojo.User;
 import com.caolei.system.service.UserService;
 import com.caolei.system.util.SecurityUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -20,7 +20,8 @@ import org.springframework.context.annotation.Lazy;
  * @author cloud0072
  * @date 2018/6/12 22:43
  */
-public class DefaultRealm extends AuthorizingRealm implements BaseLogger {
+@Slf4j
+public class DefaultRealm extends AuthorizingRealm {
 
     @Autowired
     @Lazy
@@ -43,7 +44,7 @@ public class DefaultRealm extends AuthorizingRealm implements BaseLogger {
         }
         // 1.获取用户输入的用户名
         String account = token.getPrincipal().toString();
-        logger().info(account + " 正在验证身份...");
+        log.info(account + " 正在验证身份...");
 
         //2.调用userService，根据用户名，查寻出对应的用户
         User user = userService.findUserByAccount(account);

@@ -6,8 +6,8 @@ import com.caolei.common.util.DateUtils;
 import com.caolei.common.util.FileUtils;
 import com.caolei.common.util.HttpUtils;
 import com.caolei.common.util.StringUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.util.FileCopyUtils;
 
 import javax.persistence.*;
 import java.io.File;
@@ -19,6 +19,7 @@ import java.util.Date;
  *
  * @author caolei
  */
+@Slf4j
 @Entity
 @Table
 public class FileComponent extends BaseEntity {
@@ -38,16 +39,22 @@ public class FileComponent extends BaseEntity {
     @Column
     private String extendName;
     /**
-     * 时间路径
+     * 文件http传输中的类型
      */
     @Column
-    private String datePath;
+    private String contentType;
     /**
      * 文件分类
      * 哪个Entity中的文件
      */
     @Column
     private FileType category;
+
+    /**
+     * 时间路径
+     */
+    @Column
+    private String datePath;
     /**
      * 下载次数
      */
@@ -82,46 +89,28 @@ public class FileComponent extends BaseEntity {
     }
 
     /**
-     * 更新文件组件信息
+     * 更新文件信息并拷贝文件到指定路径
      *
      * @param fileName
+     * @param contentType
      * @param category
      */
-    private void createOrUpdate(String fileName, FileType category, User user) {
-        this.fileName = fileName;
-        this.category = category;
+    public void createOrUpdateFile(String fileName, String contentType, FileType category, User user) {
+        deleteFile();
 
         Date date = new Date();
+        this.fileName = fileName;
+        this.contentType = contentType;
+        this.category = category;
         this.datePath = DateUtils.datePathFormat(date);
         this.UUIDName = StringUtils.UUID32();
         this.extendName = StringUtils.extendName(fileName);
-        this.downloadTimes = 0;
-        if (this.createTime == null) {
-            this.createTime = date;
-        }
-        this.modifyTime = date;
-        if (this.creator == null) {
-            this.creator = user;
-        }
-        this.modifier = user;
-    }
 
-    /**
-     * 将保存文件组件实体和复制文件分开
-     *
-     * @param file
-     * @throws IOException
-     */
-    private void copyFile(File file) throws IOException {
-        if (StringUtils.isEmpty(getId())) {
-            throw new UnsupportedOperationException("请先保存文件组件才能复制文件!");
-        }
-        File target = new File(getAbsolutePath());
-        if (target.createNewFile()) {
-            FileCopyUtils.copy(file, target);
-        } else {
-            throw new IOException("创建文件失败!");
-        }
+        this.downloadTimes = downloadTimes == null ? 0 : downloadTimes;
+        this.createTime = createTime == null ? date : createTime;
+        this.modifyTime = date;
+        this.creator = creator == null ? user : creator;
+        this.modifier = user;
     }
 
     /**
@@ -134,32 +123,13 @@ public class FileComponent extends BaseEntity {
         }
         File file = new File(getAbsolutePath());
         if (file.exists()) {
-            logger().info("正在删除文件...类型:{},\tID:{}", getCategory(), getId());
+            log.info("正在删除文件...类型:{},\tID:{}", getCategory(), getId());
             if (!file.delete()) {
                 throw new UnsupportedOperationException("原有文件无法删除!");
             }
         } else {
 //            throw new UnsupportedOperationException("原文件已被移动或删除!");
         }
-    }
-
-    /**
-     * 更新文件信息并拷贝文件到指定路径
-     *
-     * @param fileName
-     * @param category
-     */
-    public void createOrUpdateFile(String fileName, FileType category, User user) {
-        deleteFile();
-        createOrUpdate(fileName, category, user);
-    }
-
-    /**
-     * 获取文件的绝对路径
-     * @return
-     */
-    public String getAbsolutePath() {
-        return FileUtils.uploadPath() + getPath();
     }
 
     /**
@@ -178,8 +148,15 @@ public class FileComponent extends BaseEntity {
     }
 
     /**
+     * 获取文件的绝对路径
+     * @return
+     */
+    public String getAbsolutePath() {
+        return FileUtils.uploadPath() + getPath();
+    }
+
+    /**
      * 获取文件
-     *
      * @return
      */
     public File getFile() {
@@ -198,8 +175,19 @@ public class FileComponent extends BaseEntity {
     }
 
     /**
+     * 获取访问路径
+     * @return
+     */
+    public String getUrl() {
+        if (StringUtils.isEmpty(getId())) {
+            throw new UnsupportedOperationException("请先保存文件组件才能获取访问路径!");
+        }
+
+        return HttpUtils.serverAddress() + "/static" + getPath();
+    }
+
+    /**
      * 是否是空文件
-     *
      * @return
      */
     public Boolean isEmptyFile() {
@@ -212,17 +200,20 @@ public class FileComponent extends BaseEntity {
     }
 
     /**
-     * 获取访问路径
-     * @return
+     * 将保存文件组件实体和复制文件分开
      */
-    public String getUrl() {
+    /*
+    private void copyFile(File file) throws IOException {
         if (StringUtils.isEmpty(getId())) {
-            throw new UnsupportedOperationException("请先保存文件组件才能获取访问路径!");
+            throw new UnsupportedOperationException("请先保存文件组件才能复制文件!");
         }
-
-        return HttpUtils.getServerAddress() + "/static" + getPath();
-    }
-
+        File target = new File(getAbsolutePath());
+        if (target.createNewFile()) {
+            FileCopyUtils.copy(file, target);
+        } else {
+            throw new IOException("创建文件失败!");
+        }
+    }*/
     @Override
     protected String getTableName() {
         return "文件组件";
@@ -258,12 +249,12 @@ public class FileComponent extends BaseEntity {
         this.extendName = extendName;
     }
 
-    public String getDatePath() {
-        return datePath;
+    public String getContentType() {
+        return contentType;
     }
 
-    public void setDatePath(String datePath) {
-        this.datePath = datePath;
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
     }
 
     public FileType getCategory() {
@@ -272,6 +263,14 @@ public class FileComponent extends BaseEntity {
 
     public void setCategory(FileType category) {
         this.category = category;
+    }
+
+    public String getDatePath() {
+        return datePath;
+    }
+
+    public void setDatePath(String datePath) {
+        this.datePath = datePath;
     }
 
     public Integer getDownloadTimes() {
@@ -313,5 +312,4 @@ public class FileComponent extends BaseEntity {
     public void setModifier(User modifier) {
         this.modifier = modifier;
     }
-
 }

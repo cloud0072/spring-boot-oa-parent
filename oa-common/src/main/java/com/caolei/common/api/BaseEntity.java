@@ -17,7 +17,7 @@ import java.util.Objects;
  * @author cloud0072
  */
 @MappedSuperclass
-public abstract class BaseEntity implements Serializable, BaseLogger {
+public abstract class BaseEntity implements Serializable {
 
     @Id
     @GenericGenerator(name = "system-uuid", strategy = "uuid")

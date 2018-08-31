@@ -1,7 +1,7 @@
 package com.caolei.system.service;
 
-import com.caolei.system.pojo.Role;
 import com.caolei.system.api.BaseCrudService;
+import com.caolei.system.pojo.Role;
 
 /**
  * @author cloud0072

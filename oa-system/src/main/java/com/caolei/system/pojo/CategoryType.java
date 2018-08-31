@@ -1,7 +1,6 @@
 package com.caolei.system.pojo;
 
 import com.caolei.common.api.BaseEntity;
-import com.caolei.system.pojo.Category;
 
 import javax.persistence.*;
 import java.util.Set;

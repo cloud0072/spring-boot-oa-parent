@@ -1,7 +1,7 @@
 package com.caolei.system.repository;
 
+import com.caolei.system.api.BaseRepository;
 import com.caolei.system.pojo.FileComponent;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -11,5 +11,6 @@ import org.springframework.stereotype.Repository;
  * @date 2018/8/20 10:12
  */
 @Repository
-public interface FileComponentRepository extends JpaRepository<FileComponent, String> {
+public interface FileComponentRepository extends BaseRepository<FileComponent, String> {
+
 }

@@ -2,8 +2,7 @@ package com.caolei.common.util;
 
 import com.caolei.common.api.BaseEntity;
 import com.caolei.common.api.NamedEntity;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -11,9 +10,8 @@ import java.util.stream.Collectors;
 /**
  * 对象增强
  */
+@Slf4j
 public class EntityUtils {
-
-    private static final Logger logger = LoggerFactory.getLogger(EntityUtils.class);
 
     /**
      * 实体类缓存

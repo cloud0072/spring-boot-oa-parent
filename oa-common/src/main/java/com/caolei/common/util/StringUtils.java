@@ -1,8 +1,7 @@
 package com.caolei.common.util;
 
-import com.caolei.common.api.BaseLogger;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.UUID;
 
@@ -10,9 +9,8 @@ import java.util.UUID;
  * @author cloud0072
  * @date 2018/6/12 22:39
  */
-public class StringUtils implements BaseLogger {
-
-    private static final Logger logger = LoggerFactory.getLogger(StringUtils.class);
+@Slf4j
+public class StringUtils {
 
     private StringUtils() {
     }

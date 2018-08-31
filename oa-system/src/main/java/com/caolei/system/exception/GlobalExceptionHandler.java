@@ -1,8 +1,9 @@
 package com.caolei.system.exception;
 
-import com.caolei.common.api.BaseLogger;
+
 import com.caolei.common.util.StringUtils;
 import com.caolei.system.util.SecurityUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authz.UnauthorizedException;
@@ -18,8 +19,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @ControllerAdvice
-public class GlobalExceptionHandler implements BaseLogger {
+public class GlobalExceptionHandler {
 
     private GlobalExceptionHandler() {
     }
@@ -30,9 +32,9 @@ public class GlobalExceptionHandler implements BaseLogger {
     }
 
     private void printErrorMessage(Exception ex) {
-        logger().error(ex.getStackTrace()[0].toString());
-        logger().error(ex.getClass().getName());
-        logger().error(ex.getMessage());
+        log.error(ex.getStackTrace()[0].toString());
+        log.error(ex.getClass().getName());
+        log.error(ex.getMessage());
     }
 
     /**

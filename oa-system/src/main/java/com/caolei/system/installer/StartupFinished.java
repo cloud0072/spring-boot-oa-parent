@@ -1,30 +1,31 @@
 package com.caolei.system.installer;
 
-import com.caolei.common.api.BaseLogger;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.Ordered;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 /**
  * 启动完成后
  */
+@Slf4j
 @Component
 public class StartupFinished
-        implements ApplicationRunner, Ordered, BaseLogger {
+        implements ApplicationRunner, Ordered {
 
-    @Autowired
-    private Environment env;
+    @Value("${server.port}")
+    private String port;
+    @Value("${server.servlet.context-path}")
+    private String context_path;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
         String protocol = "http://";
         String host = "localhost";
-        String port = env.getProperty("server.port");
-        String context_path = env.getProperty("server.servlet.context-path");
-        logger().info(protocol + host + ":" + port + context_path);
+        log.info(protocol + host + ":" + port + context_path + "");
     }
 
     @Override

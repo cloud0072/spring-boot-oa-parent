@@ -1,9 +1,9 @@
 package com.caolei.system.api;
 
 import com.caolei.common.api.BaseEntity;
-import com.caolei.common.api.BaseLogger;
 import com.caolei.common.util.EntityUtils;
 import com.caolei.system.util.SecurityUtils;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.data.domain.*;
 import org.springframework.ui.Model;
@@ -25,13 +25,14 @@ import static com.caolei.common.constant.Constants.*;
  * @date 2018/7/25 11:41
  */
 @RequiresAuthentication
-public interface BaseCrudController<T extends BaseEntity> extends BaseLogger {
+public interface BaseCrudController<T extends BaseEntity> extends SwaggerApi, BaseController {
 
     /**
      * 获取实例对应的服务
      *
      * @return
      */
+    @ApiOperation("获取实例对应的服务")
     BaseCrudService<T> service();
 
     /**
@@ -40,6 +41,7 @@ public interface BaseCrudController<T extends BaseEntity> extends BaseLogger {
      *
      * @return
      */
+    @ApiOperation("返回一个空对象实例")
     default T instance() {
         return (T) EntityUtils.interfaceGenericTypeInstance(getClass(), 0, 0);
     }
@@ -50,6 +52,7 @@ public interface BaseCrudController<T extends BaseEntity> extends BaseLogger {
      *
      * @param model
      */
+    @ApiOperation("model增强方法,给子类扩展添加到model中的数据")
     default void modelAdvice(Model model) {
     }
 
@@ -58,6 +61,7 @@ public interface BaseCrudController<T extends BaseEntity> extends BaseLogger {
      *
      * @return
      */
+    @ApiOperation("获取实例名,和访问路径")
     default String entityName() {
         return instance().entityName();
     }
@@ -67,6 +71,7 @@ public interface BaseCrudController<T extends BaseEntity> extends BaseLogger {
      *
      * @return
      */
+    @ApiOperation("获取模块名,和访问路径")
     default String moduleName() {
         return instance().moduleName();
     }
@@ -74,6 +79,7 @@ public interface BaseCrudController<T extends BaseEntity> extends BaseLogger {
     /**
      * 查询所有对象
      */
+    @ApiOperation("查询所有对象")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     default String list(HttpServletRequest request, HttpServletResponse response, T t,
                         @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber,
@@ -93,6 +99,7 @@ public interface BaseCrudController<T extends BaseEntity> extends BaseLogger {
     /**
      * 跳转创建对象页
      */
+    @ApiOperation("跳转创建对象页")
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     default String showCreateForm(HttpServletRequest request, HttpServletResponse response, Model model) {
         SecurityUtils.checkOperation(instance(), OP_CREATE);
@@ -103,6 +110,7 @@ public interface BaseCrudController<T extends BaseEntity> extends BaseLogger {
     /**
      * 跳转 查看 更新 或 删除对象页
      */
+    @ApiOperation("跳转 查看 更新 或 删除对象页")
     @RequestMapping(value = "/{operation}/{id}", method = RequestMethod.GET)
     default String showForm(HttpServletRequest request, HttpServletResponse response, Model model,
                             @PathVariable("id") String id, @PathVariable("operation") String operation) {
@@ -116,6 +124,7 @@ public interface BaseCrudController<T extends BaseEntity> extends BaseLogger {
     /**
      * 提交创建对象
      */
+    @ApiOperation("提交创建对象")
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     default String create(HttpServletRequest request, HttpServletResponse response, T t,
                           RedirectAttributes redirectAttributes) {
@@ -128,6 +137,7 @@ public interface BaseCrudController<T extends BaseEntity> extends BaseLogger {
     /**
      * 提交更新对象
      */
+    @ApiOperation("提交更新对象")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     default String update(HttpServletRequest request, HttpServletResponse response, T t,
                           RedirectAttributes redirectAttributes) {
@@ -140,6 +150,7 @@ public interface BaseCrudController<T extends BaseEntity> extends BaseLogger {
     /**
      * 提交删除对象
      */
+    @ApiOperation("提交删除对象")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     default String delete(HttpServletRequest request, HttpServletResponse response, T t,
                           RedirectAttributes redirectAttributes) {
@@ -158,6 +169,7 @@ public interface BaseCrudController<T extends BaseEntity> extends BaseLogger {
      * @param t
      * @param type
      */
+    @ApiOperation("将参数放入model中")
     default void putModel(Model model, String operation, T t, String type) {
         model.addAttribute(entityName(), t);
         model.addAttribute("id", t.getId());

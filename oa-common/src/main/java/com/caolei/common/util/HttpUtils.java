@@ -1,10 +1,9 @@
 package com.caolei.common.util;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.UnavailableSecurityManagerException;
 import org.apache.shiro.session.Session;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -22,12 +21,10 @@ import java.util.Date;
 import static com.caolei.common.constant.Constants.TXT_LOCALHOST;
 import static com.caolei.common.constant.Constants.TXT_UNKNOWN;
 
+@Slf4j
 public class HttpUtils {
 
-    private static final Logger logger = LoggerFactory.getLogger(HttpUtils.class);
-
     private HttpUtils() {
-
     }
 
     /**
@@ -40,7 +37,7 @@ public class HttpUtils {
             return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
                     .getRequest();
         } catch (Exception e) {
-            logger.error("无法获取当前HTTP请求");
+            log.error("无法获取当前HTTP请求");
             throw new UnsupportedOperationException("无法获取当前HTTP请求!");
         }
     }
@@ -63,28 +60,17 @@ public class HttpUtils {
         try {
             return SecurityUtils.getSubject().getSession();
         } catch (UnavailableSecurityManagerException e) {
-            logger.error("无法获取当前SHIRO会话");
+            log.error("无法获取当前SHIRO会话");
             throw new UnsupportedOperationException("无法获取当前SHIRO会话!");
         }
     }
 
     /**
-     * 获取sessionId
-     * @return
-     */
-    public static String sessionId() {
-        try {
-            return httpSession().getId();
-        } catch (Exception e) {
-            return "-1";
-        }
-    }
-
-    /**
      * 获取服务器地址
+     *
      * @return
      */
-    public static String getServerAddress() {
+    public static String serverAddress() {
         HttpServletRequest request = httpServletRequest();
         StringBuffer url = request.getRequestURL();
         return url.delete(url.length() - request.getRequestURI().length(),
@@ -96,23 +82,30 @@ public class HttpUtils {
      *
      * @param file
      * @param fileName
+     * @param contentType
      * @return
      */
-    public static ResponseEntity<FileSystemResource> downloadFile(File file, String fileName) {
+    public static ResponseEntity<FileSystemResource> downloadFile(File file, String fileName, String contentType) {
         if (file == null) {
             throw new UnsupportedOperationException("无法读取要下载的文件!");
         }
+
         HttpHeaders headers = new HttpHeaders();
         headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
         headers.add("Content-Disposition", "attachment; filename=" + fileName);
         headers.add("Pragma", "no-cache");
         headers.add("Expires", "0");
-        logger.info("download: {}\ttime: {}", fileName, DateUtils.defaultDateFormat(new Date()));
+
+        MediaType mediaType = contentType == null ? MediaType.APPLICATION_OCTET_STREAM :
+                MediaType.valueOf(contentType);
+
+        log.info("download: {}\ttime: {}", fileName, DateUtils.defaultDateFormat(new Date()));
+
         return ResponseEntity
                 .ok()
                 .headers(headers)
                 .contentLength(file.length())
-                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .contentType(mediaType)
                 .body(new FileSystemResource(file));
     }
 

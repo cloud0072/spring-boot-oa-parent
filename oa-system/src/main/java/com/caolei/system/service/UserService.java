@@ -1,9 +1,7 @@
 package com.caolei.system.service;
 
-import com.caolei.system.pojo.User;
 import com.caolei.system.api.BaseCrudService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.multipart.MultipartFile;
+import com.caolei.system.pojo.User;
 
 /**
  * @author cloud0072

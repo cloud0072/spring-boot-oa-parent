@@ -3,8 +3,6 @@ package com.caolei.system.controller;
 import com.caolei.common.constant.FileType;
 import com.caolei.common.util.HttpUtils;
 import com.caolei.common.util.StringUtils;
-import com.caolei.system.api.BaseCrudController;
-import com.caolei.system.api.BaseCrudService;
 import com.caolei.system.exception.AjaxException;
 import com.caolei.system.pojo.FileComponent;
 import com.caolei.system.pojo.User;
@@ -59,7 +57,7 @@ public class FileComponentController {
                     new FileComponent() : fileComponentService.findById(fileId);
             User user = userService.findById(SecurityUtils.getCurrentUser().getId());
 
-            component.createOrUpdateFile(file.getOriginalFilename(), fileType, user);
+            component.createOrUpdateFile(file.getOriginalFilename(), file.getContentType(), fileType, user);
             component = fileComponentService.save(component);
             file.transferTo(new File(component.getAbsolutePath()));
 
@@ -89,7 +87,8 @@ public class FileComponentController {
         try {
 
             FileComponent fileComponent = fileComponentService.findById(fileId);
-            return HttpUtils.downloadFile(fileComponent.getFile(), fileComponent.getFileName());
+            return HttpUtils.downloadFile(fileComponent.getFile(), fileComponent.getFileName(),
+                    fileComponent.getContentType());
 
         } catch (Exception e) {
             throw new AjaxException(e);

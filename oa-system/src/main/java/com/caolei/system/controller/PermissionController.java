@@ -1,5 +1,7 @@
 package com.caolei.system.controller;
 
+import com.caolei.system.api.BaseCrudController;
+import com.caolei.system.api.BaseCrudService;
 import com.caolei.system.pojo.Permission;
 import com.caolei.system.pojo.Role;
 import com.caolei.system.pojo.User;
@@ -7,8 +9,8 @@ import com.caolei.system.service.PermissionService;
 import com.caolei.system.service.RoleService;
 import com.caolei.system.service.UserService;
 import com.caolei.system.util.SecurityUtils;
-import com.caolei.system.api.BaseCrudController;
-import com.caolei.system.api.BaseCrudService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.http.ResponseEntity;
@@ -45,6 +47,8 @@ public class PermissionController
     /**
      * 查询用户自身的权限集合
      */
+    @ApiOperation(value = "获取用户的权限集合", notes = "传入userId,然后返回JSON类型的数据")
+    @ApiImplicitParam(name = "userId", value = "用户Id", paramType = "String")
     @RequestMapping(value = "/user/{userId}", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<List<Permission>> findUserPermission(@PathVariable(name = "userId") String userId,

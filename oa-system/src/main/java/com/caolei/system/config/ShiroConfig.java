@@ -1,7 +1,6 @@
 package com.caolei.system.config;
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
-import com.caolei.common.api.BaseLogger;
 import com.caolei.system.shiro.DefaultRealm;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -33,8 +32,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author cloud0072
  */
 @Configuration
-public class ShiroConfig
-        implements BaseLogger {
+public class ShiroConfig {
 
     @Value("${shiro.cipher.key}")
     private String CIPHER_KEY;

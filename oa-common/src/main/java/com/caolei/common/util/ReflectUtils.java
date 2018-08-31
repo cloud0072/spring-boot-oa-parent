@@ -1,7 +1,6 @@
 package com.caolei.common.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,10 +23,9 @@ import java.util.jar.JarFile;
  * @author cloud0072
  * @date 2018/6/12 22:38
  */
+@Slf4j
 @SuppressWarnings("AlibabaRemoveCommentedCode")
 public class ReflectUtils {
-
-    private static final Logger logger = LoggerFactory.getLogger(ReflectUtils.class);
 
     private ReflectUtils() {
     }

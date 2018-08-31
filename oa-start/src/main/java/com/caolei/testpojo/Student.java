@@ -9,6 +9,7 @@ import java.io.Serializable;
  * @date 2018/8/16 18:00
  */
 public class Student implements Serializable {
+
     private String name;
 
     private Teacher teacher;

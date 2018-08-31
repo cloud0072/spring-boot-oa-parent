@@ -1,13 +1,11 @@
 package com.caolei.system.util;
 
 import com.caolei.common.api.BaseEntity;
-import com.caolei.common.api.BaseLogger;
 import com.caolei.common.api.SystemEntity;
 import com.caolei.common.constant.Constants;
 import com.caolei.common.constant.Operation;
 import com.caolei.common.util.HttpUtils;
 import com.caolei.system.pojo.User;
-import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.slf4j.Logger;
@@ -30,8 +28,8 @@ import java.util.stream.Stream;
 @Component
 public class SecurityUtils extends org.apache.shiro.SecurityUtils {
 
+    private static final Logger log = LoggerFactory.getLogger(SecurityUtils.class);
     private static Integer HASH_ITERATIONS;
-    private static final Logger logger =  LoggerFactory.getLogger(SecurityUtils.class);
 
     private SecurityUtils() {
 
@@ -46,7 +44,7 @@ public class SecurityUtils extends org.apache.shiro.SecurityUtils {
         try {
             org.apache.shiro.SecurityUtils.getSubject();
         } catch (Exception e) {
-            logger.error("Subject is not available");
+            log.error("Subject is not available");
             return false;
         }
         return true;

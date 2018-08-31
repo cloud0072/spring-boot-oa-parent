@@ -1,9 +1,7 @@
 package com.caolei.common.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
-import java.io.File;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
@@ -17,9 +15,8 @@ import java.util.stream.Stream;
  *
  * @author cloud0072
  */
+@Slf4j
 public class DateUtils {
-
-    private static final Logger logger = LoggerFactory.getLogger(DateUtils.class);
 
     private static final SimpleDateFormat defaultDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private static final SimpleDateFormat datePathFormat = new SimpleDateFormat("yyyyMM/dd");
@@ -57,7 +54,7 @@ public class DateUtils {
      * @return
      */
     public static DayOfWeek parseDayOfWeek(String chinese) {
-        logger.info("parseDayOfWeek - > {}", chinese);
+        log.info("parseDayOfWeek - > {}", chinese);
         //java自带的日期枚举类，同类的还有 Month 等
         return weekMap.entrySet().stream().filter(entry -> entry.getValue().contains(chinese)).findFirst()
                 .orElseThrow(UnsupportedOperationException::new).getKey();

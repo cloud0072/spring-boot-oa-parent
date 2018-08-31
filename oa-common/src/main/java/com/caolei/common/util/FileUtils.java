@@ -1,7 +1,6 @@
 package com.caolei.common.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -12,9 +11,9 @@ import java.io.File;
  *
  * @author cloud0072
  */
+@Slf4j
 @Component
 public class FileUtils {
-    private static final Logger logger = LoggerFactory.getLogger(FileUtils.class);
 
     //文件保存路径
     private static String uploadPath;
@@ -58,7 +57,7 @@ public class FileUtils {
      *
      * @param uploadPath
      */
-    @Value("${file.upload.path}")
+    @Value("${location.static-resource.path}")
     private void setUploadPath(String uploadPath) {
         FileUtils.uploadPath = uploadPath + "/static/";
 

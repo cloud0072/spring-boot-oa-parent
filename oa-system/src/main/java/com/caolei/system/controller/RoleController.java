@@ -1,6 +1,8 @@
 package com.caolei.system.controller;
 
 import com.caolei.common.util.EntityUtils;
+import com.caolei.system.api.BaseCrudController;
+import com.caolei.system.api.BaseCrudService;
 import com.caolei.system.pojo.Permission;
 import com.caolei.system.pojo.Role;
 import com.caolei.system.pojo.User;
@@ -8,8 +10,6 @@ import com.caolei.system.service.PermissionService;
 import com.caolei.system.service.RoleService;
 import com.caolei.system.service.UserService;
 import com.caolei.system.util.SecurityUtils;
-import com.caolei.system.api.BaseCrudController;
-import com.caolei.system.api.BaseCrudService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

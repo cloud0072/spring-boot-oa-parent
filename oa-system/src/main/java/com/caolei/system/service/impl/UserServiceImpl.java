@@ -8,6 +8,7 @@ import com.caolei.system.service.PermissionService;
 import com.caolei.system.service.RoleService;
 import com.caolei.system.service.UserService;
 import com.caolei.system.util.SecurityUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import java.util.Date;
 /**
  * @author cloud0072
  */
+@Slf4j
 @Service
 public class UserServiceImpl
         implements UserService {
@@ -63,7 +65,7 @@ public class UserServiceImpl
                 user.getExtend().setHeadPhoto(extend.getHeadPhoto());
             }
             if (extend.getBirthday() != null) {
-               user.getExtend().setBirthday(extend.getBirthday());
+                user.getExtend().setBirthday(extend.getBirthday());
             }
         }
 
@@ -90,7 +92,7 @@ public class UserServiceImpl
             User u = SecurityUtils.getCurrentUser();
             u.setLastLoginTime(new Date());
             save(u);
-            info(user.getAccount() + " 登陆成功...");
+            log.info(user.getAccount() + " 登陆成功...");
             return true;
         } else {
             SecurityUtils.setCurrentUser(null);

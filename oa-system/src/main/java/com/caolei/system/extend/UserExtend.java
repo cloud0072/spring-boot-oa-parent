@@ -3,7 +3,6 @@ package com.caolei.system.extend;
 import com.caolei.common.api.BaseEntity;
 import com.caolei.system.pojo.FileComponent;
 import com.caolei.system.pojo.OperationLog;
-import com.caolei.system.pojo.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.format.annotation.DateTimeFormat;
 

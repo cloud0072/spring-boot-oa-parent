@@ -1,6 +1,6 @@
 package com.caolei.system.interceptor;
 
-import com.caolei.common.api.BaseLogger;
+
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
  * @date 2018/6/12 22:41
  */
 @Component
-public class DefaultInterceptor implements HandlerInterceptor, BaseLogger {
+public class DefaultInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
