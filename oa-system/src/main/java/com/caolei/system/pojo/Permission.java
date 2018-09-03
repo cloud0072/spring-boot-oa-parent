@@ -6,6 +6,8 @@ import com.caolei.common.constant.Operation;
 import com.caolei.common.util.StringUtils;
 import com.caolei.system.extend.EntityResource;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.util.List;
@@ -18,8 +20,13 @@ import java.util.List;
  * @author cloud0072
  * @date 2018/6/12 22:40
  */
+@EqualsAndHashCode(callSuper = true)
+@Data
 @Entity
-@Table(name = "auth_permission", uniqueConstraints = {@UniqueConstraint(columnNames = {"code"})})
+@Table(name = "auth_permission", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"code"}),
+        @UniqueConstraint(columnNames = {"name"})
+})
 public class Permission extends SystemEntity implements NamedEntity {
 
     @Column
@@ -61,11 +68,6 @@ public class Permission extends SystemEntity implements NamedEntity {
     public Permission() {
     }
 
-    /**
-     * FIXME 以后改为中文名
-     *
-     * @return
-     */
     private String name() {
         return code;
     }
@@ -86,6 +88,11 @@ public class Permission extends SystemEntity implements NamedEntity {
     }
 
     @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
     protected String getTableName() {
         return "认证权限";
     }
@@ -94,61 +101,4 @@ public class Permission extends SystemEntity implements NamedEntity {
     protected String getModuleName() {
         return "system";
     }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public Operation getOperation() {
-        return operation;
-    }
-
-    public void setOperation(Operation operation) {
-        this.operation = operation;
-    }
-
-    public EntityResource getEntityResource() {
-        return entityResource;
-    }
-
-    public void setEntityResource(EntityResource entityResource) {
-        this.entityResource = entityResource;
-    }
-
-    public String getResourceId() {
-        return resourceId;
-    }
-
-    public void setResourceId(String resourceId) {
-        this.resourceId = resourceId;
-    }
-
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<User> users) {
-        this.users = users;
-    }
-
-    public List<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
-    }
-
 }

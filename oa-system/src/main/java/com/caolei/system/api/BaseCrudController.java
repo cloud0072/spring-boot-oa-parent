@@ -25,7 +25,7 @@ import static com.caolei.common.constant.Constants.*;
  * @date 2018/7/25 11:41
  */
 @RequiresAuthentication
-public interface BaseCrudController<T extends BaseEntity> extends SwaggerApi, BaseController {
+public interface BaseCrudController<T extends BaseEntity> extends BaseController {
 
     /**
      * 获取实例对应的服务

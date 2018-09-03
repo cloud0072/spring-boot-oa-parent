@@ -49,7 +49,7 @@ public class SystemModuleInstaller
     public void run(ApplicationArguments args) {
         System.err.println("ModuleInstaller -> ModuleInstaller start...");
 
-        initialize();
+//        initialize();
 
         System.err.println("ModuleInstaller -> system_module finished...");
     }
@@ -65,16 +65,12 @@ public class SystemModuleInstaller
         /*
          * 添加实体
          */
-        Set<Class<?>> classes = ReflectUtils.getClasses("com.caolei.system.pojo");
-        List<EntityResource> hasExistEntityResources = entityResourceRepository.findAll().stream()
-                .peek(entityResource -> entityResource.setId(null)).collect(toList());
-        List<EntityResource> entityResources = new ArrayList<>();
 
-        classes.forEach(clazz -> {
-            if (BaseEntity.class.isAssignableFrom(clazz)) {
-                entityResources.add(new EntityResource((Class<? extends BaseEntity>) clazz));
-            }
-        });
+        Set<Class<?>> classes = ReflectUtils.getClasses("com.caolei.system.pojo");
+        List<EntityResource> entityResources = classes.stream().filter(BaseEntity.class::isAssignableFrom)
+                .map(clazz -> new EntityResource((Class<? extends BaseEntity>) clazz)).collect(toList());
+
+        List<EntityResource> hasExistEntityResources = entityResourceRepository.findAll();
         entityResources.removeAll(hasExistEntityResources);
         entityResourceRepository.saveAll(entityResources);
 
@@ -82,8 +78,7 @@ public class SystemModuleInstaller
          * 添加权限
          */
         entityResources.addAll(hasExistEntityResources);
-        List<Permission> hasExistPermissions = permissionService.findAll().stream()
-                .peek(permission -> permission.setId(null)).collect(toList());
+        List<Permission> hasExistPermissions = permissionService.findAll();
         List<Permission> authPermissions = new ArrayList<>();
 
         entityResources.forEach(entity -> Arrays.stream(Operation.values())
@@ -94,8 +89,7 @@ public class SystemModuleInstaller
         /*
          * 注册分组
          */
-        List<Role> hasExistRoles = roleService.findAll().stream()
-                .peek(role -> role.setId(null)).collect(toList());
+        List<Role> hasExistRoles = roleService.findAll();
         Role superuserRole = new Role("超级管理员", "superuser", "拥有管理系统所有权限", true);
         Role userRole = new Role("用户", "user", "普通用户", true);
         if (!hasExistRoles.contains(superuserRole)) {

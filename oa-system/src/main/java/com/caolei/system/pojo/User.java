@@ -5,11 +5,12 @@ import com.caolei.common.api.SystemEntity;
 import com.caolei.common.util.StringUtils;
 import com.caolei.system.extend.UserExtend;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -18,6 +19,8 @@ import java.util.Set;
  * @author cloud0072
  * @date 2018/6/12 22:37
  */
+@EqualsAndHashCode(callSuper = true)
+@Data
 @Entity
 @Table(name = "auth_user", uniqueConstraints = @UniqueConstraint(columnNames = {"account"}))
 public class User extends SystemEntity implements NamedEntity {
@@ -114,74 +117,6 @@ public class User extends SystemEntity implements NamedEntity {
         return getUserName();
     }
 
-    public String getAccount() {
-        return account;
-    }
-
-    public void setAccount(String account) {
-        this.account = account;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getSalt() {
-        return salt;
-    }
-
-    public void setSalt(String salt) {
-        this.salt = salt;
-    }
-
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
-
-    public Boolean isActive() {
-        return active == null ? false : active;
-    }
-
-    public Boolean getSuperUser() {
-        return superUser;
-    }
-
-    public void setSuperUser(Boolean superUser) {
-        this.superUser = superUser;
-    }
-
     /**
      * 使用 is+名称方式获取 Boolean 的值 并判断非空
      * 好处 可以使用 Example 查询 而不必被默认的 boolean 默认为 false 所困扰
@@ -193,50 +128,8 @@ public class User extends SystemEntity implements NamedEntity {
         return superUser == null ? false : superUser;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Boolean isActive() {
+        return active == null ? false : active;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getLastLoginTime() {
-        return lastLoginTime;
-    }
-
-    public void setLastLoginTime(Date lastLoginTime) {
-        this.lastLoginTime = lastLoginTime;
-    }
-
-
-    public Set<Role> getRoles() {
-        if (roles == null) {
-            roles = new HashSet<>();
-        }
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-
-    public Set<Permission> getPermissions() {
-        if (permissions == null) {
-            permissions = new HashSet<>();
-        }
-        return permissions;
-    }
-
-    public void setPermissions(Set<Permission> permissions) {
-        this.permissions = permissions;
-    }
-
-    public UserExtend getExtend() {
-        return extend;
-    }
-
-    public void setExtend(UserExtend extend) {
-        this.extend = extend;
-    }
 }

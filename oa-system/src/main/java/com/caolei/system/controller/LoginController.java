@@ -19,6 +19,7 @@ import static com.caolei.common.constant.Constants.FORWARD_TO;
 @Controller
 public class LoginController
         implements BaseController {
+
     @Autowired
     private UserService userService;
 

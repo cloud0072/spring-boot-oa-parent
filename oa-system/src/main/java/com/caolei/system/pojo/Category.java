@@ -1,6 +1,9 @@
 package com.caolei.system.pojo;
 
 import com.caolei.common.api.BaseEntity;
+import com.caolei.common.api.NamedEntity;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -8,9 +11,11 @@ import java.util.Set;
 /**
  * 层级分类
  */
+@EqualsAndHashCode(callSuper = true)
+@Data
 @Entity
-@Table
-public class Category extends BaseEntity {
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"name"})})
+public class Category extends BaseEntity implements NamedEntity {
     /**
      * 名称
      */
@@ -31,7 +36,7 @@ public class Category extends BaseEntity {
     /**
      * 子节点
      */
-    @OneToMany
+    @OneToMany(mappedBy = "parent")
     private Set<Category> children;
 
     public Category() {
@@ -57,31 +62,4 @@ public class Category extends BaseEntity {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public CategoryType getCategoryType() {
-        return categoryType;
-    }
-
-    public void setCategoryType(CategoryType categoryType) {
-        this.categoryType = categoryType;
-    }
-
-    public Category getParent() {
-        return parent;
-    }
-
-    public void setParent(Category parent) {
-        this.parent = parent;
-    }
-
-    public Set<Category> getChildren() {
-        return children;
-    }
-
-    public void setChildren(Set<Category> children) {
-        this.children = children;
-    }
 }

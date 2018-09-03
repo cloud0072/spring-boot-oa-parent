@@ -6,6 +6,8 @@ import com.caolei.common.util.DateUtils;
 import com.caolei.common.util.FileUtils;
 import com.caolei.common.util.HttpUtils;
 import com.caolei.common.util.StringUtils;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -19,6 +21,8 @@ import java.util.Date;
  *
  * @author caolei
  */
+@EqualsAndHashCode(callSuper = true)
+@Data
 @Slf4j
 @Entity
 @Table
@@ -86,6 +90,16 @@ public class FileComponent extends BaseEntity {
     private User modifier;
 
     public FileComponent() {
+    }
+
+    @Override
+    protected String getTableName() {
+        return "文件组件";
+    }
+
+    @Override
+    protected String getModuleName() {
+        return "system";
     }
 
     /**
@@ -199,6 +213,7 @@ public class FileComponent extends BaseEntity {
         }
     }
 
+
     /**
      * 将保存文件组件实体和复制文件分开
      */
@@ -214,102 +229,4 @@ public class FileComponent extends BaseEntity {
             throw new IOException("创建文件失败!");
         }
     }*/
-    @Override
-    protected String getTableName() {
-        return "文件组件";
-    }
-
-    @Override
-    protected String getModuleName() {
-        return "system";
-    }
-
-
-    public String getFileName() {
-        return fileName;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
-
-    public String getUUIDName() {
-        return UUIDName;
-    }
-
-    public void setUUIDName(String UUIDName) {
-        this.UUIDName = UUIDName;
-    }
-
-    public String getExtendName() {
-        return extendName;
-    }
-
-    public void setExtendName(String extendName) {
-        this.extendName = extendName;
-    }
-
-    public String getContentType() {
-        return contentType;
-    }
-
-    public void setContentType(String contentType) {
-        this.contentType = contentType;
-    }
-
-    public FileType getCategory() {
-        return category;
-    }
-
-    public void setCategory(FileType category) {
-        this.category = category;
-    }
-
-    public String getDatePath() {
-        return datePath;
-    }
-
-    public void setDatePath(String datePath) {
-        this.datePath = datePath;
-    }
-
-    public Integer getDownloadTimes() {
-        return downloadTimes;
-    }
-
-    public void setDownloadTimes(Integer downloadTimes) {
-        this.downloadTimes = downloadTimes;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getModifyTime() {
-        return modifyTime;
-    }
-
-    public void setModifyTime(Date modifyTime) {
-        this.modifyTime = modifyTime;
-    }
-
-    public User getCreator() {
-        return creator;
-    }
-
-    public void setCreator(User creator) {
-        this.creator = creator;
-    }
-
-    public User getModifier() {
-        return modifier;
-    }
-
-    public void setModifier(User modifier) {
-        this.modifier = modifier;
-    }
 }

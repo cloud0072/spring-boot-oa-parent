@@ -6,6 +6,7 @@ import com.caolei.system.exception.AjaxException;
 import com.caolei.system.pojo.User;
 import com.caolei.testpojo.Student;
 import com.caolei.testpojo.Teacher;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +27,7 @@ import java.util.Set;
  * @Description: TODO
  * @date 2018/8/2 19:17
  */
+@Slf4j
 @RequestMapping("/test")
 @RestController
 public class TestController {
@@ -62,6 +64,7 @@ public class TestController {
         set.add(new Student("小红", teacher));
         set.add(new Student("小黄", teacher));
         teacher.setStudents(set);
+        log.info(teacher.toString());
 
         try {
             ObjectOutputStream oo = new ObjectOutputStream(new FileOutputStream(

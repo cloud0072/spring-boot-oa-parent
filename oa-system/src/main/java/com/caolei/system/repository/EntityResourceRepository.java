@@ -1,14 +1,14 @@
 package com.caolei.system.repository;
 
+import com.caolei.system.api.BaseRepository;
 import com.caolei.system.extend.EntityResource;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 /**
  * @author cloud0072
  */
 @Repository
-public interface EntityResourceRepository extends JpaRepository<EntityResource, String> {
+public interface EntityResourceRepository extends BaseRepository<EntityResource, String> {
 
     /**
      * 查询

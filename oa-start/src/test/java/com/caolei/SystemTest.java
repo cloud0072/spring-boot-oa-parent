@@ -1,12 +1,14 @@
 package com.caolei;
 
 import com.caolei.common.constant.Operation;
+import com.caolei.system.extend.EntityResource;
 import com.caolei.system.mongodb.DynamicForm;
 import com.caolei.system.mongodb.DynamicFormRepository;
 import com.caolei.system.pojo.OperationLog;
 import com.caolei.system.pojo.Permission;
 import com.caolei.system.pojo.Role;
 import com.caolei.system.pojo.User;
+import com.caolei.system.repository.EntityResourceRepository;
 import com.caolei.system.repository.PermissionRepository;
 import com.caolei.system.service.PermissionService;
 import com.caolei.system.service.RoleService;
@@ -23,6 +25,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.text.html.parser.Entity;
 import java.io.IOException;
 import java.util.*;
 
@@ -34,15 +37,17 @@ public class SystemTest {
     private static int index = 1;
 
     @Autowired
-    PermissionService permissionService;
+    private PermissionService permissionService;
     @Autowired
-    UserService userService;
+    private UserService userService;
     @Autowired
-    RoleService roleService;
+    private RoleService roleService;
     @Autowired
-    PermissionRepository permissionRepository;
+    private PermissionRepository permissionRepository;
     @Autowired
-    DynamicFormRepository dynamicFormRepository;
+    private DynamicFormRepository dynamicFormRepository;
+    @Autowired
+    private EntityResourceRepository entityResourceRepository;
 
     private void printIndex() {
         System.err.println(">>>>>>>>>>>>>>>>>" + index++);
@@ -206,6 +211,11 @@ public class SystemTest {
         System.out.println(dynamicFormRepository.findAll());
     }
 
+    @Test
+    public void test18() {
+        List<EntityResource> entities = entityResourceRepository.findByPropertyEquals("name","User");
+        System.out.println(entities);
+    }
 
 }
 

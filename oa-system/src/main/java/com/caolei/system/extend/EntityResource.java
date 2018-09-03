@@ -3,6 +3,8 @@ package com.caolei.system.extend;
 
 import com.caolei.common.api.BaseEntity;
 import com.caolei.common.api.NamedEntity;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,6 +16,8 @@ import javax.persistence.UniqueConstraint;
  *
  * @author cloud0072
  */
+@EqualsAndHashCode(callSuper = true)
+@Data
 @Entity
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "label"})})
 public class EntityResource
@@ -43,23 +47,14 @@ public class EntityResource
             this.label = "pojo";
         }
         this.code = path[path.length - 1];
+        this.name = code;
     }
 
     public EntityResource() {
     }
 
-    /*@Override
-    public String getGroupName() {
-        //namedEntity
-        return getLabel();
-    }*/
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     @Override
@@ -71,21 +66,4 @@ public class EntityResource
     protected String getModuleName() {
         return "system";
     }
-
-    public String getLabel() {
-        return label == null ? "" : label;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
 }

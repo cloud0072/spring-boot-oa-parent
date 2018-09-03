@@ -4,6 +4,8 @@ import com.caolei.common.api.BaseEntity;
 import com.caolei.system.pojo.FileComponent;
 import com.caolei.system.pojo.OperationLog;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -13,6 +15,8 @@ import java.util.Set;
 /**
  * 用户详情
  */
+@EqualsAndHashCode(callSuper = true)
+@Data
 @Entity
 @Table
 public class UserExtend extends BaseEntity {
@@ -37,6 +41,9 @@ public class UserExtend extends BaseEntity {
     @JoinColumn(name = "user_id")
     private Set<OperationLog> logs;
 
+    public UserExtend() {
+    }
+
     @Override
     protected String getTableName() {
         return "用户详情";
@@ -47,28 +54,4 @@ public class UserExtend extends BaseEntity {
         return "system";
     }
 
-
-    public Date getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
-    }
-
-    public FileComponent getHeadPhoto() {
-        return headPhoto;
-    }
-
-    public void setHeadPhoto(FileComponent headPhoto) {
-        this.headPhoto = headPhoto;
-    }
-
-    public Set<OperationLog> getLogs() {
-        return logs;
-    }
-
-    public void setLogs(Set<OperationLog> logs) {
-        this.logs = logs;
-    }
 }

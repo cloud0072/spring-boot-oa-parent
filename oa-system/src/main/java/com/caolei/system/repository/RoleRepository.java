@@ -1,7 +1,7 @@
 package com.caolei.system.repository;
 
+import com.caolei.system.api.BaseRepository;
 import com.caolei.system.pojo.Role;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,7 +11,13 @@ import java.util.List;
  */
 @Repository
 public interface RoleRepository
-        extends JpaRepository<Role, String> {
-
+        extends BaseRepository<Role, String> {
+    /**
+     * 查询成员变量中的某个值 用 _ 代表成员变量
+     * findByUsers_AccountEquals
+     * @param userName
+     * @return
+     */
     List<Role> findByUsers_AccountEquals(String userName);
+
 }

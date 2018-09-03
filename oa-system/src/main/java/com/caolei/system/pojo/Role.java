@@ -4,9 +4,10 @@ package com.caolei.system.pojo;
 import com.caolei.common.api.NamedEntity;
 import com.caolei.common.api.SystemEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -16,6 +17,8 @@ import java.util.List;
  * @author cloud0072
  * @date 2018/6/12 22:37
  */
+@EqualsAndHashCode(callSuper = true)
+@Data
 @Entity
 @Table(name = "auth_role", uniqueConstraints = {@UniqueConstraint(columnNames = {"name"})})
 public class Role extends SystemEntity implements NamedEntity {
@@ -61,44 +64,9 @@ public class Role extends SystemEntity implements NamedEntity {
         return "system";
     }
 
+    @Override
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public List<User> getUsers() {
-        return users == null ? new ArrayList() : users;
-    }
-
-    public void setUsers(List<User> users) {
-        this.users = users;
-    }
-
-    public List<Permission> getPermissions() {
-        return permissions == null ? new ArrayList<>() : permissions;
-    }
-
-    public void setPermissions(List<Permission> permissions) {
-        this.permissions = permissions;
     }
 
 }

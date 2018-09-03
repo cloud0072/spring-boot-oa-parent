@@ -1,7 +1,7 @@
 package com.caolei.system.repository;
 
+import com.caolei.system.api.BaseRepository;
 import com.caolei.system.pojo.User;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface UserRepository
-        extends JpaRepository<User, String> {
+        extends BaseRepository<User, String> {
 
     /**
      * 查询
