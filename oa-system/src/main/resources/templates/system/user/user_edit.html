@@ -144,14 +144,15 @@
 
                     <div class="panel-heading">
                         <div class="panel-title">
-                            Basic Initialization
+                            上传头像
                         </div>
                     </div>
 
                     <div class="panel-body">
 
-                        <!-- Auto initialization -->
-                        <form th:action="@{/system/user/upload/}" class="dropzone"></form>
+                        <div class="form-group" >
+                            <div id="dropz" class="dropzone"></div>
+                        </div>
 
                     </div>
                 </div>
@@ -180,12 +181,51 @@
 <!-- Imported styles on this page -->
 <link rel="stylesheet" th:href="@{/assets/js/dropzone/css/dropzone.css}">
 <!-- Imported scripts on this page -->
-<script  th:src="@{/assets/js/dropzone/dropzone.min.js}"></script>
+<script th:src="@{/assets/js/dropzone/dropzone.js}"></script>
 
 <script type="text/javascript" th:inline="javascript">
     $(function () {
         if ([[${op == 'find'}]]) {
             $("#account").attr("readOnly");
+        }
+    });
+
+    Dropzone.autoDiscover = false;
+    var myDropzone = new Dropzone("#dropz", {
+        url: hostUrl + "/file/upload",//文件提交地址
+        method: "post",  //也可用put
+        paramName: "file", //默认为file
+        maxFiles: 1,//一次性上传的文件数量上限
+        maxFilesize: 5, //文件大小，单位：MB
+        acceptedFiles: ".jpg,.gif,.png,.jpeg,.bmp", //上传的类型
+        addRemoveLinks: true,
+        parallelUploads: 1,//一次上传的文件数量
+        //previewsContainer:"#preview",//上传图片的预览窗口
+        dictDefaultMessage: '拖动文件至此或者点击上传',
+        dictMaxFilesExceeded: "您最多只能上传1个文件！",
+        dictResponseError: '文件上传失败!',
+        dictInvalidFileType: "文件类型只能是*.jpg,*.gif,*.png,*.jpeg*.bmp。",
+        dictFallbackMessage: "浏览器不受支持",
+        dictFileTooBig: "文件过大上传文件最大支持.",
+        dictRemoveLinks: "删除",
+        dictCancelUpload: "取消",
+        init: function () {
+            this.on('sending', function (data, xhr, formData) {
+                //向后台发送该文件的参数
+                formData.append('fileType', 'PORTRAIT');
+            });
+            this.on('success', function (files, response) {
+                //文件上传成功之后的操作
+                console.log(files);
+                console.log(response);
+                $(".dz-default dz-message").remove();
+                $('#file_id').val(response.file_id);
+            });
+            this.on('error', function (files, response) {
+                //文件上传失败后的操作
+                console.log(files);
+                console.log(response);
+            });
         }
     });
 

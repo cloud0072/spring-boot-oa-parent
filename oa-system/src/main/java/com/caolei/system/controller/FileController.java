@@ -3,19 +3,18 @@ package com.caolei.system.controller;
 import com.caolei.common.constant.FileType;
 import com.caolei.common.util.HttpUtils;
 import com.caolei.common.util.StringUtils;
+import com.caolei.system.api.BaseController;
 import com.caolei.system.exception.AjaxException;
 import com.caolei.system.pojo.FileComponent;
 import com.caolei.system.pojo.User;
 import com.caolei.system.service.FileComponentService;
 import com.caolei.system.service.UserService;
 import com.caolei.system.util.SecurityUtils;
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -30,7 +29,7 @@ import java.util.Map;
  */
 @RequestMapping("/file")
 @Controller
-public class FileController {
+public class FileController implements BaseController {
 
     @Autowired
     private FileComponentService fileComponentService;
@@ -49,8 +48,9 @@ public class FileController {
      */
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity fileUpload(String fileId, FileType fileType,
-                                     @RequestParam("file") MultipartFile file) {
+    public ResponseEntity fileUpload(String fileId,
+                                     @NonNull FileType fileType,
+                                     @NonNull @RequestParam("file") MultipartFile file) {
         try {
 
             FileComponent component = StringUtils.isEmpty(fileId) ?
@@ -59,12 +59,34 @@ public class FileController {
 
             component.createOrUpdateFile(file.getOriginalFilename(), file.getContentType(), fileType, user);
             component = fileComponentService.save(component);
-            file.transferTo(new File(component.getAbsolutePath()));
+            File f = new File(component.getAbsolutePath());
+            if (!f.getParentFile().exists()) {
+                f.getParentFile().mkdirs();
+            }
+            file.transferTo(f);
 
             Map<String, Object> result = new HashMap<>();
             result.put("file_id", component.getId());
             result.put("file_url", component.getUrl());
             result.put("message", "文件上传成功！");
+            return ResponseEntity.ok().body(result);
+
+        } catch (Exception e) {
+            throw new AjaxException(e);
+        }
+    }
+
+    @RequestMapping(value = "/delete/${id}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public ResponseEntity fileRemove(@PathVariable("id") String fileId) {
+        try {
+
+            FileComponent component = fileComponentService.findById(fileId);
+            component.deleteFile();
+            fileComponentService.deleteById(fileId);
+
+            Map<String, Object> result = new HashMap<>();
+            result.put("message", "文件删除成功！");
             return ResponseEntity.ok().body(result);
 
         } catch (Exception e) {

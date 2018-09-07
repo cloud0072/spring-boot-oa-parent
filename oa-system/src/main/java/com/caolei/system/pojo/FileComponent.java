@@ -130,7 +130,7 @@ public class FileComponent extends BaseEntity {
     /**
      * 如果有则删除原有文件
      */
-    private void deleteFile() {
+    public void deleteFile() {
         //没有保存过 直接返回;
         if (StringUtils.isEmpty(getId())) {
             return;
