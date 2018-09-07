@@ -1,7 +1,6 @@
 package com.caolei;
 
 import com.caolei.common.constant.Operation;
-import com.caolei.system.extend.EntityResource;
 import com.caolei.system.mongodb.DynamicForm;
 import com.caolei.system.mongodb.DynamicFormRepository;
 import com.caolei.system.pojo.OperationLog;
@@ -22,10 +21,14 @@ import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Example;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.text.html.parser.Entity;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.io.IOException;
 import java.util.*;
 
@@ -213,8 +216,11 @@ public class SystemTest {
 
     @Test
     public void test18() {
-        List<EntityResource> entities = entityResourceRepository.findByPropertyEquals("name","User");
-        System.out.println(entities);
+//        List<EntityResource> entities = entityResourceRepository.findByPropertyEquals("name","User");
+//        System.out.println(entities);
+        Permission permission = permissionRepository.findOne((Specification<Permission>)
+                (root, criteriaQuery, criteriaBuilder) -> null).orElse(null);
+
     }
 
 }

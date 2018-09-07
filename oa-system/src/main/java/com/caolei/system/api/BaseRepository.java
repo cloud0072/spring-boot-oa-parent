@@ -1,9 +1,8 @@
 package com.caolei.system.api;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.repository.NoRepositoryBean;
 
 /**
  * @ClassName: BaseRepository
@@ -11,9 +10,9 @@ import java.util.List;
  * @author caolei
  * @date 2018/8/31 17:34
  */
-public interface BaseRepository<T, ID> extends JpaRepository<T, ID> {
+@NoRepositoryBean
+public interface BaseRepository<T, ID> extends JpaRepository<T, ID>,JpaSpecificationExecutor<T> {
 
-    @Query("from #{#entityName} where name= ?1 ")
-    List<T> find(String name);
+
 
 }
