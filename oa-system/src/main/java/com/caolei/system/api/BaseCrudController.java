@@ -3,6 +3,7 @@ package com.caolei.system.api;
 import com.caolei.common.api.BaseEntity;
 import com.caolei.common.util.EntityUtils;
 import com.caolei.system.util.SecurityUtils;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.data.domain.*;
@@ -24,61 +25,33 @@ import static com.caolei.common.constant.Constants.*;
  * @Description: TODO
  * @date 2018/7/25 11:41
  */
+@Api("基础增删改查方法的接口类")
 @RequiresAuthentication
 public interface BaseCrudController<T extends BaseEntity> extends BaseController {
 
-    /**
-     * 获取实例对应的服务
-     *
-     * @return
-     */
     @ApiOperation("获取实例对应的服务")
     BaseCrudService<T> service();
 
-    /**
-     * 返回一个空对象实例
-     * 用于查询和调用实例内的方法
-     *
-     * @return
-     */
-    @ApiOperation("返回一个空对象实例")
+    @ApiOperation("返回一个空对象实例,用于查询和调用实例内的方法")
     default T instance() {
         return (T) EntityUtils.interfaceGenericTypeInstance(getClass(), 0, 0);
     }
 
-    /**
-     * model增强方法
-     * 需要重写
-     *
-     * @param model
-     */
     @ApiOperation("model增强方法,给子类扩展添加到model中的数据")
     default void modelAdvice(Model model) {
     }
 
-    /**
-     * 获取实例名
-     *
-     * @return
-     */
     @ApiOperation("获取实例名,和访问路径")
     default String entityName() {
         return instance().entityName();
     }
 
-    /**
-     * 获取模块名
-     *
-     * @return
-     */
     @ApiOperation("获取模块名,和访问路径")
     default String moduleName() {
         return instance().moduleName();
     }
 
-    /**
-     * 查询所有对象
-     */
+
     @ApiOperation("查询所有对象")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     default String list(HttpServletRequest request, HttpServletResponse response, T t,
@@ -96,9 +69,7 @@ public interface BaseCrudController<T extends BaseEntity> extends BaseController
         return "/" + moduleName() + "/" + entityName() + "/" + entityName() + "_list";
     }
 
-    /**
-     * 跳转创建对象页
-     */
+
     @ApiOperation("跳转创建对象页")
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     default String showCreateForm(HttpServletRequest request, HttpServletResponse response, Model model) {
@@ -107,9 +78,7 @@ public interface BaseCrudController<T extends BaseEntity> extends BaseController
         return "/" + moduleName() + "/" + entityName() + "/" + entityName() + "_edit";
     }
 
-    /**
-     * 跳转 查看 更新 或 删除对象页
-     */
+
     @ApiOperation("跳转 查看 更新 或 删除对象页")
     @RequestMapping(value = "/{operation}/{id}", method = RequestMethod.GET)
     default String showForm(HttpServletRequest request, HttpServletResponse response, Model model,
@@ -121,9 +90,7 @@ public interface BaseCrudController<T extends BaseEntity> extends BaseController
         return "/" + moduleName() + "/" + entityName() + "/" + entityName() + prefix;
     }
 
-    /**
-     * 提交创建对象
-     */
+
     @ApiOperation("提交创建对象")
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     default String create(HttpServletRequest request, HttpServletResponse response, T t,
@@ -134,9 +101,7 @@ public interface BaseCrudController<T extends BaseEntity> extends BaseController
         return REDIRECT_TO + "/" + moduleName() + "/" + entityName() + "/list";
     }
 
-    /**
-     * 提交更新对象
-     */
+
     @ApiOperation("提交更新对象")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     default String update(HttpServletRequest request, HttpServletResponse response, T t,
@@ -147,9 +112,6 @@ public interface BaseCrudController<T extends BaseEntity> extends BaseController
         return REDIRECT_TO + "/" + moduleName() + "/" + entityName() + "/find/" + t.getId();
     }
 
-    /**
-     * 提交删除对象
-     */
     @ApiOperation("提交删除对象")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     default String delete(HttpServletRequest request, HttpServletResponse response, T t,
@@ -161,14 +123,6 @@ public interface BaseCrudController<T extends BaseEntity> extends BaseController
         return REDIRECT_TO + "/" + moduleName() + "/" + entityName() + "/list";
     }
 
-    /**
-     * 封装方法
-     *
-     * @param model
-     * @param operation
-     * @param t
-     * @param type
-     */
     @ApiOperation("将参数放入model中")
     default void putModel(Model model, String operation, T t, String type) {
         model.addAttribute(entityName(), t);
@@ -179,4 +133,5 @@ public interface BaseCrudController<T extends BaseEntity> extends BaseController
         model.addAttribute("entityName", entityName());
         modelAdvice(model);
     }
+
 }

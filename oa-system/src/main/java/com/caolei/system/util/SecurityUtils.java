@@ -150,7 +150,7 @@ public class SecurityUtils extends org.apache.shiro.SecurityUtils {
         return user;
     }
 
-    @Value("${shiro.hash.iterations}")
+    @Value("${plugin.shiro.hash-iterations}")
     private void setHashIterations(Integer hashIterations) {
         HASH_ITERATIONS = hashIterations;
     }

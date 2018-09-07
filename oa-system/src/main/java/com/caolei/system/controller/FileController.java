@@ -30,7 +30,7 @@ import java.util.Map;
  */
 @RequestMapping("/file")
 @Controller
-public class FileComponentController {
+public class FileController {
 
     @Autowired
     private FileComponentService fileComponentService;

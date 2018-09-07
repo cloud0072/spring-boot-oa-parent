@@ -1,24 +1,16 @@
-package com.caolei.controller;
+package com.caolei.webtest.controller;
 
 import com.caolei.common.util.DateUtils;
 import com.caolei.common.util.FileUtils;
+import com.caolei.system.api.BaseController;
 import com.caolei.system.exception.AjaxException;
 import com.caolei.system.pojo.User;
-import com.caolei.testpojo.Student;
-import com.caolei.testpojo.Teacher;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.util.HashSet;
-import java.util.Set;
 
 
 /**
@@ -30,7 +22,7 @@ import java.util.Set;
 @Slf4j
 @RequestMapping("/test")
 @RestController
-public class TestController {
+public class TestController implements BaseController {
 
     @RequestMapping("/01")
     public Object test01(HttpServletRequest request, HttpServletResponse response) {
@@ -53,30 +45,6 @@ public class TestController {
     @RequestMapping("/04")
     public Object test04(HttpServletRequest request, HttpServletResponse response) {
         return DateUtils.parseDayOfWeek("周一");
-    }
-
-    @RequestMapping("/05")
-    public Object test05(HttpServletRequest request, HttpServletResponse response) {
-        Teacher teacher = new Teacher();
-        teacher.setName("李华");
-        Set<Student> set = new HashSet<>();
-        set.add(new Student("小明", teacher));
-        set.add(new Student("小红", teacher));
-        set.add(new Student("小黄", teacher));
-        teacher.setStudents(set);
-        log.info(teacher.toString());
-
-        try {
-            ObjectOutputStream oo = new ObjectOutputStream(new FileOutputStream(
-                    new File("D:/123/Person.txt")));
-            oo.writeObject(teacher);
-            oo.flush();
-            oo.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return ResponseEntity.ok("序列化成功");
     }
 
     @RequestMapping("/06")

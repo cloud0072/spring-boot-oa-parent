@@ -34,17 +34,17 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Configuration
 public class ShiroConfig {
 
-    @Value("${shiro.cipher.key}")
+    @Value("${plugin.shiro.cipher-key}")
     private String CIPHER_KEY;
-    @Value("${shiro.hash.algorithm.name}")
+    @Value("${plugin.shiro.hash-algorithm-name}")
     private String HASH_ALGORITHM_NAME;
-    @Value("${shiro.hash.iterations}")
+    @Value("${plugin.shiro.hash-iterations}")
     private Integer HASH_ITERATIONS;
-    @Value("${shiro.login.retry.times}")
+    @Value("${plugin.shiro.login-retry-times}")
     private Integer LOGIN_RETRY_TIMES;
-    @Value("${shiro.lock.expired.time}")
+    @Value("${plugin.shiro.lock-expired-time}")
     private Integer LOCK_EXPIRED_TIME;
-    @Value("${shiro.remember.me.age}")
+    @Value("${plugin.shiro.remember-me-age}")
     private Integer REMEMBER_ME_AGE;
 
     @Bean

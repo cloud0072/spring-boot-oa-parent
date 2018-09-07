@@ -2,7 +2,6 @@ package com.caolei.system.config;
 
 import com.caolei.system.interceptor.DefaultInterceptor;
 import com.caolei.system.interceptor.MenuInterceptor;
-import com.caolei.system.interceptor.VisitLogInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
@@ -18,16 +17,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class InterceptorConfig
         implements WebMvcConfigurer {
 
-    private final VisitLogInterceptor visitLogInterceptor;
     private final DefaultInterceptor defaultInterceptor;
     private final MenuInterceptor menuInterceptor;
 
     @Autowired
     public InterceptorConfig(DefaultInterceptor defaultInterceptor,
-                             VisitLogInterceptor visitLogInterceptor,
                              MenuInterceptor menuInterceptor) {
         this.defaultInterceptor = defaultInterceptor;
-        this.visitLogInterceptor = visitLogInterceptor;
         this.menuInterceptor = menuInterceptor;
     }
 
@@ -56,9 +52,6 @@ public class InterceptorConfig
 
         InterceptorRegistration ir2 = registry.addInterceptor(menuInterceptor).addPathPatterns("/**");
         excludeStaticResource(ir2);
-
-        InterceptorRegistration ir3 = registry.addInterceptor(visitLogInterceptor).addPathPatterns("/**");
-        excludeStaticResource(ir3);
 
     }
 

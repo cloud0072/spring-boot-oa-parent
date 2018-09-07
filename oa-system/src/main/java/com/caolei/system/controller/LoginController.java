@@ -30,7 +30,7 @@ public class LoginController
      * @author cloud0072
      * @date 2018/6/12 21:55
      */
-    @RequestMapping(value = "/prepare_login", method = RequestMethod.GET)
+    @RequestMapping(value = "/prepare_login", method = {RequestMethod.GET, RequestMethod.POST})
     public String prepareLogin() {
         return "login";
     }

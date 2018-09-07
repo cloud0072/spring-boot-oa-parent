@@ -1,7 +1,8 @@
-package com.caolei.system.exception;
+package com.caolei.system.handle;
 
 
 import com.caolei.common.util.StringUtils;
+import com.caolei.system.exception.AjaxException;
 import com.caolei.system.util.SecurityUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.View;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -34,7 +36,7 @@ public class GlobalExceptionHandler {
     private void printErrorMessage(Exception ex) {
         log.error(ex.getStackTrace()[0].toString());
         log.error(ex.getClass().getName());
-        log.error(ex.getMessage());
+        log.error(ex.getMessage() + "\n");
     }
 
     /**

@@ -17,7 +17,6 @@ public class FileUtils {
 
     //文件保存路径
     private static String uploadPath;
-    private static File uploadDir;
 
     private FileUtils() {
     }
@@ -57,12 +56,13 @@ public class FileUtils {
      *
      * @param uploadPath
      */
-    @Value("${location.static-resource.path}")
+    @Value("${location.resource.upload-path}")
     private void setUploadPath(String uploadPath) {
-        FileUtils.uploadPath = uploadPath + "/static/";
+        FileUtils.uploadPath = uploadPath;
+        File uploadDir = new File(uploadPath);
 
-        if (uploadDir == null) {
-            uploadDir = new File(uploadPath());
+        if (!uploadDir.exists()) {
+            uploadDir.mkdirs();
             if (!uploadDir.exists() && !uploadDir.mkdirs() || uploadDir.isFile()) {
                 throw new UnsupportedOperationException("无法创建文件上传文件夹");
             }

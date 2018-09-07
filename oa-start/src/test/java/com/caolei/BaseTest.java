@@ -4,8 +4,6 @@ import com.caolei.common.util.ReflectUtils;
 import com.caolei.common.util.StringUtils;
 import com.caolei.system.pojo.User;
 import com.caolei.system.util.SecurityUtils;
-import com.caolei.testpojo.Student;
-import com.caolei.testpojo.Teacher;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.junit.Test;
 
@@ -170,7 +168,6 @@ public class BaseTest {
 
         System.out.println(map2.get(""));
 
-
     }
 
     @Test
@@ -232,34 +229,5 @@ public class BaseTest {
         bos.flush();
         bos.close();
     }
-
-    @Test
-    public void test20() throws IOException {
-        Teacher teacher = new Teacher();
-        teacher.setName("李华");
-        Set<Student> set = new HashSet<>();
-        set.add(new Student("小明", teacher));
-        set.add(new Student("小红", teacher));
-        set.add(new Student("小黄", teacher));
-        teacher.setStudents(set);
-
-        ObjectOutputStream oo = new ObjectOutputStream(new FileOutputStream(
-                new File("D:/123/Person.txt")));
-
-        oo.writeObject(teacher);
-        oo.flush();
-        oo.close();
-
-    }
-
-    @Test
-    public void test21() throws IOException, ClassNotFoundException {
-        ObjectInputStream oi = new ObjectInputStream(new FileInputStream(
-                new File("D:/123/Person.txt")));
-        Teacher teacher = (Teacher) oi.readObject();
-
-        System.out.println(teacher.getName());
-    }
-
 
 }

@@ -1,5 +1,7 @@
 package com.caolei.system.config;
 
+import com.caolei.common.util.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -21,6 +23,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class Swagger2Config {
 
+    private Boolean enable;
     /**
      * 创建API应用
      * apiInfo() 增加API相关信息
@@ -32,6 +35,7 @@ public class Swagger2Config {
     @Bean
     public Docket createRestApi() {
         return new Docket(DocumentationType.SWAGGER_2)
+                .enable(enable)
                 .apiInfo(apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.any())
@@ -51,5 +55,13 @@ public class Swagger2Config {
                 .termsOfServiceUrl("http://www.Swagger2.com")
                 .version("1.0")
                 .build();
+    }
+
+    @Value("plugin.swagger2.show")
+    public void setEnable(String enable) {
+        if (StringUtils.isEmpty(enable)){
+            enable = "false";
+        }
+        this.enable = Boolean.valueOf(enable);
     }
 }
