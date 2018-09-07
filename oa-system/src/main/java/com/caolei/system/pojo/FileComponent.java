@@ -197,7 +197,7 @@ public class FileComponent extends BaseEntity {
             throw new UnsupportedOperationException("请先保存文件组件才能获取访问路径!");
         }
 
-        return HttpUtils.serverAddress() + "/static" + getPath();
+        return HttpUtils.serverAddress() + "/file/download?fileId=" + getId();
     }
 
     /**
