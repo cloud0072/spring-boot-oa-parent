@@ -21,14 +21,7 @@ public abstract class BaseEntity implements Serializable {
     @Id
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     @GeneratedValue(generator = "system-uuid")
-    private String id;
-
-    @Transient
-    private String tableName;
-    @Transient
-    private String moduleName;
-    @Transient
-    private String entityName;
+    protected String id;
 
     public String getId() {
         return id;
@@ -53,41 +46,6 @@ public abstract class BaseEntity implements Serializable {
         }
         BaseEntity that = (BaseEntity) o;
         return Objects.equals(id, that.id);
-    }
-
-    /**
-     * 获取表的中文名
-     *
-     * @return
-     */
-    public final String tableName() {
-        return null;
-    }
-
-    /**
-     * 获取模块路径
-     *
-     * @return
-     */
-    public final String modulePath() {
-        return null;
-    }
-
-    /**
-     * 获取实体名
-     *
-     * @return
-     */
-    public final String entityPath() {
-        return null;
-    }
-
-    protected String getTableName() {
-        return null;
-    }
-
-    protected String getmodulePath() {
-        return null;
     }
 
 }

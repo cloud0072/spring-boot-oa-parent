@@ -2,7 +2,9 @@ package com.caolei.common.api.controller;
 
 import com.caolei.common.api.entity.BaseEntity;
 import com.caolei.common.api.service.BaseCrudService;
-import com.caolei.common.util.EntityUtils;
+import com.caolei.common.util.ReflectUtils;
+import com.caolei.common.util.StringUtils;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.data.domain.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,52 +13,53 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
-public interface BaseRestController<T extends BaseEntity> extends BaseController {
+public abstract class BaseRestController<T extends BaseEntity> implements BaseController {
 
-    /**
-     * 获取实例对应的服务
-     *
-     * @return
-     */
-    BaseCrudService<T> service();
+    protected Class<T> persistentClass = persistentClass();
+    protected String className = className();
 
-    /**
-     * 返回一个空对象实例
-     * 用于查询和调用实例内的方法
-     *
-     * @return
-     */
-    default BaseEntity instance() {
-        return EntityUtils.interfaceGenericTypeInstance(getClass(), 0, 0);
+    @ApiOperation("获取实例对应的服务")
+    protected abstract BaseCrudService<T> service();
+
+    @ApiOperation("返回一个当前控制器对应实体的类型")
+    protected synchronized Class<T> persistentClass() {
+        if (persistentClass == null) {
+            try {
+                persistentClass = ReflectUtils.getClassGenericType(getClass(), 0);
+            } catch (Exception e) {
+            }
+        }
+
+        return persistentClass;
     }
 
-    /**
-     * 获取实例名
-     *
-     * @return
-     */
-    default String entityPath() {
-        return instance().entityPath();
+    @ApiOperation("获取类型名")
+    protected synchronized String className() {
+        if (StringUtils.isEmpty(className)) {
+            assert persistentClass != null;
+            className = StringUtils.toLowerCaseFirstOne(persistentClass.getSimpleName());
+        }
+        return className;
     }
 
-    /**
-     * 获取模块名
-     *
-     * @return
-     */
-    default String modulePath() {
-        return instance().modulePath();
+    @ApiOperation("返回一个当前控制器对应实体的实例")
+    protected T instance() {
+        try {
+            return persistentClass.newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new UnsupportedOperationException(e);
+        }
     }
 
     /**
      * 查询所有对象
      */
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    default Object list(HttpServletRequest request, HttpServletResponse response, T t,
-                        @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber,
-                        @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                        @RequestParam(value = "direction", defaultValue = "ASC") String direction,
-                        @RequestParam(value = "sortField", defaultValue = "id") String sortField) {
+    protected Object list(HttpServletRequest request, HttpServletResponse response, T t,
+                          @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber,
+                          @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+                          @RequestParam(value = "direction", defaultValue = "ASC") String direction,
+                          @RequestParam(value = "sortField", defaultValue = "id") String sortField) {
 //        SecurityUtils.checkOperation(t, OP_LIST);
         Pageable pageable = PageRequest.of(pageNumber, pageSize, new Sort(Sort.Direction.fromString(direction), sortField));
         Page<T> list = service().findAll(Example.of(t), pageable);
@@ -64,17 +67,17 @@ public interface BaseRestController<T extends BaseEntity> extends BaseController
     }
 
     @RequestMapping(value = "/find/${id}", method = RequestMethod.GET)
-    default Object find(HttpServletRequest request, HttpServletResponse response,
-                        @PathVariable(name = "id") String id) {
+    protected Object find(HttpServletRequest request, HttpServletResponse response,
+                          @PathVariable(name = "id") String id) {
         T t = service().findById(id);
 //        SecurityUtils.checkOperation(t, OP_FIND);
         return ResponseEntity.ok(t);
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    default Object create(HttpServletRequest request, HttpServletResponse response, T t) {
+    protected Object create(HttpServletRequest request, HttpServletResponse response, T t) {
 //        SecurityUtils.checkOperation(t, OP_CREATE);
-        t = service().save(t);
+        t = service().save(t, request, response);
         return ResponseEntity.ok(t);
     }
 
@@ -82,9 +85,9 @@ public interface BaseRestController<T extends BaseEntity> extends BaseController
      * 提交更新对象
      */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    default Object update(HttpServletRequest request, HttpServletResponse response, T t) {
+    protected Object update(HttpServletRequest request, HttpServletResponse response, T t) {
 //        SecurityUtils.checkOperation(t, OP_UPDATE);
-        t = service().updateById(t.getId(), t);
+        t = service().update(t, request, response);
         return ResponseEntity.ok(t);
     }
 
@@ -92,8 +95,8 @@ public interface BaseRestController<T extends BaseEntity> extends BaseController
      * 提交删除对象
      */
     @RequestMapping(value = "/delete/${id}", method = RequestMethod.POST)
-    default Object delete(HttpServletRequest request, HttpServletResponse response,
-                          @PathVariable(name = "id") String id) {
+    protected Object delete(HttpServletRequest request, HttpServletResponse response,
+                            @PathVariable(name = "id") String id) {
         T t = service().findById(id);
 //        SecurityUtils.checkOperation(t, OP_DELETE);
         service().deleteById(id);

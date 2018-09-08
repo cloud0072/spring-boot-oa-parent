@@ -1,11 +1,13 @@
 package com.caolei.webtest.controller;
 
+import com.caolei.base.service.UserService;
 import com.caolei.common.api.controller.BaseController;
 import com.caolei.common.util.DateUtils;
 import com.caolei.common.util.FileUtils;
-import com.caolei.system.exception.AjaxException;
-import com.caolei.system.pojo.User;
+import com.caolei.base.exception.AjaxException;
+import com.caolei.base.pojo.User;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,6 +25,9 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("/test")
 @RestController
 public class TestController implements BaseController {
+
+    @Autowired
+    private UserService userService;
 
     @RequestMapping("/01")
     public Object test01(HttpServletRequest request, HttpServletResponse response) {
@@ -49,6 +54,10 @@ public class TestController implements BaseController {
 
     @RequestMapping("/06")
     public Object test06(HttpServletRequest request, HttpServletResponse response) {
+        User user = userService.findUserByAccount("admin");
+        user.setPassword("admin");
+        userService.update(user);
+
         String catalina = System.getProperty("catalina.home");
         String uploadPath = FileUtils.uploadPath();
         return uploadPath;

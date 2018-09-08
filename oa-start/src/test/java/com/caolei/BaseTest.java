@@ -2,9 +2,8 @@ package com.caolei;
 
 import com.caolei.common.util.ReflectUtils;
 import com.caolei.common.util.StringUtils;
-import com.caolei.system.pojo.User;
-import com.caolei.common.util.SecurityUtils;
-import com.caolei.system.util.UserUtils;
+import com.caolei.base.pojo.User;
+import com.caolei.base.util.UserUtils;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.junit.Test;
 

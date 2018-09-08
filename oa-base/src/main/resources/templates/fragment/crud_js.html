@@ -10,30 +10,10 @@
         var hostUrl = /*[[@{'/'}]]*/ +'';
         var baseUrl = /*[[@{${modulePath}+${entityPath}}]]*/ +'';
 
-        function showCreate() {
-            location.href = baseUrl + '/create';
-        }
-
-        function showUpdate() {
-            location.href = baseUrl + '/update/' + [[${id}]];
-        }
-
-        function update() {
-            var form = $("#main_form");
-            var id = [[${id}]];
-            var url = '';
-
-            if (id == null || id === '') {
-                url = baseUrl + '/create';
-            } else {
-                url = baseUrl + '/update';
-            }
-
-            form.attr("action", url);
-            form.submit();
-        }
-
-        //get 跳转
+        $('.btn.view').on('click', function () {
+            var id = $(this).attr("entity_id");
+            location.href = baseUrl + '/view/' + id;
+        });
 
         $('.btn.create').on('click', function () {
             location.href = baseUrl + '/create';
@@ -44,33 +24,36 @@
             location.href = baseUrl + '/update/' + id;
         });
 
-        $('.btn.view').on('click', function () {
-            var id = $(this).attr("entity_id");
-            location.href = baseUrl + '/find/' + id;
-        });
-
-        //post 提交
-
         $('.btn.save').on('click', function () {
-            var id = $(this).attr("entity_id");
             var form = $("#main_form");
-            if (id) {
-                form.attr({"action": baseUrl + "/update"});
-            } else {
-                form.attr({"action": baseUrl + "/create"});
-            }
-
-            form.submit();
+            var id = $(this).attr("entity_id");
+            var method = id ? 'PUT' : 'POST';
+            var url = id ? baseUrl + "/" + id : baseUrl;
+            $.ajax({
+                url: url,
+                type: method,
+                data: form.serialize(),
+                success: function (data) {
+                    // console.log(data);
+                    if (data && data.url) {
+                        location.href = hostUrl + data.url;
+                    }
+                }
+            });
         });
 
         $('.btn.remove').on('click', function () {
-            var id = $("#id");
-            id.val($(this).attr("entity_id"));
-
-            var form = $("#form");
-            form.attr({"action": baseUrl + "/"});
-            form.attr("method","delete");
-            form.submit();
+            var id = $(this).attr("entity_id");
+            $.ajax({
+                url: baseUrl + "/" + id,
+                type: "DELETE",
+                success: function (data) {
+                    // console.log(data);
+                    if (data && data.url) {
+                        location.href = hostUrl + data.url;
+                    }
+                }
+            });
         });
     </script>
 

@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Collection;
 import java.util.List;
 
@@ -33,13 +35,18 @@ public interface BaseCrudService<T extends BaseEntity>
     /**
      * 修改
      *
-     * @param id
      * @param input
      * @return
      * @author cloud0072
      * @date 2018/6/12 22:49
      */
-    T updateById(String id, T input);
+    T update(T input,
+             HttpServletRequest request,
+             HttpServletResponse response);
+
+    default T update(T input) {
+        return update(input, null, null);
+    }
 
     /**
      * 创建
@@ -49,8 +56,14 @@ public interface BaseCrudService<T extends BaseEntity>
      * @author cloud0072
      * @date 2018/6/12 22:49
      */
-    default T save(T t) {
+    default T save(T t,
+                   HttpServletRequest request,
+                   HttpServletResponse response) {
         return repository().save(t);
+    }
+
+    default T save(T t) {
+        return save(t, null, null);
     }
 
     /**
@@ -60,8 +73,14 @@ public interface BaseCrudService<T extends BaseEntity>
      * @author cloud0072
      * @date 2018/6/12 22:49
      */
-    default void saveAll(Collection<? extends T> var) {
+    default void saveAll(Collection<? extends T> var,
+                         HttpServletRequest request,
+                         HttpServletResponse response) {
         repository().saveAll(var);
+    }
+
+    default void saveAll(Collection<? extends T> var) {
+        saveAll(var, null, null);
     }
 
     /**

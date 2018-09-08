@@ -8,18 +8,18 @@ import com.caolei.common.util.ReflectUtils;
 import com.caolei.common.util.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.NonNull;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.data.domain.*;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.caolei.common.constant.Constants.*;
 
@@ -79,9 +79,12 @@ public abstract class BaseCrudController<T extends BaseEntity> implements BaseCo
         return AnnotationUtils.findAnnotation(persistentClass, ModuleInfo.class).modulePath();
     }
 
+
     @ApiOperation("查询所有对象")
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
-    protected String list(HttpServletRequest request, HttpServletResponse response, T t,
+    @GetMapping
+    protected String list(T t,
+                          HttpServletRequest request,
+                          HttpServletResponse response,
                           @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber,
                           @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
                           @RequestParam(value = "direction", defaultValue = "ASC") String direction,
@@ -95,58 +98,98 @@ public abstract class BaseCrudController<T extends BaseEntity> implements BaseCo
         return modulePath() + entityPath() + entityPath() + "_list";
     }
 
-
-    @ApiOperation("跳转创建对象页")
-    @RequestMapping(value = "/create", method = RequestMethod.GET)
-    protected String showCreateForm(HttpServletRequest request, HttpServletResponse response, Model model) {
-//        SecurityUtils.checkOperation(instance(), OP_CREATE);
-        putModel(model, OP_CREATE, instance(), TY_ADMIN);
+    @ApiOperation("跳转 创建 或删除对象页")
+    @GetMapping(value = "/create")
+    protected String showCreatePage(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    Model model) {
+        T t = instance();
+//        SecurityUtils.checkOperation(t, operation);
+        putModel(model, OP_CREATE, t, TY_ADMIN);
         return modulePath() + entityPath() + entityPath() + "_edit";
     }
 
-
-    @ApiOperation("跳转 查看 更新 或 删除对象页")
-    @RequestMapping(value = "/{operation}/{id}", method = RequestMethod.GET)
-    protected String showForm(HttpServletRequest request, HttpServletResponse response, Model model,
-                              @PathVariable("id") String id, @PathVariable("operation") String operation) {
+    @ApiOperation("跳转 编辑 或删除对象页")
+    @GetMapping(value = "/update/{id}")
+    protected String showUpdatePage(@PathVariable("id") @NonNull String id,
+                                    HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    Model model) {
         T t = service().findById(id);
 //        SecurityUtils.checkOperation(t, operation);
-        putModel(model, operation, t, TY_ADMIN);
-        String prefix = operation.equals(OP_FIND) ? "_view" : "_edit";
-        return modulePath() + entityPath() + entityPath() + prefix;
+        putModel(model, OP_UPDATE, t, TY_ADMIN);
+        return modulePath() + entityPath() + entityPath() + "_edit";
     }
 
+    @ApiOperation("跳转 查看 或删除对象页")
+    @GetMapping(value = "/view/{id}")
+    protected String showViewPage(@PathVariable("id") @NonNull String id,
+                                  HttpServletRequest request,
+                                  HttpServletResponse response,
+                                  Model model) {
+        T t = id == null ? instance() : service().findById(id);
+//        SecurityUtils.checkOperation(t, operation);
+        putModel(model, OP_FIND, t, TY_ADMIN);
+        return modulePath() + entityPath() + entityPath() + "_view";
+    }
+
+    @ApiOperation("查询对象")
+    @GetMapping("/{id}")
+    @ResponseBody
+    protected ResponseEntity find(@PathVariable("id") @NonNull String id,
+                                  HttpServletRequest request,
+                                  HttpServletResponse response) {
+        T t = service().findById(id);
+        Map<String, Object> map = new HashMap<>();
+        map.put("message", "查詢成功");
+        map.put(className, t);
+        return ResponseEntity.ok(map);
+    }
 
     @ApiOperation("提交创建对象")
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
-    protected String create(HttpServletRequest request, HttpServletResponse response, T t,
-                            RedirectAttributes redirectAttributes) {
+    @PostMapping
+    @ResponseBody
+    protected ResponseEntity create(T t,
+                                    HttpServletRequest request,
+                                    HttpServletResponse response) {
 //        SecurityUtils.checkOperation(t, OP_CREATE);
-        service().save(t);
-        redirectAttributes.addFlashAttribute("message", "新增成功");
-        return REDIRECT_TO + "/" + modulePath() + "/" + entityPath() + "/list";
+        t = service().save(t, request, response);
+        Map<String, Object> map = new HashMap<>();
+        map.put("message", "新增成功");
+        map.put("url", modulePath() + entityPath() + "/view/" + t.getId());
+        return ResponseEntity.ok(map);
     }
 
-
     @ApiOperation("提交更新对象")
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
-    protected String update(HttpServletRequest request, HttpServletResponse response, T t,
-                            RedirectAttributes redirectAttributes) {
+    @PutMapping("/{id}")
+    @ResponseBody
+    protected ResponseEntity update(@PathVariable("id") @NonNull String id,
+                                    T t,
+                                    HttpServletRequest request,
+                                    HttpServletResponse response) {
 //        SecurityUtils.checkOperation(t, OP_UPDATE);
-        service().updateById(t.getId(), t);
-        redirectAttributes.addFlashAttribute("message", "修改成功");
-        return REDIRECT_TO + "/" + modulePath() + "/" + entityPath() + "/find/" + t.getId();
+        t = service().update(t, request, response);
+        Map<String, Object> map = new HashMap<>();
+        map.put("message", "修改成功");
+        map.put("url", modulePath() + entityPath() + "/view/" + t.getId());
+        return ResponseEntity.ok(map);
     }
 
     @ApiOperation("提交删除对象")
-    @RequestMapping(value = "/", method = RequestMethod.DELETE)
-    protected String delete(HttpServletRequest request, HttpServletResponse response, T t,
-                            RedirectAttributes redirectAttributes) {
+    @DeleteMapping("/{id}")
+    @ResponseBody
+    protected ResponseEntity delete(@PathVariable("id") @NonNull String id,
+                                    T t,
+                                    HttpServletRequest request,
+                                    HttpServletResponse response) {
         t = service().findById(t.getId());
 //        SecurityUtils.checkOperation(t, OP_DELETE);
+
         service().deleteById(t.getId());
-        redirectAttributes.addFlashAttribute("message", "删除成功");
-        return REDIRECT_TO + "/" + modulePath() + "/" + entityPath() + "/list";
+        Map<String, Object> map = new HashMap<>();
+        map.put("message", "删除成功");
+        map.put("url", modulePath() + entityPath());
+        return ResponseEntity.ok(map);
     }
 
     @ApiOperation("将参数放入model中")

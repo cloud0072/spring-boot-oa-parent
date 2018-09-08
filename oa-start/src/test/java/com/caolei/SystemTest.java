@@ -1,17 +1,15 @@
 package com.caolei;
 
 import com.caolei.common.constant.Operation;
-import com.caolei.system.pojo.OperationLog;
-import com.caolei.system.pojo.Permission;
-import com.caolei.system.pojo.Role;
-import com.caolei.system.pojo.User;
-import com.caolei.system.repository.EntityResourceRepository;
-import com.caolei.system.repository.PermissionRepository;
-import com.caolei.system.service.PermissionService;
-import com.caolei.system.service.RoleService;
-import com.caolei.system.service.UserService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.caolei.base.pojo.OperationLog;
+import com.caolei.base.pojo.Permission;
+import com.caolei.base.pojo.Role;
+import com.caolei.base.pojo.User;
+import com.caolei.base.repository.EntityResourceRepository;
+import com.caolei.base.repository.PermissionRepository;
+import com.caolei.base.service.PermissionService;
+import com.caolei.base.service.RoleService;
+import com.caolei.base.service.UserService;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,11 +21,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import java.io.IOException;
 import java.util.*;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -57,7 +50,7 @@ public class SystemTest {
         printIndex();
         String key = "cloud0072";
         User user = new User(key, key, key, null, false).setDefaultValue();
-        userService.register(user);
+        userService.save(user);
     }
 
     @Test
@@ -187,6 +180,12 @@ public class SystemTest {
 
     }
 
+    @Test
+    public void changPassword(){
+        User user = userService.findUserByAccount("admin");
+        user.setPassword("admin");
+        userService.update(user);
+    }
 }
 
 
