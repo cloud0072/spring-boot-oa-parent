@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<!-- suppress ALL -->
+<html xmlns:th="http://www.thymeleaf.org" lang="zh-CN">
+<body>
+<div th:fragment="main-menu">
+
+    <div class="sidebar-menu-inner">
+
+        <header class="logo-env">
+
+            <!-- xenon logo -->
+            <div class="logo">
+                <a href="#" class="logo-expanded">
+                    <img th:src="@{/assets/images/logo@2x.png}" width="80" alt=""/>
+                </a>
+
+                <a href="#" class="logo-collapsed">
+                    <img th:src="@{/assets/images/logo-collapsed@2x.png}" width="40" alt=""/>
+                </a>
+            </div>
+
+            <!-- This will open the popup with user profile settings, you can use for any purpose, just be creative -->
+            <!-- 设置齿轮 点击后呼出顶部用户信息和设置 -->
+            <div class="settings-icon">
+                <a href="#" data-toggle="settings-pane" data-animate="true">
+                    <i class="linecons-cog"></i>
+                </a>
+            </div>
+
+        </header>
+
+        <ul class="main-menu">
+            <li class="menu-1">
+                <a th:href="@{/base/user/find/self(menuId='1')}">
+                    <i></i>
+                    <span class="title" th:text="个人信息"></span>
+                </a>
+            </li>
+            <li class="menu-2">
+                <a href="#?menuId=2">
+                    <i></i>
+                    <span class="title" th:text="系统管理"></span>
+                </a>
+                <ul>
+                    <li class="menu-21">
+                        <a th:href="@{/base/user/list(menuId='21')}">
+                            <i></i>
+                            <span class="title" th:text="用户管理"></span>
+                        </a>
+                    </li>
+
+                    <li class="menu-22">
+                        <a th:href="@{/base/role/list(menuId='22')}">
+                            <i></i>
+                            <span class="title" th:text="角色管理"></span>
+                        </a>
+                    </li>
+
+                    <li class="menu-23">
+                        <a th:href="@{/base/permission/list(menuId='23')}">
+                            <i></i>
+                            <span class="title" th:text="权限管理"></span>
+                        </a>
+                    </li>
+
+                    <li class="menu-24">
+                        <a th:href="@{/base/operationLog/list(menuId='24')}">
+                            <i></i>
+                            <span class="title" th:text="访问日志"></span>
+                        </a>
+                    </li>
+
+                    <!--暂时弃用 改为 使用 category-->
+                   <!-- <li class="menu-25">
+                        <a th:href="@{/system/dictCatalog/list(menuId='25')}">
+                            <i></i>
+                            <span class="title" th:text="字典管理"></span>
+                        </a>
+                    </li>-->
+
+                </ul>
+            </li>
+        </ul>
+        <script th:inline="javascript">
+            var menuId = [[${session.menuId}]];
+
+            if (menuId) {
+                $(".main-menu").find("li.menu-" + menuId.charAt(0)).addClass("opened active");
+                $(".main-menu").find("li.menu-" + menuId).addClass("opened active");
+            }
+
+        </script>
+    </div>
+</div>
+
+</body>
+</html>
