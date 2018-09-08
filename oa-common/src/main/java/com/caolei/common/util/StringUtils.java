@@ -52,6 +52,7 @@ public class StringUtils {
 
     /**
      * 获取扩展名
+     *
      * @param fileName
      * @return
      */

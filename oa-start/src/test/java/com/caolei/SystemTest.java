@@ -1,8 +1,6 @@
 package com.caolei;
 
 import com.caolei.common.constant.Operation;
-import com.caolei.system.mongodb.DynamicForm;
-import com.caolei.system.mongodb.DynamicFormRepository;
 import com.caolei.system.pojo.OperationLog;
 import com.caolei.system.pojo.Permission;
 import com.caolei.system.pojo.Role;
@@ -47,8 +45,6 @@ public class SystemTest {
     private RoleService roleService;
     @Autowired
     private PermissionRepository permissionRepository;
-    @Autowired
-    private DynamicFormRepository dynamicFormRepository;
     @Autowired
     private EntityResourceRepository entityResourceRepository;
 
@@ -180,38 +176,6 @@ public class SystemTest {
         List<Permission> permissions = permissionRepository.findPermissionsByRoles_Users_AccountEquals("admin");
 
         permissions.forEach(permission -> System.out.println(permission.getName()));
-    }
-
-    @Test
-    public void test15() throws JsonProcessingException {
-        Map<String, Object> map = new HashMap<>();
-        map.put("姓名", "cloud");
-        map.put("日期", new Date());
-        map.put("原因", "调休");
-        ObjectMapper mapper = new ObjectMapper();
-        String str = mapper.writeValueAsString(map);
-        dynamicFormRepository.insert(new DynamicForm("请假单", str));
-    }
-
-    @Test
-    public void test16() throws IOException {
-        List<DynamicForm> dynamicForms = dynamicFormRepository.findAll();
-        ObjectMapper mapper = new ObjectMapper();
-        for (DynamicForm form : dynamicForms) {
-            Map m = mapper.readValue(form.getFormData(), Map.class);
-            System.out.println(m);
-        }
-        System.out.println(dynamicForms);
-    }
-
-    @Test
-    public void test17() {
-
-        DynamicForm f = dynamicFormRepository.findById("5b7b851f58fa3f2afcb811d6").get();
-        f.setName("休息单");
-        dynamicFormRepository.save(f);
-
-        System.out.println(dynamicFormRepository.findAll());
     }
 
     @Test

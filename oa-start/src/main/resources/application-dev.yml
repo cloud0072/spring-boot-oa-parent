@@ -47,10 +47,10 @@ spring:
         hikari:
             pool-name: Springboot-OA-HikariCP
             connection-test-query: SELECT 1
-    data:
-        mongodb:
-          uri: mongodb://127.0.0.1:27017
-          database: spring_boot_oa
+#    data:
+#        mongodb:
+#          uri: mongodb://127.0.0.1:27017
+#          database: spring_boot_oa
     aop:
         auto: true
         proxy-target-class: true
@@ -83,6 +83,7 @@ location:
         path: d:/temp/
         static-path: ${location.resource.path}static/
         upload-path: ${location.resource.path}upload/
+        config-path: ${location.resource.path}conf/
 plugin:
     swagger2:
         show: true

@@ -1,8 +1,8 @@
 package com.caolei.webtest.controller;
 
+import com.caolei.common.api.controller.BaseController;
 import com.caolei.common.util.DateUtils;
 import com.caolei.common.util.FileUtils;
-import com.caolei.system.api.BaseController;
 import com.caolei.system.exception.AjaxException;
 import com.caolei.system.pojo.User;
 import lombok.extern.slf4j.Slf4j;

@@ -1,7 +1,7 @@
 package com.caolei.common.util;
 
-import com.caolei.common.api.BaseEntity;
-import com.caolei.common.api.NamedEntity;
+import com.caolei.common.api.entity.BaseEntity;
+import com.caolei.common.api.entity.NamedEntity;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
@@ -34,6 +34,7 @@ public class EntityUtils {
 
     /**
      * 创建实例方法
+     *
      * @param clazz
      * @param interfaceIndex
      * @param typeIndex
