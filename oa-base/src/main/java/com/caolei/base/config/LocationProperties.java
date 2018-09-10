@@ -12,10 +12,13 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "location.resource")
 public class LocationProperties {
-
+    // 外部文件基础路径
     private String path;
+    // 静态文件读取的路径
     private String staticPath;
+    // 上传文件存放路径
     private String uploadPath;
+    // 配置文件存放路径
     private String configPath;
 
     public String getPath() {

@@ -88,12 +88,9 @@ plugin:
     swagger2:
         show: true
     shiro:
-        # cookie加密安全码
         cipher-key: 4028c081645b411c01645b4127c40026
         hash-algorithm-name: SHA-256
         login-retry-times: 5
         hash-iterations: 100
-        # 600 秒 重置登陆次数时间 最大为 30分钟1800
         lock-expired-time: 600
-        # 259200 秒 - 30 天 记住我功能过期时间
         remember-me-age: 259200

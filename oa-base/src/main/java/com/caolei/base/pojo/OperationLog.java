@@ -1,11 +1,11 @@
 package com.caolei.base.pojo;
 
 
+import com.caolei.base.util.UserUtils;
 import com.caolei.common.annotation.EntityInfo;
 import com.caolei.common.api.entity.BaseEntity;
 import com.caolei.common.api.module.BaseModuleEntity;
 import com.caolei.common.util.HttpUtils;
-import com.caolei.base.util.UserUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -71,7 +71,7 @@ public class OperationLog extends BaseEntity implements BaseModuleEntity {
     @Override
     public String toString() {
         return "OperationLog{" +
-                "user=" + user.getUserName() +
+                (user == null ? "" : "user=" + user.getUserName()) +
                 ", method='" + method + '\'' +
                 ", requestUrl='" + requestUrl + '\'' +
                 ", ipAddress='" + ipAddress + '\'' +

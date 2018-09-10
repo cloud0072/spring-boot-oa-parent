@@ -1,8 +1,5 @@
 package com.caolei.base.installer;
 
-import com.caolei.common.api.entity.BaseEntity;
-import com.caolei.common.constant.Operation;
-import com.caolei.common.util.ReflectUtils;
 import com.caolei.base.extend.EntityResource;
 import com.caolei.base.pojo.Permission;
 import com.caolei.base.pojo.Role;
@@ -11,6 +8,10 @@ import com.caolei.base.repository.EntityResourceRepository;
 import com.caolei.base.service.PermissionService;
 import com.caolei.base.service.RoleService;
 import com.caolei.base.service.UserService;
+import com.caolei.common.api.entity.BaseEntity;
+import com.caolei.common.constant.Operation;
+import com.caolei.common.util.ReflectUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -32,6 +33,7 @@ import static java.util.stream.Collectors.toList;
  * @author cloud0072
  * @date 2018/6/12 22:39
  */
+@Slf4j
 @Component
 public class SystemModuleInstaller
         implements ApplicationRunner, Ordered {
@@ -47,11 +49,11 @@ public class SystemModuleInstaller
 
     @Override
     public void run(ApplicationArguments args) {
-        System.err.println("ModuleInstaller -> ModuleInstaller start...");
+        log.error("start ...");
 
         initialize();
 
-        System.err.println("ModuleInstaller -> system_module finished...");
+        log.error("finished...");
     }
 
     /**
@@ -65,16 +67,15 @@ public class SystemModuleInstaller
         /*
          * 添加实体
          */
-
         Set<Class<?>> classes = ReflectUtils.getClasses("com.caolei.base.pojo");
         List<EntityResource> entityResources = classes.stream().filter(BaseEntity.class::isAssignableFrom)
                 .map(clazz -> new EntityResource((Class<? extends BaseEntity>) clazz)).collect(toList());
 
         List<EntityResource> hasExistEntityResources = entityResourceRepository.findAll();
-        entityResources.removeAll(hasExistEntityResources);
+        entityResources.removeIf(entity -> hasExistEntityResources.stream().anyMatch(has -> has.getName().equals(entity.getName())));
         try {
             entityResourceRepository.saveAll(entityResources);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         /*
          * 添加权限
@@ -85,10 +86,10 @@ public class SystemModuleInstaller
 
         entityResources.forEach(entity -> Arrays.stream(Operation.values())
                 .forEach(operation -> authPermissions.add(new Permission(entity, operation, null, true))));
-        authPermissions.removeAll(hasExistPermissions);
+        authPermissions.removeIf(entity -> hasExistPermissions.stream().anyMatch(has -> has.getName().equals(entity.getName())));
         try {
             permissionService.saveAll(authPermissions);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
 
         /*
@@ -97,7 +98,7 @@ public class SystemModuleInstaller
         List<Role> hasExistRoles = roleService.findAll();
         Role superuserRole = new Role("超级管理员", "superuser", "拥有管理系统所有权限", true);
         Role userRole = new Role("用户", "user", "普通用户", true);
-        if (!hasExistRoles.contains(superuserRole)) {
+        if (hasExistRoles.stream().noneMatch(role -> role.getCode().equals(superuserRole.getCode()))) {
             List<Role> roles = new ArrayList<>();
             roles.add(superuserRole);
             roles.add(userRole);
@@ -105,7 +106,7 @@ public class SystemModuleInstaller
             //先保存一次，这样Role才有id 不然直接多对多保存会导致Role一方id没有初始化
             try {
                 roleService.saveAll(roles);
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
             //superUser
             Permission superUserPermission = new Permission(null, Operation.ALL, null, true);
@@ -115,7 +116,7 @@ public class SystemModuleInstaller
             userRole.setPermissions(permissionService.findAll(Example.of(userPermission)));
             try {
                 roleService.saveAll(roles);
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         }
 
@@ -126,15 +127,13 @@ public class SystemModuleInstaller
         if (null == userService.findUserByAccount(account)) {
             User admin = new User(account, account, account, null, true).setDefaultValue();
             admin.setSuperUser(true);
-            try {
-                userService.save(admin);
-            } catch (Exception e) {
-            }
+            userService.save(admin);
+
             admin = userService.findAuthorInfoByAccount(account);
             admin.getRoles().addAll(Arrays.asList(superuserRole, userRole));
             try {
                 userService.save(admin);
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         }
 

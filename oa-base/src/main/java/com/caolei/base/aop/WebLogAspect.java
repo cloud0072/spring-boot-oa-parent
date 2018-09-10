@@ -2,6 +2,7 @@ package com.caolei.base.aop;
 
 import com.caolei.base.pojo.OperationLog;
 import com.caolei.base.service.OperationLogService;
+import com.caolei.common.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
@@ -13,6 +14,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
+import java.util.Date;
 
 /**
  * @author caolei

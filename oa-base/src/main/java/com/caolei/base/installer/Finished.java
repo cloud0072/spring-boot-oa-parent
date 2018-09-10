@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-public class StartupFinished
+public class Finished
         implements ApplicationRunner, Ordered {
 
     @Value("${server.port}")
