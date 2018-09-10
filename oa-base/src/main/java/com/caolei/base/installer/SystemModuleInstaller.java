@@ -49,11 +49,11 @@ public class SystemModuleInstaller
 
     @Override
     public void run(ApplicationArguments args) {
-        log.error("start ...");
+        log.info("start ...");
 
         initialize();
 
-        log.error("finished...");
+        log.info("finished...");
     }
 
     /**
@@ -98,7 +98,7 @@ public class SystemModuleInstaller
         List<Role> hasExistRoles = roleService.findAll();
         Role superuserRole = new Role("超级管理员", "superuser", "拥有管理系统所有权限", true);
         Role userRole = new Role("用户", "user", "普通用户", true);
-        if (hasExistRoles.stream().noneMatch(role -> role.getCode().equals(superuserRole.getCode()))) {
+        if (hasExistRoles.stream().noneMatch(role -> role.getCode().equals("superuser"))) {
             List<Role> roles = new ArrayList<>();
             roles.add(superuserRole);
             roles.add(userRole);

@@ -1,12 +1,12 @@
 package com.caolei.base.pojo;
 
+import com.caolei.base.extend.EntityResource;
 import com.caolei.common.annotation.EntityInfo;
 import com.caolei.common.api.entity.NamedEntity;
 import com.caolei.common.api.entity.SystemEntity;
 import com.caolei.common.api.module.BaseModuleEntity;
 import com.caolei.common.constant.Operation;
 import com.caolei.common.util.StringUtils;
-import com.caolei.base.extend.EntityResource;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

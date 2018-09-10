@@ -23,10 +23,13 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
-@Table(name = "auth_role", uniqueConstraints = {@UniqueConstraint(columnNames = {"name"})})
+@Table(name = "auth_role", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"name"}),
+        @UniqueConstraint(columnNames = {"code"})
+})
 public class Role extends SystemEntity implements NamedEntity, BaseModuleEntity {
 
-    @Column
+    @Column(nullable = false, unique = true)
     private String name;
 
     @Column(nullable = false, unique = true)

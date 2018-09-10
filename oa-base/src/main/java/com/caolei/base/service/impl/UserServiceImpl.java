@@ -16,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +24,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -52,7 +50,7 @@ public class UserServiceImpl
         return userRepository;
     }
 
-    private void updateUserExtend(User user, HttpServletRequest request) {
+    private void updateUserAdvice(User user, HttpServletRequest request) {
         if (request != null) {
 
             String[] roleIdArrays = request.getParameterValues("role-checked");
@@ -70,8 +68,31 @@ public class UserServiceImpl
                     user.getExtend().setHeadPhoto(headPhoto);
                 }
             }
+
         }
 
+    }
+
+    @Override
+    public User update(User input,
+                       HttpServletRequest request,
+                       HttpServletResponse response) {
+
+        User user = findById(input.getId());
+
+        user.setUserName(input.getUserName());
+        user.setAccount(input.getAccount());
+        user.setEmail(input.getEmail());
+        user.setPhone(input.getPhone());
+
+        if (!StringUtils.isEmpty(input.getPassword())) {
+            user.setPassword(input.getPassword());
+            UserUtils.encrypt(user);
+        }
+
+        updateUserAdvice(user, request);
+
+        return repository().save(user);
     }
 
     /**
@@ -86,43 +107,15 @@ public class UserServiceImpl
     public User save(User user,
                      HttpServletRequest request,
                      HttpServletResponse response) {
+
         user.setDefaultValue();
         UserUtils.encrypt(user);
-        updateUserExtend(user, request);
+
+        updateUserAdvice(user, request);
 
         return repository().save(user);
     }
 
-    @Override
-    public User update(User input,
-                       HttpServletRequest request,
-                       HttpServletResponse response) {
-
-        User user = findById(input.getId());
-        user.setUserName(input.getUserName());
-        user.setAccount(input.getAccount());
-        user.setEmail(input.getEmail());
-        user.setPhone(input.getPhone());
-
-        if (input.getRoles() != null) {
-            user.setRoles(input.getRoles());
-        }
-
-        if (input.getPermissions() != null) {
-            user.setPermissions(input.getPermissions());
-        }
-
-        if (!StringUtils.isEmpty(input.getPassword())) {
-            user.setPassword(input.getPassword());
-            UserUtils.encrypt(user);
-        }
-
-        if (input.getExtend() != null) {
-            updateUserExtend(user, request);
-        }
-
-        return repository().save(user);
-    }
 
     @Override
     public boolean login(User user) {

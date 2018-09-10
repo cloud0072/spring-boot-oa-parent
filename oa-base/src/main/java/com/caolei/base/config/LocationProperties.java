@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * @ClassName: LocationProperties
- * @Description: 给注入的值一个正确的默认值
+ * @Description: 给注入的值一个正确的默认值 和 数据类型
  * @author caolei
  * @date 2018/9/10 11:14
  */

@@ -4,7 +4,7 @@
 
 <head th:replace="/fragment/head :: head"></head>
 <style>
-    img.pic {
+    img.portrait {
         width: auto;
         height: auto;
         max-width: 100%;
@@ -12,8 +12,8 @@
     }
 
     div.upload-area {
-        min-width: 50px;
-        max-width: 50px;
+        min-width: 150px;
+        max-width: 150px;
     }
 </style>
 <body class="page-body">
@@ -34,27 +34,25 @@
 
 
         <div class="row">
-            <div class="col-sm-6">
+            <!--/*@thymesVar id="user" type="com.caolei.base.pojo.User"*/-->
+            <form id="main_form" role="form" class="form-horizontal" method="post">
 
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title" data-th-text="${type == 'self' ? '个人信息' : '用户信息'}"></h3>
-                        <div class="panel-options">
-                            <button class="btn btn-info save" data-th-attr="entity_id=${id}"
-                                    data-th-remove="${op == 'delete'?'all':'none'}">保存
-                            </button>
-                            <button class="btn btn-danger remove" data-th-attr="entity_id=${id}"
-                                    data-th-remove="${op == 'delete'?'none':'all'}">删除
-                            </button>
+                <div class="col-sm-6">
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title" data-th-text="${type == 'self' ? '个人信息' : '用户信息'}"></h3>
+                            <div class="panel-options">
+                                <button class="btn btn-info save" data-th-attr="entity_id=${id}"
+                                        data-th-remove="${op == 'delete'?'all':'none'}">保存
+                                </button>
+                                <button class="btn btn-danger remove" data-th-attr="entity_id=${id}"
+                                        data-th-remove="${op == 'delete'?'none':'all'}">删除
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="panel-body">
-
-                        <!--/*@thymesVar id="user" type="com.caolei.base.pojo.User"*/-->
-                        <form id="main_form" role="form" class="form-horizontal" method="post">
-                            <label>
-                                <input hidden="hidden" name="id" data-th-value="${id}">
-                            </label>
+                        <div class="panel-body">
+                            <input hidden="hidden" name="id" data-th-value="${id}">
 
                             <div class="form-group">
                                 <label class="col-sm-2 control-label" for="userName">用户名</label>
@@ -119,8 +117,8 @@
                             <div class="form-group" data-th-remove="${op == 'find'?'none':'all'}">
                                 <label class="col-sm-2 control-label" for="createTime">创建日期</label>
                                 <div class="col-sm-8">
-                                     <span class="form-control" id="createTime"
-                                           data-th-text="${user.createTime}"></span>
+                                         <span class="form-control" id="createTime"
+                                               data-th-text="${user.createTime}"></span>
                                 </div>
                             </div>
 
@@ -144,32 +142,39 @@
                             <div class="form-group-separator"></div>
                             <br>
 
-                        </form>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="col-sm-6">
-
-                <div class="panel panel-default">
-
-                    <div class="panel-heading">
-                        <div class="panel-title">
-                            上传头像
                         </div>
                     </div>
 
-                    <div class="panel-body">
-
-                        <div class="form-group upload-area" onclick="fileUpload()" id="pic_box">
-                            <img class="pic" src=""/>
-                        </div>
-                        <input type="file" id="file_id" onchange="fileUpload()" style="display: none;">
-                    </div>
                 </div>
 
-            </div>
+                <div class="col-sm-6">
+
+                    <div class="panel panel-default">
+
+                        <div class="panel-heading">
+                            <div class="panel-title">
+                                上传头像
+                            </div>
+                        </div>
+
+                        <div class="panel-body">
+
+                            <div class="form-group" onclick="fileUpload()" id="pic_box">
+                                <div class="upload-area">
+                                    <img class="portrait" src="" th:src="${user.extend?.headPhoto?.getUrl()}"/>
+                                </div>
+                                <br>
+                                <input id="head_photo_id" name="extend.headPhoto.id"
+                                       type="hidden"  th:value="${user.extend?.headPhoto?.id}">
+                                <input type="file" id="file_id" onchange="fileUpload()" value="上传头像" >
+                                <!--style="display: none;"-->
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </form>
 
         </div>
 
@@ -201,16 +206,30 @@
         if ([[${op == 'find'}]]) {
             $("#account").attr("readOnly");
         }
+
+        console.log('123');
+        var url = [[${user.extend?.headPhoto?.getUrl()}]];
+        console.log(url);
+
     });
+
+    function openUploadBox() {
+        var fileInput = $('file_id');
+        console.log(fileInput.files);
+        fileInput.click();
+        console.log(fileInput.files);
+    }
 
     //同时只有一个上传任务在执行
     var uploading = false;
 
     function fileUpload() {
-        if (!uploading) {
+        var file = document.getElementById("file_id").files[0];
+        if (!uploading && file) {
             uploading = true;
             var formData = new FormData();
-            formData.append("file", document.getElementById("file_id").files[0]);
+            formData.append("file", file);
+            formData.append("fileType", 'PORTRAIT');
             $.ajax({
                 url: hostUrl + "/file/upload",
                 type: "POST",
@@ -221,12 +240,12 @@
                 //XMLHttpRequest会对 formdata 进行正确的处理
                 processData: false,
                 success: function (data) {
-                    if (data.code == 200) {
+                    if (data&& data.message) {
                         alert(data.message);
+                        $('img.portrait').attr('src', data.file_url);
+                        $('#head_photo_id').val(data.file_id);
                     }
-                    if (data.code == 400) {
-                        alert(data.error);
-                    }
+
                     uploading = false;
                 },
                 error: function () {
