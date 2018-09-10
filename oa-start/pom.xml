@@ -15,7 +15,7 @@
 
         <dependency>
             <groupId>com.caolei</groupId>
-            <artifactId>oa-system</artifactId>
+            <artifactId>oa-base</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 

@@ -31,6 +31,7 @@ public class User extends SystemEntity implements NamedEntity, BaseModuleEntity 
 
     @Column(nullable = false, unique = true)
     private String account;
+    @JsonIgnore
     @Column
     private String password;
     @Column

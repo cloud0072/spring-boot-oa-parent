@@ -79,9 +79,8 @@ public abstract class BaseCrudController<T extends BaseEntity> implements BaseCo
         return AnnotationUtils.findAnnotation(persistentClass, ModuleInfo.class).modulePath();
     }
 
-
     @ApiOperation("查询所有对象")
-    @GetMapping
+    @GetMapping("/list")
     protected String list(T t,
                           HttpServletRequest request,
                           HttpServletResponse response,
@@ -131,6 +130,17 @@ public abstract class BaseCrudController<T extends BaseEntity> implements BaseCo
 //        SecurityUtils.checkOperation(t, operation);
         putModel(model, OP_FIND, t, TY_ADMIN);
         return modulePath() + entityPath() + entityPath() + "_view";
+    }
+
+    @ApiOperation("根据对象的属性查询所有对象")
+    @GetMapping
+    protected ResponseEntity findAll(T t,
+                                     HttpServletRequest request,
+                                     HttpServletResponse response) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("message", "查詢成功");
+        map.put(className, service().findAll(Example.of(t)));
+        return ResponseEntity.ok(map);
     }
 
     @ApiOperation("查询对象")

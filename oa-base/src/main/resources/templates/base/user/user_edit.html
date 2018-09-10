@@ -3,7 +3,19 @@
       lang="zh-CN">
 
 <head th:replace="/fragment/head :: head"></head>
+<style>
+    img.pic {
+        width: auto;
+        height: auto;
+        max-width: 100%;
+        max-height: 100%;
+    }
 
+    div.upload-area {
+        min-width: 50px;
+        max-width: 50px;
+    }
+</style>
 <body class="page-body">
 <!-- 顶部用户信息和设置 (平时隐藏) -->
 <div th:include="/fragment/settings-pane :: settings-pane"></div>
@@ -150,14 +162,15 @@
 
                     <div class="panel-body">
 
-                        <div class="form-group" >
-                            <div id="dropz" class="dropzone"></div>
+                        <div class="form-group upload-area" onclick="fileUpload()" id="pic_box">
+                            <img class="pic" src=""/>
                         </div>
-
+                        <input type="file" id="file_id" onchange="fileUpload()" style="display: none;">
                     </div>
                 </div>
 
             </div>
+
         </div>
 
 
@@ -190,6 +203,46 @@
         }
     });
 
+    //同时只有一个上传任务在执行
+    var uploading = false;
+
+    function fileUpload() {
+        if (!uploading) {
+            uploading = true;
+            var formData = new FormData();
+            formData.append("file", document.getElementById("file_id").files[0]);
+            $.ajax({
+                url: hostUrl + "/file/upload",
+                type: "POST",
+                data: formData,
+                //必须false才会自动加上正确的Content-Type
+                contentType: false,
+                //必须false才会避开jQuery对 formdata 的默认处理
+                //XMLHttpRequest会对 formdata 进行正确的处理
+                processData: false,
+                success: function (data) {
+                    if (data.code == 200) {
+                        alert(data.message);
+                    }
+                    if (data.code == 400) {
+                        alert(data.error);
+                    }
+                    uploading = false;
+                },
+                error: function () {
+                    alert("上传失败！");
+                    uploading = false;
+                }
+            })
+        }
+
+    }
+
+    $("#pic").on('click', function () {
+        $("#file_id").click();
+    });
+
+    /*
     Dropzone.autoDiscover = false;
     var myDropzone = new Dropzone("#dropz", {
         url: hostUrl + "/file/upload",//文件提交地址
@@ -216,10 +269,11 @@
             });
             this.on('success', function (files, response) {
                 //文件上传成功之后的操作
-                console.log(files);
-                console.log(response);
                 $(".dz-default dz-message").remove();
                 $('#file_id').val(response.file_id);
+                if (response && response.file_url) {
+                    $('img.pic').attr("src",response.file_url);
+                }
             });
             this.on('error', function (files, response) {
                 //文件上传失败后的操作
@@ -227,7 +281,7 @@
                 console.log(response);
             });
         }
-    });
+    });*/
 
 </script>
 </body>

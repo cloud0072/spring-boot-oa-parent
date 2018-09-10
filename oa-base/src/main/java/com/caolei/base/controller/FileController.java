@@ -1,15 +1,17 @@
 package com.caolei.base.controller;
 
-import com.caolei.common.api.controller.BaseController;
-import com.caolei.common.constant.FileType;
-import com.caolei.common.util.HttpUtils;
-import com.caolei.common.util.StringUtils;
 import com.caolei.base.exception.AjaxException;
 import com.caolei.base.pojo.FileComponent;
 import com.caolei.base.pojo.User;
 import com.caolei.base.service.FileComponentService;
 import com.caolei.base.service.UserService;
 import com.caolei.base.util.UserUtils;
+import com.caolei.common.api.controller.BaseController;
+import com.caolei.common.constant.FileType;
+import com.caolei.common.util.HttpUtils;
+import com.caolei.common.util.StringUtils;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +29,7 @@ import java.util.Map;
  * @Description: TODO
  * @date 2018/8/20 10:11
  */
+@Api
 @RequestMapping("/file")
 @Controller
 public class FileController implements BaseController {
@@ -36,16 +39,7 @@ public class FileController implements BaseController {
     @Autowired
     private UserService userService;
 
-    /**
-     * @param fileId
-     * @param fileType
-     * @param file
-     * @return
-     * @Title: 统一文件上传
-     * @Description:
-     * @author caolei
-     * @date 2018/8/20 11:04
-     */
+    @ApiOperation("统一文件上传方法")
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity fileUpload(String fileId,
@@ -76,9 +70,10 @@ public class FileController implements BaseController {
         }
     }
 
-    @RequestMapping(value = "/delete/${id}", method = RequestMethod.DELETE)
+    @ApiOperation("文件上传的删除方法")
+    @DeleteMapping("/delete/{id}")
     @ResponseBody
-    public ResponseEntity fileRemove(@PathVariable("id") String fileId) {
+    public ResponseEntity fileRemove(@PathVariable("id") @NonNull String fileId) {
         try {
 
             FileComponent component = fileComponentService.findById(fileId);
@@ -94,18 +89,10 @@ public class FileController implements BaseController {
         }
     }
 
-    /**
-     * @param fileId
-     * @return
-     * @Title:
-     * @Description:
-     * @author caolei
-     * @date 2018/8/20 11:07
-     * 统一文件下载
-     */
-    @RequestMapping(value = "/download", method = RequestMethod.GET)
+    @ApiOperation("统一文件下载")
+    @GetMapping("/download/{id}")
     @ResponseBody
-    public ResponseEntity fileDownload(String fileId) {
+    public ResponseEntity fileDownload(@PathVariable("id") @NonNull String fileId, String defaultFile) {
         try {
 
             FileComponent fileComponent = fileComponentService.findById(fileId);
@@ -113,6 +100,8 @@ public class FileController implements BaseController {
                     fileComponent.getContentType());
 
         } catch (Exception e) {
+            //FIXME:如果获取文件失败则返回 defaultFile 的文件
+
             throw new AjaxException(e);
         }
     }

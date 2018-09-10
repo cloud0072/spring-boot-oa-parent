@@ -31,7 +31,7 @@
 
         <ul class="main-menu">
             <li class="menu-1">
-                <a th:href="@{/base/user/find/self(menuId='1')}">
+                <a th:href="@{/base/user/view/{userId}(menuId='1',userId=${session.user_info?.id})}">
                     <i></i>
                     <span class="title" th:text="个人信息"></span>
                 </a>
@@ -43,28 +43,28 @@
                 </a>
                 <ul>
                     <li class="menu-21">
-                        <a th:href="@{/base/user(menuId='21')}">
+                        <a th:href="@{/base/user/list(menuId='21')}">
                             <i></i>
                             <span class="title" th:text="用户管理"></span>
                         </a>
                     </li>
 
                     <li class="menu-22">
-                        <a th:href="@{/base/role(menuId='22')}">
+                        <a th:href="@{/base/role/list(menuId='22')}">
                             <i></i>
                             <span class="title" th:text="角色管理"></span>
                         </a>
                     </li>
 
                     <li class="menu-23">
-                        <a th:href="@{/base/permission(menuId='23')}">
+                        <a th:href="@{/base/permission/list(menuId='23')}">
                             <i></i>
                             <span class="title" th:text="权限管理"></span>
                         </a>
                     </li>
 
                     <li class="menu-24">
-                        <a th:href="@{/base/operationLog(menuId='24')}">
+                        <a th:href="@{/base/operationLog/list(menuId='24')}">
                             <i></i>
                             <span class="title" th:text="访问日志"></span>
                         </a>

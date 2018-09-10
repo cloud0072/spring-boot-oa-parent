@@ -10,6 +10,8 @@ import com.caolei.base.repository.PermissionRepository;
 import com.caolei.base.service.PermissionService;
 import com.caolei.base.service.RoleService;
 import com.caolei.base.service.UserService;
+import org.apache.commons.collections4.MultiValuedMap;
+import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -186,6 +188,8 @@ public class SystemTest {
         user.setPassword("admin");
         userService.update(user);
     }
+
+
 }
 
 

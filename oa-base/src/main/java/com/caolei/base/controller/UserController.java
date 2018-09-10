@@ -63,6 +63,10 @@ public class UserController
         String operation = (String) map.get("op");
 
         User currentUser = UserUtils.getCurrentUser();
+        //修改自己的个人信息
+        if (UserUtils.getCurrentUser().getId().equals(user.getId())){
+            model.addAttribute("type", TY_SELF);
+        }
         switch (operation) {
             case OP_UPDATE:
             case OP_DELETE:
@@ -82,54 +86,6 @@ public class UserController
             case OP_LIST:
                 break;
         }
-    }
-
-    /**
-     * 跳转个人信息查看页面
-     */
-    @RequestMapping(value = "/find/self", method = RequestMethod.GET)
-    public String findSelf(Model model) {
-        String id = UserUtils.getCurrentUser().getId();
-        User user = service().findById(id);
-        putModel(model, OP_FIND, user, TY_SELF);
-        return modulePath() + entityPath() + entityPath() + "_view";
-    }
-
-    /**
-     * 跳转个人信息修改页面
-     */
-    @RequestMapping(value = "/update/self", method = RequestMethod.GET)
-    public String showUpdateSelfForm(Model model) {
-        String id = UserUtils.getCurrentUser().getId();
-        model.addAttribute("op", OP_UPDATE);
-        model.addAttribute("type", TY_SELF);
-        model.addAttribute(entityPath(), service().findById(id));
-        return modulePath() + entityPath() + entityPath() + "_edit";
-    }
-
-    /**
-     * 提交个人信息修改
-     */
-    @RequestMapping(value = "/update/self", method = RequestMethod.POST)
-    public String updateSelf(HttpServletRequest request, HttpServletResponse response,
-                             User user, RedirectAttributes redirectAttributes) {
-        String id = UserUtils.getCurrentUser().getId();
-        if (id.equals(user.getId())) {
-
-            String fileId = request.getParameter("head_photo_id");
-            if (!StringUtils.isEmpty(fileId)) {
-                FileComponent headPhoto = fileComponentService.findById(fileId);
-                if (headPhoto.getCategory() == FileType.PORTRAIT) {
-                    user.getExtend().setHeadPhoto(headPhoto);
-                }
-            }
-
-            userService.update(user,request,response);
-            redirectAttributes.addFlashAttribute("message", "修改成功");
-        } else {
-            redirectAttributes.addFlashAttribute("message", "修改失败");
-        }
-        return REDIRECT_TO + modulePath() + entityPath() + "/find/" + id;
     }
 
 }

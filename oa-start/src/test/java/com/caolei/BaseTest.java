@@ -4,6 +4,8 @@ import com.caolei.common.util.ReflectUtils;
 import com.caolei.common.util.StringUtils;
 import com.caolei.base.pojo.User;
 import com.caolei.base.util.UserUtils;
+import org.apache.commons.collections4.MultiValuedMap;
+import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.junit.Test;
 
@@ -230,4 +232,13 @@ public class BaseTest {
         bos.close();
     }
 
+    @Test
+    public void testMultiValueMap(){
+        MultiValuedMap<String,String> map = new ArrayListValuedHashMap<>();
+        map.put("name","1");
+        map.put("name","2");
+        map.put("name","3");
+
+        System.out.println(map.get("name"));
+    }
 }

@@ -1,6 +1,7 @@
 package com.caolei.base.config;
 
-import com.caolei.common.util.StringUtils;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,11 +19,17 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * 通过@Configuration注解，让Spring来加载该类配置。
  * 再通过@EnableSwagger2注解来启用Swagger2。
  */
+@Slf4j
 @Configuration
 @EnableSwagger2
 public class Swagger2Config {
 
-    private Boolean enable;
+    @Value("${server.port}")
+    private String port;
+    @Value("${server.servlet.context-path}")
+    private String context_path;
+    @Value("${plugin.swagger2.show}")
+    private boolean show;
 
     /**
      * 创建API应用
@@ -34,8 +41,11 @@ public class Swagger2Config {
      */
     @Bean
     public Docket createRestApi() {
+        if (show) {
+            log.info("Swagger2 开启 url: http://localhost:" + port + context_path + "/swagger-ui.html");
+        }
         return new Docket(DocumentationType.SWAGGER_2)
-                .enable(enable)
+                .enable(show)
                 .apiInfo(apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.any())
@@ -58,11 +68,4 @@ public class Swagger2Config {
                 .build();
     }
 
-    @Value("plugin.swagger2.show")
-    public void setEnable(String enable) {
-        if (StringUtils.isEmpty(enable)) {
-            enable = "false";
-        }
-        this.enable = Boolean.valueOf(enable);
-    }
 }
