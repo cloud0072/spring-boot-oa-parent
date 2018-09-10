@@ -63,9 +63,9 @@ public class OperationLog
 
     public OperationLog(HttpServletRequest request) {
         this.user = UserUtils.getCurrentUser();
-        if (user==null){
-            user = new User();
-        }
+//        if (user == null){
+//            user = new User();
+//        }
         this.method = request.getMethod();
         this.requestUrl = request.getRequestURL().toString();
         this.ipAddress = HttpUtils.IPAddress(request);

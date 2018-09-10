@@ -25,7 +25,7 @@ public class UserUtils {
      * @return
      */
     public static User getCurrentUser() {
-        return (User) HttpUtils.httpSession().getAttribute(Constants.USER_INFO);
+            return (User) HttpUtils.httpSession().getAttribute(Constants.USER_INFO);
     }
 
     /**
