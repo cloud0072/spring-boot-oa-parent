@@ -29,22 +29,19 @@ import static com.caolei.common.constant.Constants.*;
  * @Description: TODO
  * @date 2018/7/25 11:41
  */
-@Api("基础增删改查方法的接口类")
+@Api("基础增删改查方法的抽象类")
 @RequiresAuthentication
 public abstract class BaseCrudController<T extends BaseEntity> implements BaseController {
 
     protected Class<T> persistentClass = persistentClass();
     protected String className = className();
 
-    @ApiOperation("获取实例对应的服务")
-    protected abstract BaseCrudService<T> service();
-
     @ApiOperation("返回一个当前控制器对应实体的类型")
-    protected synchronized Class<T> persistentClass() {
+    private Class<T> persistentClass() {
         if (persistentClass == null) {
             try {
                 persistentClass = ReflectUtils.getClassGenericType(getClass(), 0);
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         }
 
@@ -52,7 +49,7 @@ public abstract class BaseCrudController<T extends BaseEntity> implements BaseCo
     }
 
     @ApiOperation("获取类型名")
-    protected synchronized String className() {
+    private String className() {
         if (StringUtils.isEmpty(className)) {
             assert persistentClass != null;
             className = StringUtils.toLowerCaseFirstOne(persistentClass.getSimpleName());
@@ -79,6 +76,26 @@ public abstract class BaseCrudController<T extends BaseEntity> implements BaseCo
         return AnnotationUtils.findAnnotation(persistentClass, ModuleInfo.class).modulePath();
     }
 
+    @ApiOperation("将参数放入model中")
+    private void putModel(Model model, String operation, T t) {
+        model.addAttribute(className, t);
+        model.addAttribute("id", t.getId());
+        model.addAttribute("op", operation);
+        model.addAttribute("type", TY_ADMIN);
+        model.addAttribute("modulePath", modulePath());
+        model.addAttribute("entityPath", entityPath());
+        modelAdvice(model);
+    }
+
+    @ApiOperation("model增强方法,给子类扩展添加到model中的数据")
+    protected void modelAdvice(Model model) {
+    }
+
+    @ApiOperation("获取实例对应的服务")
+    protected abstract BaseCrudService<T> service();
+
+    /******************************************************************************************************************/
+
     @ApiOperation("查询所有对象")
     @GetMapping("/list")
     protected String list(T t,
@@ -93,7 +110,7 @@ public abstract class BaseCrudController<T extends BaseEntity> implements BaseCo
         Page<T> list = service().findAll(Example.of(t), pageable);
         model.addAttribute("page", list);
         model.addAttribute("search", t);
-        putModel(model, OP_LIST, t, TY_ADMIN);
+        putModel(model, OP_LIST, t);
         return modulePath() + entityPath() + entityPath() + "_list";
     }
 
@@ -104,7 +121,7 @@ public abstract class BaseCrudController<T extends BaseEntity> implements BaseCo
                                     Model model) {
         T t = instance();
 //        SecurityUtils.checkOperation(t, operation);
-        putModel(model, OP_CREATE, t, TY_ADMIN);
+        putModel(model, OP_CREATE, t);
         return modulePath() + entityPath() + entityPath() + "_edit";
     }
 
@@ -116,7 +133,7 @@ public abstract class BaseCrudController<T extends BaseEntity> implements BaseCo
                                     Model model) {
         T t = service().findById(id);
 //        SecurityUtils.checkOperation(t, operation);
-        putModel(model, OP_UPDATE, t, TY_ADMIN);
+        putModel(model, OP_UPDATE, t);
         return modulePath() + entityPath() + entityPath() + "_edit";
     }
 
@@ -128,9 +145,11 @@ public abstract class BaseCrudController<T extends BaseEntity> implements BaseCo
                                   Model model) {
         T t = id == null ? instance() : service().findById(id);
 //        SecurityUtils.checkOperation(t, operation);
-        putModel(model, OP_FIND, t, TY_ADMIN);
+        putModel(model, OP_FIND, t);
         return modulePath() + entityPath() + entityPath() + "_view";
     }
+
+    /******************************************************************************************************************/
 
     @ApiOperation("根据对象的属性查询所有对象")
     @GetMapping
@@ -138,7 +157,7 @@ public abstract class BaseCrudController<T extends BaseEntity> implements BaseCo
                                      HttpServletRequest request,
                                      HttpServletResponse response) {
         Map<String, Object> map = new HashMap<>();
-        map.put("message", "查詢成功");
+        map.put("message", "查询成功");
         map.put(className, service().findAll(Example.of(t)));
         return ResponseEntity.ok(map);
     }
@@ -151,7 +170,7 @@ public abstract class BaseCrudController<T extends BaseEntity> implements BaseCo
                                   HttpServletResponse response) {
         T t = service().findById(id);
         Map<String, Object> map = new HashMap<>();
-        map.put("message", "查詢成功");
+        map.put("message", "查询成功");
         map.put(className, t);
         return ResponseEntity.ok(map);
     }
@@ -202,18 +221,4 @@ public abstract class BaseCrudController<T extends BaseEntity> implements BaseCo
         return ResponseEntity.ok(map);
     }
 
-    @ApiOperation("将参数放入model中")
-    protected void putModel(Model model, String operation, T t, String type) {
-        model.addAttribute(className, t);
-        model.addAttribute("id", t.getId());
-        model.addAttribute("op", operation);
-        model.addAttribute("type", type);
-        model.addAttribute("modulePath", modulePath());
-        model.addAttribute("entityPath", entityPath());
-        modelAdvice(model);
-    }
-
-    @ApiOperation("model增强方法,给子类扩展添加到model中的数据")
-    protected void modelAdvice(Model model) {
-    }
 }

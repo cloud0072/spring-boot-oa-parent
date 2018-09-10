@@ -23,7 +23,9 @@ import java.util.Date;
 @Data
 @Entity
 @Table
-public class OperationLog extends BaseEntity implements BaseModuleEntity {
+public class OperationLog
+        extends BaseEntity
+        implements BaseModuleEntity {
     /**
      * 操作用户
      */

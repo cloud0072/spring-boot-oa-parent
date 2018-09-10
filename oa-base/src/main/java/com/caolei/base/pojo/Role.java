@@ -2,6 +2,7 @@ package com.caolei.base.pojo;
 
 
 import com.caolei.common.annotation.EntityInfo;
+import com.caolei.common.api.entity.BaseEntity;
 import com.caolei.common.api.entity.NamedEntity;
 import com.caolei.common.api.entity.SystemEntity;
 import com.caolei.common.api.module.BaseModuleEntity;
@@ -27,7 +28,9 @@ import java.util.List;
         @UniqueConstraint(columnNames = {"name"}),
         @UniqueConstraint(columnNames = {"code"})
 })
-public class Role extends SystemEntity implements NamedEntity, BaseModuleEntity {
+public class Role
+        extends BaseEntity
+        implements NamedEntity, SystemEntity, BaseModuleEntity {
 
     @Column(nullable = false, unique = true)
     private String name;
@@ -37,6 +40,11 @@ public class Role extends SystemEntity implements NamedEntity, BaseModuleEntity 
 
     @Column
     private String description;
+    /**
+     * 是否是系统自带的实体
+     */
+    @Column
+    private Boolean systemEntity;
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
@@ -73,4 +81,5 @@ public class Role extends SystemEntity implements NamedEntity, BaseModuleEntity 
                 ", description='" + description + '\'' +
                 '}';
     }
+
 }

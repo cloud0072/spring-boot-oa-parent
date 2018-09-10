@@ -29,7 +29,9 @@ import java.util.Date;
 @Slf4j
 @Entity
 @Table
-public class FileComponent extends BaseEntity implements BaseModuleEntity {
+public class FileComponent
+        extends BaseEntity
+        implements BaseModuleEntity {
     /**
      * 文件名
      */
@@ -56,7 +58,6 @@ public class FileComponent extends BaseEntity implements BaseModuleEntity {
      */
     @Column
     private FileType category;
-
     /**
      * 时间路径
      */
@@ -135,6 +136,7 @@ public class FileComponent extends BaseEntity implements BaseModuleEntity {
                 throw new UnsupportedOperationException("原有文件无法删除!");
             }
         } else {
+            log.error("原文件已被移动或删除!");
 //            throw new UnsupportedOperationException("原文件已被移动或删除!");
         }
     }
@@ -210,23 +212,6 @@ public class FileComponent extends BaseEntity implements BaseModuleEntity {
             return file.length() == 0;
         }
     }
-
-
-    /**
-     * 将保存文件组件实体和复制文件分开
-     */
-    /*
-    private void copyFile(File file) throws IOException {
-        if (StringUtils.isEmpty(getId())) {
-            throw new UnsupportedOperationException("请先保存文件组件才能复制文件!");
-        }
-        File target = new File(getAbsolutePath());
-        if (target.createNewFile()) {
-            FileCopyUtils.copy(file, target);
-        } else {
-            throw new IOException("创建文件失败!");
-        }
-    }*/
 
     @Override
     public String toString() {

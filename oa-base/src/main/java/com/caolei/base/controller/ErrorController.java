@@ -2,8 +2,8 @@ package com.caolei.base.controller;
 
 import com.caolei.common.api.controller.BaseController;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 @RequestMapping("/error")
 @Controller
@@ -15,7 +15,7 @@ public class ErrorController
      *
      * @return
      */
-    @RequestMapping(value = "/404", method = RequestMethod.GET)
+    @GetMapping(value = "/404")
     public String error_404() {
         return "404";
     }

@@ -40,7 +40,7 @@ public class FileController implements BaseController {
     private UserService userService;
 
     @ApiOperation("统一文件上传方法")
-    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    @PostMapping(value = "/upload")
     @ResponseBody
     public ResponseEntity fileUpload(String fileId,
                                      @NonNull FileType fileType,

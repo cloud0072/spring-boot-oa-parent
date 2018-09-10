@@ -2,6 +2,7 @@ package com.caolei.base.pojo;
 
 import com.caolei.base.extend.EntityResource;
 import com.caolei.common.annotation.EntityInfo;
+import com.caolei.common.api.entity.BaseEntity;
 import com.caolei.common.api.entity.NamedEntity;
 import com.caolei.common.api.entity.SystemEntity;
 import com.caolei.common.api.module.BaseModuleEntity;
@@ -30,7 +31,9 @@ import java.util.List;
         @UniqueConstraint(columnNames = {"code"}),
         @UniqueConstraint(columnNames = {"name"})
 })
-public class Permission extends SystemEntity implements NamedEntity, BaseModuleEntity {
+public class Permission
+        extends BaseEntity
+        implements NamedEntity, SystemEntity, BaseModuleEntity {
 
     @Column
     private String name;
@@ -46,6 +49,11 @@ public class Permission extends SystemEntity implements NamedEntity, BaseModuleE
 
     @Column(name = "resource_id")
     private String resourceId;
+    /**
+     * 是否是系统自带的实体
+     */
+    @Column
+    private Boolean systemEntity;
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)

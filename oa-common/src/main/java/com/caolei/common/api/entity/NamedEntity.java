@@ -5,4 +5,5 @@ public interface NamedEntity {
     String getId();
 
     String getName();
+
 }

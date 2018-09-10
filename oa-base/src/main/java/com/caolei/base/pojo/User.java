@@ -1,11 +1,12 @@
 package com.caolei.base.pojo;
 
+import com.caolei.base.extend.UserExtend;
 import com.caolei.common.annotation.EntityInfo;
+import com.caolei.common.api.entity.BaseEntity;
 import com.caolei.common.api.entity.NamedEntity;
 import com.caolei.common.api.entity.SystemEntity;
 import com.caolei.common.api.module.BaseModuleEntity;
 import com.caolei.common.util.StringUtils;
-import com.caolei.base.extend.UserExtend;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -27,7 +28,9 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "auth_user", uniqueConstraints = @UniqueConstraint(columnNames = {"account"}))
-public class User extends SystemEntity implements NamedEntity, BaseModuleEntity {
+public class User
+        extends BaseEntity
+        implements NamedEntity, SystemEntity, BaseModuleEntity {
 
     @Column(nullable = false, unique = true)
     private String account;
@@ -46,6 +49,12 @@ public class User extends SystemEntity implements NamedEntity, BaseModuleEntity 
     private Boolean active;
     @Column
     private Boolean superUser;
+    /**
+     * 是否是系统自带的实体
+     */
+    @Column
+    private Boolean systemEntity;
+
     /**
      * 祖册时间
      */
@@ -108,12 +117,6 @@ public class User extends SystemEntity implements NamedEntity, BaseModuleEntity 
         return this;
     }
 
-    @Override
-    public String getName() {
-        //namedEntity
-        return getUserName();
-    }
-
     /**
      * 使用 is+名称方式获取 Boolean 的值 并判断非空
      * 好处 可以使用 Example 查询 而不必被默认的 boolean 默认为 false 所困扰
@@ -127,6 +130,12 @@ public class User extends SystemEntity implements NamedEntity, BaseModuleEntity 
 
     public Boolean isActive() {
         return active == null ? false : active;
+    }
+
+    @Override
+    public String getName() {
+        //namedEntity
+        return getUserName();
     }
 
     @Override
@@ -144,4 +153,6 @@ public class User extends SystemEntity implements NamedEntity, BaseModuleEntity 
                 ", lastLoginTime=" + lastLoginTime +
                 '}';
     }
+
+
 }

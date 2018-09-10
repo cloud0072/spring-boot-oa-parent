@@ -1,5 +1,6 @@
 package com.caolei.base.service.impl;
 
+import com.caolei.base.pojo.Permission;
 import com.caolei.base.pojo.Role;
 import com.caolei.base.repository.RoleRepository;
 import com.caolei.base.service.PermissionService;
@@ -17,6 +18,9 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author cloud0072
@@ -38,6 +42,19 @@ public class RoleServiceImpl
     }
 
     @Override
+    public Role save(Role role, HttpServletRequest request, HttpServletResponse response) {
+
+        if (request != null) {
+            List<String> permissionIds = Arrays.asList(request.getParameterValues("permission-select[]"));
+            List<Permission> permissions = new ArrayList<>();
+            permissionIds.forEach(permissionId -> permissions.add(permissionService.findById(permissionId)));
+            role.setPermissions(permissions);
+        }
+
+        return repository().save(role);
+    }
+
+    @Override
     public Role update(Role input,
                        HttpServletRequest request,
                        HttpServletResponse response) {
@@ -46,10 +63,9 @@ public class RoleServiceImpl
         role.setName(input.getName());
         role.setCode(input.getCode());
         role.setDescription(input.getDescription());
-        if (input.getPermissions() != null) {
-            role.setPermissions(input.getPermissions());
-        }
+
         save(role);
+
         return role;
     }
 

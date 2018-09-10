@@ -42,7 +42,7 @@ public class Swagger2Config {
     @Bean
     public Docket createRestApi() {
         if (show) {
-            log.info("Swagger2 开启 url: http://localhost:" + port + context_path + "/swagger-ui.html");
+            log.info("Swagger2 Status : active\turl : http://localhost:" + port + context_path + "/swagger-ui.html");
         }
         return new Docket(DocumentationType.SWAGGER_2)
                 .enable(show)

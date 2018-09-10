@@ -72,9 +72,7 @@ public class ShiroConfig {
     @Bean
     public AuthorizingRealm defaultRealm() {
         DefaultRealm defaultRealm = new DefaultRealm();
-        /**
-         * 设置密码凭证匹配器
-         */
+        //设置密码凭证匹配器
         defaultRealm.setCredentialsMatcher(hashedCredentialsMatcher());
 
         return defaultRealm;
@@ -86,7 +84,7 @@ public class ShiroConfig {
     }
 
     /**
-     * cookie对象;
+     * cookie对象
      */
     @Bean
     public SimpleCookie rememberMeCookie() {
@@ -141,8 +139,6 @@ public class ShiroConfig {
 
     /**
      * 开启shiro aop注解支持. 使用代理方式;所以需要开启代码支持; Controller才能使用@RequiresPermissions
-     *
-     * @return
      */
     @Bean
     public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor() {

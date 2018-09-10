@@ -5,6 +5,8 @@ import com.caolei.base.pojo.User;
 import com.caolei.base.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -43,7 +45,7 @@ public class LoginController
      * @author cloud0072
      * @date 2018/6/12 21:53
      */
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @PostMapping(value = "/login")
     public String login(User user) {
         if (userService.login(user)) {
             return "index";
@@ -59,7 +61,7 @@ public class LoginController
      * @author cloud0072
      * @date 2018/6/12 21:53
      */
-    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    @GetMapping(value = "/logout")
     public String logout() {
         userService.logout();
         return FORWARD_TO + "/prepare_login";

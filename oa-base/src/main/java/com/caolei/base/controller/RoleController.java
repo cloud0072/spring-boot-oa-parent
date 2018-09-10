@@ -84,50 +84,6 @@ public class RoleController
         }
     }
 
-    @ApiOperation("提交创建对象")
-    @PostMapping
-    @ResponseBody
-    @Override
-    public ResponseEntity create(Role role,
-                                 HttpServletRequest request,
-                                 HttpServletResponse response) {
-
-//        SecurityUtils.checkOperation(t, OP_CREATE);
-
-        List<String> permissionIds = Arrays.asList(request.getParameterValues("permission-select[]"));
-        List<Permission> permissions = new ArrayList<>();
-        permissionIds.forEach(permissionId -> permissions.add(permissionService.findById(permissionId)));
-        role.setPermissions(permissions);
-        service().save(role, request, response);
-
-        Map<String, Object> map = new HashMap<>();
-        map.put("message", "新增成功");
-        map.put("url", modulePath() + entityPath() + "/view/" + role.getId());
-        return ResponseEntity.ok(map);
-    }
-
-    @ApiOperation("提交更新对象")
-    @PutMapping("/{id}")
-    @ResponseBody
-    @Override
-    public ResponseEntity update(@PathVariable("id") @NonNull String id,
-                                 Role role,
-                                 HttpServletRequest request,
-                                 HttpServletResponse response) {
-//        SecurityUtils.checkOperation(t, OP_UPDATE);
-
-        List<String> permissionIds = Arrays.asList(request.getParameterValues("permission-select[]"));
-        List<Permission> permissions = new ArrayList<>();
-        permissionIds.forEach(permissionId -> permissions.add(permissionService.findById(permissionId)));
-        role.setPermissions(permissions);
-        role = service().update(role, request, response);
-
-        Map<String, Object> map = new HashMap<>();
-        map.put("message", "修改成功");
-        map.put("url", modulePath() + entityPath() + "/view/" + role.getId());
-        return ResponseEntity.ok(map);
-    }
-
     @RequestMapping(value = "/clearRoleCache", method = RequestMethod.GET)
     public ResponseEntity<String> clearRoleCache() {
         roleService.clearRoleCache();
