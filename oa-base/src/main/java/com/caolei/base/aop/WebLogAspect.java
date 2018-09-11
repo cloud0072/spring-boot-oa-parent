@@ -53,7 +53,7 @@ public class WebLogAspect {
         log.info("CLASS_METHOD : " + signature.getDeclaringTypeName() + "." + signature.getName());
         log.info("ARGS : " + Arrays.toString(joinPoint.getArgs()));
         try {
-            operationLogService.save(new OperationLog(request));
+            operationLogService.save(new OperationLog(request),request,null);
         } catch (Exception e) {
             log.error(e.getMessage());
         }

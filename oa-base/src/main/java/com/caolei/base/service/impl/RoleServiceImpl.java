@@ -64,7 +64,7 @@ public class RoleServiceImpl
         role.setCode(input.getCode());
         role.setDescription(input.getDescription());
 
-        save(role);
+        save(role,null,null);
 
         return role;
     }

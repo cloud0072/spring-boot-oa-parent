@@ -50,29 +50,6 @@ public class UserServiceImpl
         return userRepository;
     }
 
-    private void updateUserAdvice(User user, HttpServletRequest request) {
-        if (request != null) {
-
-            String[] roleIdArrays = request.getParameterValues("role-checked");
-            if (roleIdArrays != null) {
-                List<String> roleIds = Arrays.asList(roleIdArrays);
-                List<Role> roles = new ArrayList<>();
-                roleIds.forEach(roleId -> roles.add(roleService.findById(roleId)));
-                user.getRoles().addAll(roles);
-            }
-
-            String fileId = request.getParameter("head_photo_id");
-            if (!StringUtils.isEmpty(fileId)) {
-                FileComponent headPhoto = fileComponentService.findById(fileId);
-                if (headPhoto.getCategory() == FileType.PORTRAIT) {
-                    user.getExtend().setHeadPhoto(headPhoto);
-                }
-            }
-
-        }
-
-    }
-
     @Override
     public User update(User input,
                        HttpServletRequest request,
@@ -107,15 +84,23 @@ public class UserServiceImpl
     public User save(User user,
                      HttpServletRequest request,
                      HttpServletResponse response) {
+        //调用save默认执行加密 如果有其他需求 置为false
+        return this.save(user, request, response, true);
+    }
 
+    @Override
+    public User save(User user,
+                     HttpServletRequest request,
+                     HttpServletResponse response,
+                     boolean encrypt) {
         user.setDefaultValue();
-        UserUtils.encrypt(user);
-
+        if (encrypt) {
+            user = UserUtils.encrypt(user);
+        }
         updateUserAdvice(user, request);
 
         return repository().save(user);
     }
-
 
     @Override
     public boolean login(User user) {
@@ -168,6 +153,29 @@ public class UserServiceImpl
         user.getRoles().forEach(role -> role.getPermissions().size());
         user.getPermissions().size();
         return user;
+    }
+
+    private void updateUserAdvice(User user, HttpServletRequest request) {
+        if (request != null) {
+
+            String[] roleIdArrays = request.getParameterValues("role-checked");
+            if (roleIdArrays != null) {
+                List<String> roleIds = Arrays.asList(roleIdArrays);
+                List<Role> roles = new ArrayList<>();
+                roleIds.forEach(roleId -> roles.add(roleService.findById(roleId)));
+                user.getRoles().addAll(roles);
+            }
+
+            String fileId = request.getParameter("head_photo_id");
+            if (!StringUtils.isEmpty(fileId)) {
+                FileComponent headPhoto = fileComponentService.findById(fileId);
+                if (headPhoto.getCategory() == FileType.PORTRAIT) {
+                    user.getExtend().setHeadPhoto(headPhoto);
+                }
+            }
+
+        }
+
     }
 
 }

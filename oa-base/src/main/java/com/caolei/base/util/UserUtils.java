@@ -25,7 +25,7 @@ public class UserUtils {
      * @return
      */
     public static User getCurrentUser() {
-            return (User) HttpUtils.httpSession().getAttribute(Constants.USER_INFO);
+        return (User) HttpUtils.httpSession().getAttribute(Constants.USER_INFO);
     }
 
     /**
@@ -48,7 +48,7 @@ public class UserUtils {
      * @date 2018/6/12 22:37
      */
     public static User encrypt(User user) {
-        if (StringUtils.isEmpty(user.getSalt()) || StringUtils.isEmpty(user.getPassword())) {
+        if (user == null || StringUtils.isEmpty(user.getSalt()) || StringUtils.isEmpty(user.getPassword())) {
             throw new NullPointerException("用户的加密信息缺失,请确认后重试");
         }
         user.setPassword(new Sha256Hash(user.getPassword(), user.getSalt(), HASH_ITERATIONS).toString());

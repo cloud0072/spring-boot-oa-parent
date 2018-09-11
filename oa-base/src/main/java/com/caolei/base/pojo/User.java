@@ -14,7 +14,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -111,9 +110,7 @@ public class User
         this.systemEntity = this.systemEntity == null ? false : this.systemEntity;
         this.createTime = this.createTime == null ? new Date() : this.createTime;
         this.lastLoginTime = this.lastLoginTime == null ? new Date() : this.lastLoginTime;
-        this.extend = new UserExtend();
-        this.roles = new HashSet<>();
-        this.permissions = new HashSet<>();
+        this.extend = this.extend == null ? new UserExtend() : this.extend;
         return this;
     }
 

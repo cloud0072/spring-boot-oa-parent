@@ -52,7 +52,7 @@ public class SystemTest {
         printIndex();
         String key = "cloud0072";
         User user = new User(key, key, key, null, false).setDefaultValue();
-        userService.save(user);
+        userService.save(user,null,null);
     }
 
     @Test
@@ -67,7 +67,7 @@ public class SystemTest {
         User user = userService.findUserByAccount("cloud0072");
         user.setEmail("352419394@qq.com");
         user.setUserName("caolei");
-        userService.save(user);
+        userService.save(user,null,null);
     }
 
     @Test
@@ -93,7 +93,7 @@ public class SystemTest {
         System.out.println(permissions.size());
 
         user.getPermissions().addAll(permissions);
-        userService.save(user);
+        userService.save(user,null,null);
     }
 
     @Transactional
@@ -114,7 +114,7 @@ public class SystemTest {
 
         user.setRoles(Collections.singleton(role));
 
-        userService.save(user);
+        userService.save(user,null,null);
     }
 
     @Transactional
@@ -129,7 +129,7 @@ public class SystemTest {
 
         user.getExtend().getLogs().addAll(Collections.singletonList(log));
 
-        userService.save(user);
+        userService.save(user,null,null);
     }
 
     @Transactional
@@ -140,7 +140,7 @@ public class SystemTest {
 
         user.getExtend().getLogs().clear();
 
-        userService.save(user);
+        userService.save(user,null,null);
     }
 
     @Transactional
@@ -156,7 +156,7 @@ public class SystemTest {
         printIndex();
         User user = userService.findAuthorInfoByAccount("cloud0072");
         user.getRoles().remove(0);
-        userService.save(user);
+        userService.save(user,null,null);
     }
 
     //    @Test

@@ -62,10 +62,6 @@ public interface BaseCrudService<T extends BaseEntity>
         return repository().save(t);
     }
 
-    default T save(T t) {
-        return save(t, null, null);
-    }
-
     /**
      * 保存多个
      *

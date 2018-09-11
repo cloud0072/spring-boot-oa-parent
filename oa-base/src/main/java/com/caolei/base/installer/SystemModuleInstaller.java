@@ -127,12 +127,14 @@ public class SystemModuleInstaller
         if (null == userService.findUserByAccount(account)) {
             User admin = new User(account, account, account, null, true).setDefaultValue();
             admin.setSuperUser(true);
-            userService.save(admin);
+            userService.save(admin, null, null, false);
 
             admin = userService.findAuthorInfoByAccount(account);
-            admin.getRoles().addAll(Arrays.asList(superuserRole, userRole));
+            Role superuser = roleService.findRoleByCode("superuser");
+            Role user = roleService.findRoleByCode("user");
+            admin.getRoles().addAll(Arrays.asList(superuser, user));
             try {
-                userService.save(admin);
+                userService.save(admin, null, null, true);
             } catch (Exception ignored) {
             }
         }

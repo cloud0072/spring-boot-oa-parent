@@ -167,6 +167,8 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/bootstrap/**", "anon");
         filterChainDefinitionMap.put("/assets/**", "anon");
         filterChainDefinitionMap.put("/s/**", "anon");
+        //h2web控制台
+        filterChainDefinitionMap.put("/h2-console/**", "anon");
         //表示可以匿名访问
         filterChainDefinitionMap.put("/prepare_login", "anon");
         filterChainDefinitionMap.put("/login", "anon");

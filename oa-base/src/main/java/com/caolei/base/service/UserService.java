@@ -1,7 +1,7 @@
 package com.caolei.base.service;
 
-import com.caolei.common.api.service.BaseCrudService;
 import com.caolei.base.pojo.User;
+import com.caolei.common.api.service.BaseCrudService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServletResponse;
  */
 public interface UserService
         extends BaseCrudService<User> {
+
+    User save(User user, HttpServletRequest request, HttpServletResponse response, boolean encrypt);
+
     /**
      * 登陆
      *

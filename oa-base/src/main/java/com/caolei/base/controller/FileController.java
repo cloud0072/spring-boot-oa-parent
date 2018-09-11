@@ -52,7 +52,7 @@ public class FileController implements BaseController {
             User user = userService.findById(UserUtils.getCurrentUser().getId());
 
             component.createOrUpdateFile(file.getOriginalFilename(), file.getContentType(), fileType, user);
-            component = fileComponentService.save(component);
+            component = fileComponentService.save(component,null,null);
             File f = new File(component.getAbsolutePath());
             if (!f.getParentFile().exists()) {
                 f.getParentFile().mkdirs();
