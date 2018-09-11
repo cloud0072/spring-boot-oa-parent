@@ -76,14 +76,14 @@ logging:
        org.hibernate: error
        com.caolei.base.handle.GlobalExceptionHandler: error
        com.caolei.base.aop.WebLogAspect: info
-    file: ${log-path}/log/application.log
+    file: ${location.resource.log-path}/application.log
 location:
     resource:
-        path: ~/springboot
-        static-path: ${location.resource.path}/static
-        upload-path: ${location.resource.path}/upload
-        config-path: ${location.resource.path}/conf
-        log-path: ${location.resource.path}/log
+        base-path: ~/springboot
+        static-path: ${location.resource.base-path}/static
+        upload-path: ${location.resource.base-path}/upload
+        config-path: ${location.resource.base-path}/conf
+        log-path: ${location.resource.base-path}/log
 plugin:
     swagger2:
         show: true

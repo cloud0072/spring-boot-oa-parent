@@ -1,7 +1,11 @@
 package com.caolei.common.config;
 
+import com.caolei.common.util.StringUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
+
+import java.io.File;
 
 /**
  * @ClassName: LocationProperties
@@ -9,24 +13,29 @@ import org.springframework.stereotype.Component;
  * @author caolei
  * @date 2018/9/10 11:14
  */
+@Slf4j
 @Component
 @ConfigurationProperties(prefix = "location.resource")
 public class LocationProperties {
     // 外部文件基础路径
-    private String path;
+    private String basePath;
     // 静态文件读取的路径
     private String staticPath;
     // 上传文件存放路径
     private String uploadPath;
     // 配置文件存放路径
     private String configPath;
+    // 日志文件目录
+    private String logPath;
+    // 数据库文件目录  -- 目前 仅用于h2 数据库
+    private String dbPath;
 
-    public String getPath() {
-        return path;
+    public String getBasePath() {
+        return basePath;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setBasePath(String basePath) {
+        this.basePath = basePath;
     }
 
     public String getStaticPath() {
@@ -53,4 +62,19 @@ public class LocationProperties {
         this.configPath = configPath;
     }
 
+    public String getLogPath() {
+        return logPath;
+    }
+
+    public void setLogPath(String logPath) {
+        this.logPath = logPath;
+    }
+
+    public String getDbPath() {
+        return dbPath;
+    }
+
+    public void setDbPath(String dbPath) {
+        this.dbPath = dbPath;
+    }
 }

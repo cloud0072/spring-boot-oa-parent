@@ -15,8 +15,14 @@ import java.io.File;
 @Component
 public class FileUtils {
 
+    //项目基础路径
+    private static String basePath;
     //文件保存路径
     private static String uploadPath;
+    //日志文件目录
+    private static String logPath;
+    //日志文件目录
+    private static String logFile;
 
     private FileUtils() {
     }
@@ -26,7 +32,7 @@ public class FileUtils {
      *
      * @return
      */
-    public static Boolean isLinuxSystem() {
+    public static Boolean isLinux() {
         return File.separator.equals("/");
     }
 
@@ -35,38 +41,93 @@ public class FileUtils {
      *
      * @return
      */
-    public static Boolean isWindowsSystem() {
+    public static Boolean isWindows() {
         return File.separator.equals("\\");
     }
 
     /**
-     * 获取文件上传路径
-     *
-     * @return
+     * 初始化目录
+     * @param filePath
      */
-    public static String uploadPath() {
-        if (StringUtils.isEmpty(uploadPath)) {
-            throw new UnsupportedOperationException("文件上传路径未定义!");
+    public static void initDirectory(String filePath) {
+        if (StringUtils.isEmpty(filePath)) {
+            return;
         }
+        try {
+            File file = new File(filePath);
+            if (!file.exists() || file.isFile()) {
+                if (file.mkdirs()) {
+                    throw new UnsupportedOperationException("无法初始化目录:\t" + filePath);
+                }
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+    }
+
+    public static void checkDirectory(String path) {
+        if (!StringUtils.isEmpty(path)) {
+            File file = new File(path);
+            if (!file.exists() || !file.isDirectory()) {
+                return;
+            }
+        }
+        throw new UnsupportedOperationException("目录不可用 : \t" + path);
+    }
+
+    public static void checkFile(String path) {
+        if (!StringUtils.isEmpty(path)) {
+            File file = new File(path);
+            if (!file.exists() || !file.isFile()) {
+                return;
+            }
+        }
+        throw new UnsupportedOperationException("文件不可用 : \t" + path);
+    }
+
+    /******************************************************************************************************************/
+
+    public static String getUploadPath() {
+        checkDirectory(uploadPath);
         return uploadPath;
     }
 
-    /**
-     * 初始化文件上传文件夹
-     *
-     * @param uploadPath
-     */
     @Value("${location.resource.upload-path}")
     private void setUploadPath(String uploadPath) {
         FileUtils.uploadPath = uploadPath;
-        File uploadDir = new File(uploadPath);
+        initDirectory(uploadPath);
+    }
 
-        if (!uploadDir.exists()) {
-            uploadDir.mkdirs();
-            if (!uploadDir.exists() && !uploadDir.mkdirs() || uploadDir.isFile()) {
-                throw new UnsupportedOperationException("无法创建文件上传文件夹");
-            }
-        }
+    public static String getLogPath() {
+        checkDirectory(logPath);
+        return logPath;
+    }
+
+    @Value("${location.resource.log-path}")
+    private void setLogPath(String logPath) {
+        FileUtils.logPath = logPath;
+        initDirectory(logPath);
+    }
+
+    public static String getLogFile() {
+        checkFile(logPath);
+        return logFile;
+    }
+
+    @Value("${logging.file}")
+    public void setLogFile(String logFile) {
+        FileUtils.logFile = logFile;
+    }
+
+    public static String getBasePath() {
+        checkDirectory(basePath);
+        return basePath;
+    }
+
+    @Value("${location.resource.base-path}")
+    public void setBasePath(String basePath) {
+        FileUtils.basePath = basePath;
+        initDirectory(basePath);
     }
 
 }

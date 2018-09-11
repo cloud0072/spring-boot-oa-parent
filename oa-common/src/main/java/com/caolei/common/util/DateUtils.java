@@ -1,6 +1,8 @@
 package com.caolei.common.util;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.MultiValuedMap;
+import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -20,28 +22,14 @@ public class DateUtils {
 
     private static final SimpleDateFormat defaultDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private static final SimpleDateFormat datePathFormat = new SimpleDateFormat("yyyyMM/dd");
-    private static final Map<DayOfWeek, Set<String>> weekMap = new HashMap<DayOfWeek, Set<String>>() {{
-        put(DayOfWeek.MONDAY, new HashSet<String>() {{
-            addAll(Arrays.asList("一", "周一", "星期一"));
-        }});
-        put(DayOfWeek.TUESDAY, new HashSet<String>() {{
-            addAll(Arrays.asList("二", "周二", "星期二"));
-        }});
-        put(DayOfWeek.WEDNESDAY, new HashSet<String>() {{
-            addAll(Arrays.asList("三", "周三", "星期三"));
-        }});
-        put(DayOfWeek.THURSDAY, new HashSet<String>() {{
-            addAll(Arrays.asList("四", "周四", "星期四"));
-        }});
-        put(DayOfWeek.FRIDAY, new HashSet<String>() {{
-            addAll(Arrays.asList("五", "周五", "星期五"));
-        }});
-        put(DayOfWeek.SATURDAY, new HashSet<String>() {{
-            addAll(Arrays.asList("六", "周六", "星期六"));
-        }});
-        put(DayOfWeek.SUNDAY, new HashSet<String>() {{
-            addAll(Arrays.asList("日", "周日", "星期日"));
-        }});
+    private static final MultiValuedMap<DayOfWeek, String> weekMap = new ArrayListValuedHashMap<DayOfWeek, String>() {{
+        putAll(DayOfWeek.MONDAY, Arrays.asList("一", "周一", "星期一"));
+        putAll(DayOfWeek.TUESDAY, Arrays.asList("二", "周二", "星期二"));
+        putAll(DayOfWeek.WEDNESDAY, Arrays.asList("三", "周三", "星期三"));
+        putAll(DayOfWeek.THURSDAY, Arrays.asList("四", "周四", "星期四"));
+        putAll(DayOfWeek.FRIDAY, Arrays.asList("五", "周五", "星期五"));
+        putAll(DayOfWeek.SATURDAY, Arrays.asList("六", "周六", "星期六"));
+        putAll(DayOfWeek.SUNDAY,Arrays.asList("日", "周日", "星期日"));
     }};
 
     private DateUtils() {
@@ -56,7 +44,7 @@ public class DateUtils {
     public static DayOfWeek parseDayOfWeek(String chinese) {
         log.info("parseDayOfWeek - > {}", chinese);
         //java自带的日期枚举类，同类的还有 Month 等
-        return weekMap.entrySet().stream().filter(entry -> entry.getValue().contains(chinese)).findFirst()
+        return weekMap.entries().stream().filter(entry -> entry.getValue().contains(chinese)).findFirst()
                 .orElseThrow(UnsupportedOperationException::new).getKey();
     }
 

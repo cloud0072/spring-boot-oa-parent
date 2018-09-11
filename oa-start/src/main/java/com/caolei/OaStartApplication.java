@@ -1,5 +1,7 @@
 package com.caolei;
 
+import com.caolei.common.util.FileUtils;
+import com.caolei.common.util.HttpUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -15,25 +17,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class OaStartApplication {
 
-    private static String port;
-    private static String context_path;
-
     public static void main(String[] args) {
         SpringApplication.run(OaStartApplication.class, args);
 
-        String protocol = "http://";
-        String host = "localhost";
-        log.info(protocol + host + ":" + port + context_path + "");
-    }
-
-    @Value("${server.port}")
-    public void setPort(String port) {
-        OaStartApplication.port = port;
-    }
-
-    @Value("${server.servlet.context-path}")
-    public void setContext_path(String context_path) {
-        OaStartApplication.context_path = context_path;
+        log.info("SERVER URL\t" + HttpUtils.serverAddress());
+        log.info("SERVER LOG\t" + FileUtils.getLogPath());
     }
 
 }

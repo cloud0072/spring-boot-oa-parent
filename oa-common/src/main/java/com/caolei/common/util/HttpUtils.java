@@ -25,6 +25,9 @@ import static com.caolei.common.constant.Constants.TXT_UNKNOWN;
 @Slf4j
 public class HttpUtils {
 
+    private static String port;
+    private static String context_path;
+
     private HttpUtils() {
     }
 
@@ -148,4 +151,26 @@ public class HttpUtils {
         }
         return ip;
     }
+
+    /******************************************************************************************************************/
+
+    public static String getPort() {
+        return port;
+    }
+
+    @Value("${server.port}")
+    public void setPort(String port) {
+        HttpUtils.port = port;
+    }
+
+    public static String getContext_path() {
+        return context_path;
+    }
+
+    @Value("${server.servlet.context-path}")
+    public void setContext_path(String context_path) {
+        HttpUtils.context_path = context_path;
+    }
+
+
 }

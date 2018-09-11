@@ -1,7 +1,6 @@
 package com.caolei.base.config;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -42,7 +41,10 @@ public class Swagger2Config {
     @Bean
     public Docket createRestApi() {
         if (show) {
-            log.info("Swagger2 Status : active\turl : http://localhost:" + port + context_path + "/swagger-ui.html");
+            log.info("Swagger2 Status : enable");
+            log.info("Swagger2 URL : http://localhost:" + port + context_path + "/swagger-ui.html");
+        } else {
+            log.info("Swagger2 Status : disable");
         }
         return new Docket(DocumentationType.SWAGGER_2)
                 .enable(show)
