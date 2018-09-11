@@ -61,9 +61,7 @@ public class TestController implements BaseController {
         user.setPassword("admin");
         userService.update(user);
 
-        String catalina = System.getProperty("catalina.home");
-        String uploadPath = FileUtils.uploadPath();
-        return uploadPath;
+        return FileUtils.getUploadPath();
     }
 
 

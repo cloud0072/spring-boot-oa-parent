@@ -1,22 +1,27 @@
 package com.caolei.base.util;
 
 import com.caolei.base.pojo.User;
+import com.caolei.common.config.Shiro;
 import com.caolei.common.constant.Constants;
 import com.caolei.common.util.HttpUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.crypto.hash.Sha256Hash;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 /**
  * 用户相关工具
  */
+@Slf4j
 @Component
 public class UserUtils {
 
-    private static Integer HASH_ITERATIONS;
+    private static Shiro shiro;
 
-    private UserUtils() {
+    @Autowired
+    private UserUtils(Shiro shiro) {
+        UserUtils.shiro = shiro;
     }
 
     /**
@@ -51,12 +56,8 @@ public class UserUtils {
         if (user == null || StringUtils.isEmpty(user.getSalt()) || StringUtils.isEmpty(user.getPassword())) {
             throw new NullPointerException("用户的加密信息缺失,请确认后重试");
         }
-        user.setPassword(new Sha256Hash(user.getPassword(), user.getSalt(), HASH_ITERATIONS).toString());
+        user.setPassword(new Sha256Hash(user.getPassword(), user.getSalt(), shiro.getHashIterations()).toString());
         return user;
     }
 
-    @Value("${plugin.shiro.hash-iterations}")
-    private void setHashIterations(Integer hashIterations) {
-        HASH_ITERATIONS = hashIterations;
-    }
 }

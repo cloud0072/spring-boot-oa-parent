@@ -1,9 +1,9 @@
 package com.caolei.base.extend;
 
-import com.caolei.common.annotation.EntityInfo;
-import com.caolei.common.api.entity.BaseEntity;
 import com.caolei.base.pojo.FileComponent;
 import com.caolei.base.pojo.OperationLog;
+import com.caolei.common.annotation.EntityInfo;
+import com.caolei.common.api.entity.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,7 +16,7 @@ import java.util.Set;
 /**
  * 用户详情
  */
-@EntityInfo(entityName = "用户详情", entityPath = "/userDetails" , tableName = "用户详情")
+@EntityInfo(entityName = "用户详情", entityPath = "/userDetails", tableName = "用户详情")
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity

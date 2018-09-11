@@ -6,8 +6,6 @@ import com.caolei.base.repository.PermissionRepository;
 import com.caolei.base.service.PermissionService;
 import com.caolei.base.service.RoleService;
 import com.caolei.common.constant.Operation;
-import org.apache.commons.collections4.MultiValuedMap;
-import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;

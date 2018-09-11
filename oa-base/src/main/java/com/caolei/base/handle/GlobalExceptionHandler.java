@@ -1,9 +1,9 @@
 package com.caolei.base.handle;
 
 
+import com.caolei.base.exception.AjaxException;
 import com.caolei.common.util.SecurityUtils;
 import com.caolei.common.util.StringUtils;
-import com.caolei.base.exception.AjaxException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;

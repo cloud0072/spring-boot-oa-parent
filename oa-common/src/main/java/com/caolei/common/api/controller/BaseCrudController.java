@@ -153,6 +153,7 @@ public abstract class BaseCrudController<T extends BaseEntity> implements BaseCo
 
     @ApiOperation("根据对象的属性查询所有对象")
     @GetMapping
+    @ResponseBody
     protected ResponseEntity findAll(T t,
                                      HttpServletRequest request,
                                      HttpServletResponse response) {

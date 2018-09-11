@@ -3,7 +3,6 @@ package com.caolei.common.util;
 import com.caolei.common.constant.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.UnauthorizedException;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,7 +15,7 @@ import java.util.stream.Stream;
  * @author cloud0072
  * @date 2018/6/12 22:37
  */
-    @Slf4j
+@Slf4j
 public class SecurityUtils extends org.apache.shiro.SecurityUtils {
 
     private SecurityUtils() {

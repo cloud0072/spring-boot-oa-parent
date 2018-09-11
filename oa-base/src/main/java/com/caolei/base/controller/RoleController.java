@@ -10,17 +10,16 @@ import com.caolei.base.util.UserUtils;
 import com.caolei.common.api.controller.BaseCrudController;
 import com.caolei.common.api.service.BaseCrudService;
 import com.caolei.common.util.EntityUtils;
-import io.swagger.annotations.ApiOperation;
-import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import static com.caolei.common.constant.Constants.*;
 
@@ -44,11 +43,6 @@ public class RoleController
         this.userService = userService;
         this.roleService = roleService;
         this.permissionService = permissionService;
-    }
-
-    @Override
-    public BaseCrudService<Role> service() {
-        return roleService;
     }
 
     @Override
@@ -82,6 +76,11 @@ public class RoleController
             case OP_LIST:
                 break;
         }
+    }
+
+    @Override
+    public BaseCrudService<Role> service() {
+        return roleService;
     }
 
     @RequestMapping(value = "/clearRoleCache", method = RequestMethod.GET)

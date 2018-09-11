@@ -1,14 +1,13 @@
 package com.caolei.base.controller;
 
-import com.caolei.common.api.controller.BaseCrudController;
-import com.caolei.common.api.service.BaseCrudService;
-import com.caolei.common.util.SecurityUtils;
 import com.caolei.base.pojo.Permission;
 import com.caolei.base.pojo.Role;
 import com.caolei.base.pojo.User;
 import com.caolei.base.service.PermissionService;
 import com.caolei.base.service.RoleService;
 import com.caolei.base.service.UserService;
+import com.caolei.common.api.controller.BaseCrudController;
+import com.caolei.common.api.service.BaseCrudService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,10 @@ import org.springframework.data.domain.Example;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Collections;
 import java.util.List;

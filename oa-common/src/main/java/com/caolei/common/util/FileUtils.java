@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 
+
 /**
  * 处理时间的工具类
  *
@@ -14,6 +15,9 @@ import java.io.File;
 @Slf4j
 @Component
 public class FileUtils {
+//
+//    @Autowired
+//    private Location location;
 
     //项目基础路径
     private static String basePath;
@@ -68,7 +72,7 @@ public class FileUtils {
     public static void checkDirectory(String path) {
         if (!StringUtils.isEmpty(path)) {
             File file = new File(path);
-            if (!file.exists() || !file.isDirectory()) {
+            if (file.exists() && file.isDirectory()) {
                 return;
             }
         }
@@ -78,7 +82,7 @@ public class FileUtils {
     public static void checkFile(String path) {
         if (!StringUtils.isEmpty(path)) {
             File file = new File(path);
-            if (!file.exists() || !file.isFile()) {
+            if (file.exists() && file.isFile()) {
                 return;
             }
         }
@@ -110,7 +114,7 @@ public class FileUtils {
     }
 
     public static String getLogFile() {
-        checkFile(logPath);
+        checkFile(logFile);
         return logFile;
     }
 

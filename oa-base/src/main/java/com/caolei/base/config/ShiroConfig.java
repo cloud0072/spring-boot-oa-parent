@@ -2,6 +2,7 @@ package com.caolei.base.config;
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import com.caolei.base.shiro.DefaultRealm;
+import com.caolei.common.config.Shiro;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
@@ -18,7 +19,7 @@ import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -34,18 +35,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Configuration
 public class ShiroConfig {
 
-    @Value("${plugin.shiro.cipher-key}")
-    private String CIPHER_KEY;
-    @Value("${plugin.shiro.hash-algorithm-name}")
-    private String HASH_ALGORITHM_NAME;
-    @Value("${plugin.shiro.hash-iterations}")
-    private Integer HASH_ITERATIONS;
-    @Value("${plugin.shiro.login-retry-times}")
-    private Integer LOGIN_RETRY_TIMES;
-    @Value("${plugin.shiro.lock-expired-time}")
-    private Integer LOCK_EXPIRED_TIME;
-    @Value("${plugin.shiro.remember-me-age}")
-    private Integer REMEMBER_ME_AGE;
+    @Autowired
+    private Shiro shiro;
 
     @Bean
     public static LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
@@ -60,8 +51,8 @@ public class ShiroConfig {
     @Bean
     public HashedCredentialsMatcher hashedCredentialsMatcher() {
         HashedCredentialsMatcher hashedCredentialsMatcher = new IHashedCredentialsMatcher();
-        hashedCredentialsMatcher.setHashAlgorithmName(HASH_ALGORITHM_NAME);
-        hashedCredentialsMatcher.setHashIterations(HASH_ITERATIONS);
+        hashedCredentialsMatcher.setHashAlgorithmName(shiro.getHashAlgorithmName());
+        hashedCredentialsMatcher.setHashIterations(shiro.getHashIterations());
         hashedCredentialsMatcher.setStoredCredentialsHexEncoded(true);
         return hashedCredentialsMatcher;
     }
@@ -91,7 +82,7 @@ public class ShiroConfig {
         //这个参数是cookie的名称，对应前端的checkbox 的name = rememberMe
         SimpleCookie simpleCookie = new SimpleCookie("rememberMe");
         //记住我cookie生效时间30天（259200） ,单位秒
-        simpleCookie.setMaxAge(REMEMBER_ME_AGE);
+        simpleCookie.setMaxAge(shiro.getRememberMeAge());
         simpleCookie.setHttpOnly(true);
         return simpleCookie;
     }
@@ -102,7 +93,7 @@ public class ShiroConfig {
     @Bean
     public CookieRememberMeManager rememberMeManager() {
         CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
-        byte[] cipherKey = Base64.decode(CIPHER_KEY);
+        byte[] cipherKey = Base64.decode(shiro.getCipherKey());
         cookieRememberMeManager.setCipherKey(cipherKey);
         cookieRememberMeManager.setCookie(rememberMeCookie());
         return cookieRememberMeManager;
@@ -219,20 +210,20 @@ public class ShiroConfig {
 
         RetryCountAndTime() {
             this.count = new AtomicInteger(0);
-            this.expiredTime = System.currentTimeMillis() + LOCK_EXPIRED_TIME * 1000;
+            this.expiredTime = System.currentTimeMillis() + shiro.getLockExpiredTime() * 1000;
         }
 
         void checkRetryTimes() {
             //没有设置重试次数则默认跳过检测
-            if (LOGIN_RETRY_TIMES < 1) {
+            if (shiro.getLoginRetryTimes() < 1) {
                 return;
             }
             //过期重置验证信息
             if (expiredTime < System.currentTimeMillis()) {
                 this.count = new AtomicInteger(0);
-                this.expiredTime = System.currentTimeMillis() + LOCK_EXPIRED_TIME * 1000;
+                this.expiredTime = System.currentTimeMillis() + shiro.getLockExpiredTime() * 1000;
             }
-            if (LOGIN_RETRY_TIMES < count.incrementAndGet()) {
+            if (shiro.getLoginRetryTimes() < count.incrementAndGet()) {
                 long second = (expiredTime - System.currentTimeMillis()) / 1000 + 1;
                 String timeMessage = second > 60 ? second / 60 + "分钟后重试" : second + "秒后重试";
                 throw new ExcessiveAttemptsException("您的登录失败次数过多! 请您在" + timeMessage);

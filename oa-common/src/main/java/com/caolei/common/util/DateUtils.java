@@ -29,7 +29,7 @@ public class DateUtils {
         putAll(DayOfWeek.THURSDAY, Arrays.asList("四", "周四", "星期四"));
         putAll(DayOfWeek.FRIDAY, Arrays.asList("五", "周五", "星期五"));
         putAll(DayOfWeek.SATURDAY, Arrays.asList("六", "周六", "星期六"));
-        putAll(DayOfWeek.SUNDAY,Arrays.asList("日", "周日", "星期日"));
+        putAll(DayOfWeek.SUNDAY, Arrays.asList("日", "周日", "星期日"));
     }};
 
     private DateUtils() {

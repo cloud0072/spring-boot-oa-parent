@@ -1,8 +1,8 @@
 package com.caolei.base.repository;
 
+import com.caolei.base.pojo.Permission;
 import com.caolei.common.api.repository.BaseRepository;
 import com.caolei.common.constant.Operation;
-import com.caolei.base.pojo.Permission;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

@@ -1,8 +1,8 @@
 package com.caolei.base.controller;
 
-import com.caolei.common.api.controller.BaseController;
 import com.caolei.base.pojo.User;
 import com.caolei.base.service.UserService;
+import com.caolei.common.api.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

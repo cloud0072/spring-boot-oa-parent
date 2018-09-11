@@ -163,7 +163,7 @@ public class FileComponent
      * @return
      */
     public String getAbsolutePath() {
-        return FileUtils.uploadPath() + getPath();
+        return FileUtils.getUploadPath() + getPath();
     }
 
     /**

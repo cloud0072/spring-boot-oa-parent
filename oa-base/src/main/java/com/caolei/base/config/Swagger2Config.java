@@ -1,6 +1,8 @@
 package com.caolei.base.config;
 
+import com.caolei.common.config.Swagger2;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,12 +25,12 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class Swagger2Config {
 
+    @Autowired
+    private Swagger2 swagger2;
     @Value("${server.port}")
     private String port;
     @Value("${server.servlet.context-path}")
     private String context_path;
-    @Value("${plugin.swagger2.show}")
-    private boolean show;
 
     /**
      * 创建API应用
@@ -40,14 +42,14 @@ public class Swagger2Config {
      */
     @Bean
     public Docket createRestApi() {
-        if (show) {
+        if (swagger2.isShow()) {
             log.info("Swagger2 Status : enable");
             log.info("Swagger2 URL : http://localhost:" + port + context_path + "/swagger-ui.html");
         } else {
             log.info("Swagger2 Status : disable");
         }
         return new Docket(DocumentationType.SWAGGER_2)
-                .enable(show)
+                .enable(swagger2.isShow())
                 .apiInfo(apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.any())

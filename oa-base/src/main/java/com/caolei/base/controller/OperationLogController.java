@@ -1,9 +1,9 @@
 package com.caolei.base.controller;
 
-import com.caolei.common.api.controller.BaseCrudController;
-import com.caolei.common.api.service.BaseCrudService;
 import com.caolei.base.pojo.OperationLog;
 import com.caolei.base.service.OperationLogService;
+import com.caolei.common.api.controller.BaseCrudController;
+import com.caolei.common.api.service.BaseCrudService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

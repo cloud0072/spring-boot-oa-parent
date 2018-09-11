@@ -9,6 +9,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -23,6 +24,7 @@ import static com.caolei.common.constant.Constants.TXT_LOCALHOST;
 import static com.caolei.common.constant.Constants.TXT_UNKNOWN;
 
 @Slf4j
+@Component
 public class HttpUtils {
 
     private static String port;
@@ -38,8 +40,7 @@ public class HttpUtils {
      */
     public static HttpServletRequest httpServletRequest() {
         try {
-            return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
-                    .getRequest();
+            return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         } catch (Exception e) {
             log.error("无法获取当前HTTP请求");
             throw new UnsupportedOperationException("无法获取当前HTTP请求!");

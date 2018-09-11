@@ -1,22 +1,12 @@
 package com.caolei.common.config;
 
-import com.caolei.common.util.StringUtils;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
-
-import java.io.File;
-
 /**
  * @ClassName: LocationProperties
  * @Description: 给注入的值一个正确的默认值 和 数据类型
  * @author caolei
  * @date 2018/9/10 11:14
  */
-@Slf4j
-@Component
-@ConfigurationProperties(prefix = "location.resource")
-public class LocationProperties {
+public class Location {
     // 外部文件基础路径
     private String basePath;
     // 静态文件读取的路径

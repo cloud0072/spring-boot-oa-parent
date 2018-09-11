@@ -3,7 +3,6 @@ package com.caolei;
 import com.caolei.common.util.FileUtils;
 import com.caolei.common.util.HttpUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -20,8 +19,8 @@ public class OaStartApplication {
     public static void main(String[] args) {
         SpringApplication.run(OaStartApplication.class, args);
 
-        log.info("SERVER URL\t" + HttpUtils.serverAddress());
-        log.info("SERVER LOG\t" + FileUtils.getLogPath());
+        log.info("SERVER URL\thttp://localhost:" + HttpUtils.getPort() + HttpUtils.getContext_path());
+        log.info("SERVER LOG\t" + FileUtils.getLogFile());
     }
 
 }

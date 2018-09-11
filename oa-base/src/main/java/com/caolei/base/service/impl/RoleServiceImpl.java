@@ -42,6 +42,21 @@ public class RoleServiceImpl
     }
 
     @Override
+    public Role update(Role input,
+                       HttpServletRequest request,
+                       HttpServletResponse response) {
+
+        Role role = findById(input.getId());
+        role.setName(input.getName());
+        role.setCode(input.getCode());
+        role.setDescription(input.getDescription());
+
+        save(role, null, null);
+
+        return role;
+    }
+
+    @Override
     public Role save(Role role, HttpServletRequest request, HttpServletResponse response) {
 
         if (request != null) {
@@ -52,21 +67,6 @@ public class RoleServiceImpl
         }
 
         return repository().save(role);
-    }
-
-    @Override
-    public Role update(Role input,
-                       HttpServletRequest request,
-                       HttpServletResponse response) {
-
-        Role role = findById(input.getId());
-        role.setName(input.getName());
-        role.setCode(input.getCode());
-        role.setDescription(input.getDescription());
-
-        save(role,null,null);
-
-        return role;
     }
 
     @Override

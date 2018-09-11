@@ -163,6 +163,7 @@ public class UserServiceImpl
                 List<String> roleIds = Arrays.asList(roleIdArrays);
                 List<Role> roles = new ArrayList<>();
                 roleIds.forEach(roleId -> roles.add(roleService.findById(roleId)));
+
                 user.getRoles().addAll(roles);
             }
 

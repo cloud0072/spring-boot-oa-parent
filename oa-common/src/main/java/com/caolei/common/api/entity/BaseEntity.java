@@ -5,7 +5,6 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.Objects;
 

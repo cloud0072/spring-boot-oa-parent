@@ -1,6 +1,5 @@
 package com.caolei.base.controller;
 
-import com.caolei.base.pojo.FileComponent;
 import com.caolei.base.pojo.Role;
 import com.caolei.base.pojo.User;
 import com.caolei.base.service.FileComponentService;
@@ -10,21 +9,15 @@ import com.caolei.base.service.UserService;
 import com.caolei.base.util.UserUtils;
 import com.caolei.common.api.controller.BaseCrudController;
 import com.caolei.common.api.service.BaseCrudService;
-import com.caolei.common.constant.FileType;
 import com.caolei.common.util.EntityUtils;
-import com.caolei.common.util.StringUtils;
-import io.swagger.annotations.ApiOperation;
-import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.*;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
 
 import static com.caolei.common.constant.Constants.*;
 
@@ -45,11 +38,6 @@ public class UserController
     @Autowired
     private FileComponentService fileComponentService;
 
-    @Override
-    public BaseCrudService<User> service() {
-        return userService;
-    }
-
     /**
      * 回调函数
      * 增强默认controller的参数集合
@@ -64,7 +52,7 @@ public class UserController
 
         User currentUser = UserUtils.getCurrentUser();
         //修改自己的个人信息
-        if (UserUtils.getCurrentUser().getId().equals(user.getId())){
+        if (UserUtils.getCurrentUser().getId().equals(user.getId())) {
             model.addAttribute("type", TY_SELF);
         }
         switch (operation) {
@@ -86,6 +74,11 @@ public class UserController
             case OP_LIST:
                 break;
         }
+    }
+
+    @Override
+    public BaseCrudService<User> service() {
+        return userService;
     }
 
 }
