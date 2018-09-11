@@ -36,7 +36,7 @@ spring:
             naming:
                 physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
     datasource:
-        url: jdbc:h2:file:${location.resource.h2-path}/spring_boot_oa_db
+        url: jdbc:h2:file:${location.resource.db-path}/spring_boot_oa_db
         username: root
         password: root
         driver-class-name: org.h2.Driver
@@ -82,7 +82,7 @@ location:
         static-path: ${location.resource.path}/static
         upload-path: ${location.resource.path}/upload
         config-path: ${location.resource.path}/conf
-        h2-path: ${location.resource.path}/h2
+        db-path: ${location.resource.path}/h2
 plugin:
     swagger2:
         show: true

@@ -53,7 +53,7 @@ public class SystemModuleInstaller
 
         initialize();
 
-        log.info("finished...");
+        log.info("finish ...");
     }
 
     /**

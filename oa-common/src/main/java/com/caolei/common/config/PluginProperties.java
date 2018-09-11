@@ -1,4 +1,4 @@
-package com.caolei.base.config;
+package com.caolei.common.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
