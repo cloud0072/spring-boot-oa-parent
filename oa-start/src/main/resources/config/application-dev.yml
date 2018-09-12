@@ -79,7 +79,7 @@ logging:
     file: ${location.resource.log-path}/application.log
 location:
     resource:
-        base-path: d:/springboot
+        base-path: d:/spring-boot
         static-path: ${location.resource.base-path}/static
         upload-path: ${location.resource.base-path}/upload
         config-path: ${location.resource.base-path}/config
