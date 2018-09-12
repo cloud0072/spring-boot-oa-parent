@@ -1,6 +1,6 @@
 package com.caolei.base.config;
 
-import com.caolei.common.config.Swagger2;
+import com.caolei.common.autoconfig.Swagger2;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

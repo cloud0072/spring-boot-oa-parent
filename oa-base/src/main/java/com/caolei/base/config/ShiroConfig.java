@@ -2,7 +2,7 @@ package com.caolei.base.config;
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import com.caolei.base.shiro.DefaultRealm;
-import com.caolei.common.config.Shiro;
+import com.caolei.common.autoconfig.Shiro;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
@@ -37,6 +37,8 @@ public class ShiroConfig {
 
     @Autowired
     private Shiro shiro;
+    @Autowired
+    private EhCacheManager ehCacheManager;
 
     @Bean
     public static LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
@@ -69,6 +71,9 @@ public class ShiroConfig {
         return defaultRealm;
     }
 
+    /**
+     * thymeleaf-shiro配置方言
+     */
     @Bean
     public ShiroDialect shiroDialect() {
         return new ShiroDialect();
@@ -99,23 +104,11 @@ public class ShiroConfig {
         return cookieRememberMeManager;
     }
 
-    /*@Bean
-    public MemoryConstrainedCacheManager shiroCacheManager() {
-        return new MemoryConstrainedCacheManager();
-    }*/
-
-    @Bean
-    public EhCacheManager ehCacheManager() {
-        EhCacheManager cacheManager = new EhCacheManager();
-        cacheManager.setCacheManagerConfigFile("classpath:config/ehcache.xml");
-        return cacheManager;
-    }
-
     /**
      * 配置核心安全事务管理器
-     * 设置realm.
-     * 设置rememberMe管理器
-     * 设置ehcache缓存
+     * - 设置realm.
+     * - 设置rememberMe管理器
+     * - 设置ehcache缓存
      */
     @Bean
     public SecurityManager securityManager() {
@@ -123,7 +116,7 @@ public class ShiroConfig {
 
         securityManager.setRealm(defaultRealm());
         securityManager.setRememberMeManager(rememberMeManager());
-        securityManager.setCacheManager(ehCacheManager());
+        securityManager.setCacheManager(ehCacheManager);
 
         return securityManager;
     }
@@ -180,8 +173,9 @@ public class ShiroConfig {
 
         private Cache<String, RetryCountAndTime> passwordRetryCache;
 
-        IHashedCredentialsMatcher() {
-            passwordRetryCache = ehCacheManager().getCache("passwordRetryCache");
+        @Autowired
+        private IHashedCredentialsMatcher() {
+            passwordRetryCache = ehCacheManager.getCache("passwordRetryCache");
         }
 
         @Override

@@ -1,11 +1,16 @@
-package com.caolei.common.config;
+package com.caolei.common.autoconfig;
+
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 /**
  * @ClassName: Shiro
- * @Description: TODO
+ * @Description: shiro插件配置
  * @author caolei
  * @date 2018/9/11 21:28
  */
+@ConfigurationProperties(prefix = "plugin.shiro")
+@Component
 public class Shiro {
     // cookie加密安全码
     private String cipherKey = "4028c081645b411c01645b4127c40026";

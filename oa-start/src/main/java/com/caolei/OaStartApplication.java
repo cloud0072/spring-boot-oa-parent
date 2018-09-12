@@ -20,7 +20,8 @@ public class OaStartApplication {
         SpringApplication.run(OaStartApplication.class, args);
 
         log.info("SERVER URL\thttp://localhost:" + HttpUtils.getPort() + HttpUtils.getContext_path());
-        log.info("SERVER LOG\t" + FileUtils.getLogFile());
+        log.info("SERVER BASE\t{}/\n",FileUtils.getBasePath());
+
     }
 
 }

@@ -57,7 +57,7 @@ spring:
             indent_output: true
     cache:
         ehcache:
-            config: /config/ehcache.xml
+            config: classpath:config/ehcache.xml
     redis:
         host: 192.168.64.104
         port: 6379

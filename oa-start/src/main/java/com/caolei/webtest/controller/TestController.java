@@ -4,8 +4,8 @@ import com.caolei.base.exception.AjaxException;
 import com.caolei.base.pojo.User;
 import com.caolei.base.service.UserService;
 import com.caolei.common.api.controller.BaseController;
-import com.caolei.common.config.Location;
-import com.caolei.common.config.Shiro;
+import com.caolei.common.autoconfig.LocationResource;
+import com.caolei.common.autoconfig.Shiro;
 import com.caolei.common.util.DateUtils;
 import com.caolei.common.util.FileUtils;
 import io.swagger.annotations.Api;
@@ -43,7 +43,7 @@ public class TestController implements BaseController {
     @Autowired
     private Shiro shiro;
     @Autowired
-    private Location location;
+    private LocationResource location;
     @Value("spring.resources.static-locations")
     private String staticLocation;
 
