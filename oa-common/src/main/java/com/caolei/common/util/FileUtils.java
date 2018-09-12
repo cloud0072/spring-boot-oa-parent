@@ -1,6 +1,8 @@
 package com.caolei.common.util;
 
+import com.caolei.common.config.Location;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -15,20 +17,21 @@ import java.io.File;
 @Slf4j
 @Component
 public class FileUtils {
-//
-//    @Autowired
-//    private Location location;
-
-    //项目基础路径
-    private static String basePath;
-    //文件保存路径
-    private static String uploadPath;
-    //日志文件目录
-    private static String logPath;
+    //本地文件配置
+    private static Location location;
     //日志文件目录
     private static String logFile;
 
-    private FileUtils() {
+    @Autowired
+    private FileUtils(Location location) {
+        FileUtils.location = location;
+
+        initDirectory(location.getBasePath());
+        initDirectory(location.getConfigPath());
+        initDirectory(location.getDbPath());
+        initDirectory(location.getLogPath());
+        initDirectory(location.getStaticPath());
+        initDirectory(location.getUploadPath());
     }
 
     /**
@@ -89,29 +92,9 @@ public class FileUtils {
         throw new UnsupportedOperationException("文件不可用 : \t" + path);
     }
 
+
+
     /******************************************************************************************************************/
-
-    public static String getUploadPath() {
-        checkDirectory(uploadPath);
-        return uploadPath;
-    }
-
-    @Value("${location.resource.upload-path}")
-    private void setUploadPath(String uploadPath) {
-        FileUtils.uploadPath = uploadPath;
-        initDirectory(uploadPath);
-    }
-
-    public static String getLogPath() {
-        checkDirectory(logPath);
-        return logPath;
-    }
-
-    @Value("${location.resource.log-path}")
-    private void setLogPath(String logPath) {
-        FileUtils.logPath = logPath;
-        initDirectory(logPath);
-    }
 
     public static String getLogFile() {
         checkFile(logFile);
@@ -123,15 +106,19 @@ public class FileUtils {
         FileUtils.logFile = logFile;
     }
 
-    public static String getBasePath() {
-        checkDirectory(basePath);
-        return basePath;
+    public static String getUploadPath() {
+        checkDirectory(location.getUploadPath());
+        return location.getUploadPath();
     }
 
-    @Value("${location.resource.base-path}")
-    public void setBasePath(String basePath) {
-        FileUtils.basePath = basePath;
-        initDirectory(basePath);
+    public static String getConfigPath() {
+        checkDirectory(location.getConfigPath());
+        return location.getConfigPath();
+    }
+
+    public static String getStaticPath() {
+        checkDirectory(location.getStaticPath());
+        return location.getStaticPath();
     }
 
 }

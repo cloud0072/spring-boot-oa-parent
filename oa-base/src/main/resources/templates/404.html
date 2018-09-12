@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
       lang="zh-CN">
 
-<head th:replace="/fragment/head :: head"></head>
+<head th:replace="fragment :: head"></head>
 
 <body class="page-body page-error-env">
 
@@ -41,7 +41,7 @@
 </div>
 
 <!-- 引入js文件 -->
-<div th:include="/fragment/onload_js :: onloadJS"></div>
+<div th:replace="fragment :: common-js"></div>
 
 <script type="text/javascript">
 

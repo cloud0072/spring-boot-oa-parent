@@ -7,8 +7,6 @@ server:
         accesslog:
           enabled: true
 spring:
-    mvc:
-        static-path-pattern: /**
     resources:
         static-locations:
             - classpath:/META-INF/resources/
@@ -16,6 +14,8 @@ spring:
             - classpath:/static/
             - classpath:/public/
             - file:${location.resource.static-path}/
+    mvc:
+        static-path-pattern: /**
     servlet:
         multipart:
             max-file-size: 10Mb
@@ -28,27 +28,28 @@ spring:
         mode: LEGACYHTML5
         cache: false
     jpa:
-        database: h2
+        database: mysql
         show-sql: true
         open-in-view: true
         hibernate:
             ddl-auto: update
             naming:
                 physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.MySQL5InnoDBDialect
     datasource:
-        url: jdbc:h2:file:${location.resource.db-path}/spring_boot_oa_db
+        url: jdbc:mysql://127.0.0.1:3306/SpringBoot_OA?characterEncoding=utf8&useUnicode=true&useSSL=true
         username: root
         password: root
-        driver-class-name: org.h2.Driver
+        driver-class-name: com.mysql.jdbc.Driver
         hikari:
             pool-name: Springboot-OA-HikariCP
             connection-test-query: SELECT 1
-    h2:
-        console:
-            settings:
-                web-allow-others: true
-            path: /h2-console
-            enabled: true
+#    data:
+#        mongodb:
+#          uri: mongodb://127.0.0.1:27017
+#          database: spring_boot_oa
     aop:
         auto: true
         proxy-target-class: true
@@ -81,7 +82,7 @@ location:
         base-path: d:/springboot
         static-path: ${location.resource.base-path}/static
         upload-path: ${location.resource.base-path}/upload
-        config-path: ${location.resource.base-path}/conf
+        config-path: ${location.resource.base-path}/config
         log-path: ${location.resource.base-path}/log
         db-path: ${location.resource.base-path}/h2
 plugin:

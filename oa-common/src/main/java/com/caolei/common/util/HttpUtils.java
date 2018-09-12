@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.UnavailableSecurityManagerException;
 import org.apache.shiro.session.Session;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpHeaders;
@@ -172,6 +173,5 @@ public class HttpUtils {
     public void setContext_path(String context_path) {
         HttpUtils.context_path = context_path;
     }
-
 
 }

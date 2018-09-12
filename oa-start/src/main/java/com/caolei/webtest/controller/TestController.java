@@ -4,18 +4,26 @@ import com.caolei.base.exception.AjaxException;
 import com.caolei.base.pojo.User;
 import com.caolei.base.service.UserService;
 import com.caolei.common.api.controller.BaseController;
+import com.caolei.common.config.Location;
+import com.caolei.common.config.Shiro;
 import com.caolei.common.util.DateUtils;
 import com.caolei.common.util.FileUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -32,6 +40,12 @@ public class TestController implements BaseController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private Shiro shiro;
+    @Autowired
+    private Location location;
+    @Value("spring.resources.static-locations")
+    private String staticLocation;
 
     @ApiOperation("测试DateUtils是否可用")
     @GetMapping("/01")
@@ -54,6 +68,16 @@ public class TestController implements BaseController {
         return null;
     }
 
+    @ApiOperation("测试环境变量是否正确引入")
+    @GetMapping("/04")
+    public Object test0(HttpServletRequest request, HttpServletResponse response) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("shiro", shiro);
+        map.put("location", location);
+        map.put("staticLocation", staticLocation);
+        return map;
+    }
+
     @ApiOperation("恢复admin密码为admin")
     @GetMapping("/06")
     public Object test06(HttpServletRequest request, HttpServletResponse response) {
@@ -64,5 +88,17 @@ public class TestController implements BaseController {
         return FileUtils.getUploadPath();
     }
 
+    @RequestMapping("/receive")
+    @ResponseBody
+    public ResponseEntity test07(HttpServletRequest request, HttpServletResponse response) {
+
+        Enumeration<String> parameterNames = request.getParameterNames();
+        while (parameterNames.hasMoreElements()) {
+            String key = parameterNames.nextElement();
+            log.info(key + ":\t" + request.getParameter(key));
+        }
+
+        return ResponseEntity.ok("接收成功");
+    }
 
 }
