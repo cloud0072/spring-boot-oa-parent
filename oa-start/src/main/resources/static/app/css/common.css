@@ -1,0 +1,17 @@
+/* table */
+th.i-checkbox {
+    width: 50px
+}
+
+th.name-column {
+    width: 150px
+}
+
+th.operation {
+    width: 200px
+}
+
+/* form */
+span.form-control {
+    border: none;
+}
