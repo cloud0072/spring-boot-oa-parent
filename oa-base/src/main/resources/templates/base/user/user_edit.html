@@ -20,7 +20,6 @@
 
         <!-- ********** 主页面 开始 ********** -->
 
-
         <div class="row">
 
             <div class="col-sm-6">
@@ -52,7 +51,7 @@
 
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="userName" name="userName"
-                                           placeholder="用户名" data-th-value="${user.userName}">
+                                           placeholder="用户名" data-th-value="${user.userName}" required>
                                 </div>
                             </div>
 
@@ -62,29 +61,32 @@
 
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="account" name="account"
-                                           placeholder="账号" data-th-value="${user.account}">
+                                           placeholder="账号" data-th-value="${user.account}" required>
                                 </div>
                             </div>
 
-                            <div class="form-group-separator"></div>
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label" for="password">密码</label>
+                            <!--超级管理员可以修改密码-->
+                            <th:block th:remove="${session.user_info.isSuperUser()?'none':'all'}">
+                                <div class="form-group-separator"></div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="password">密码</label>
 
-                                <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="password" name="password"
-                                           placeholder="密码" onfocus="this.type='password'">
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="password" name="password"
+                                               placeholder="密码" onfocus="this.type='password'">
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="form-group-separator"></div>
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label" for="passwordCheck">确认密码</label>
+                                <div class="form-group-separator"></div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" for="passwordCheck">确认密码</label>
 
-                                <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="passwordCheck" name="passwordCheck"
-                                           placeholder="确认密码" onfocus="this.type='password'">
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="passwordCheck" name="passwordCheck"
+                                               placeholder="确认密码" onfocus="this.type='password'">
+                                    </div>
                                 </div>
-                            </div>
+                            </th:block>
 
                             <div class="form-group-separator"></div>
                             <div class="form-group">
@@ -110,8 +112,7 @@
                             <div class="form-group" data-th-remove="${op == 'find'?'none':'all'}">
                                 <label class="col-sm-2 control-label" for="createTime">创建日期</label>
                                 <div class="col-sm-8">
-                                         <span class="form-control" id="createTime"
-                                               data-th-text="${user.createTime}"></span>
+                                    <span class="form-control" id="createTime" data-th-text="${user.createTime}"></span>
                                 </div>
                             </div>
 
@@ -193,13 +194,12 @@
 </div>
 
 <!-- 引入js文件 -->
+<div th:replace="fragment :: common-js"></div>
 <!-- Imported styles on this page -->
-<link rel="stylesheet" th:href="@{/assets/js/dropzone/css/dropzone.css}">
-<!-- Imported scripts on this page -->
-<script th:src="@{/assets/js/dropzone/dropzone.js}"></script>
 <script th:src="@{/assets/js/datepicker/bootstrap-datepicker.js}" type="text/javascript"></script>
 <script th:src="@{/assets/js/timepicker/bootstrap-timepicker.min.js}" type="text/javascript"></script>
-<div th:replace="fragment :: common-js"></div>
+
+<script th:src="@{/base/js/user.js}" type="text/javascript"></script>
 <script type="application/javascript" th:inline="javascript">
     $(function () {
         if ([[${op == 'find'}]]) {
@@ -210,47 +210,6 @@
         console.log("加载头像...url:\t" + url);
 
     });
-
-    $("#pic").on('click', function () {
-        $("#file_id").click();
-    });
-
-    //同时只有一个上传任务在执行
-    var uploading = false;
-
-    function fileUpload() {
-        var file = document.getElementById("file_id").files[0];
-        if (!uploading && file) {
-            uploading = true;
-            var formData = new FormData();
-            formData.append("file", file);
-            formData.append("fileType", 'PORTRAIT');
-            $.ajax({
-                url: hostUrl + "/file/upload",
-                type: "POST",
-                data: formData,
-                //必须false才会自动加上正确的Content-Type
-                contentType: false,
-                //必须false才会避开jQuery对 formdata 的默认处理
-                //XMLHttpRequest会对 formdata 进行正确的处理
-                processData: false,
-                success: function (data) {
-                    if (data && data.message) {
-                        $('#head_photo_id').val(data.file_id);
-                        $('img.portrait').attr('src', data.file_url);
-                        console.log(data.message);
-                    }
-                    uploading = false;
-                },
-                error: function () {
-                    alert("上传失败！");
-                    uploading = false;
-                }
-            })
-        }
-
-    }
-
 </script>
 </body>
 </html>

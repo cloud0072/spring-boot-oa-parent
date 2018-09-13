@@ -71,7 +71,7 @@ public class UserServiceImpl
     }
 
     /**
-     * 调用此方法前请先对密码进行加密
+     * 调用此方法 重新加密密码
      *
      * @param user
      * @param request
@@ -84,6 +84,14 @@ public class UserServiceImpl
         return this.save(user, request, response, true);
     }
 
+    /**
+     * 保存用户 可以控制是否对密码进行加密
+     * @param user
+     * @param request
+     * @param response
+     * @param encrypt
+     * @return
+     */
     @Override
     public User save(User user, HttpServletRequest request, HttpServletResponse response,
                      boolean encrypt) {
