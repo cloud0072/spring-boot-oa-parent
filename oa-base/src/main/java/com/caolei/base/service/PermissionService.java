@@ -1,7 +1,6 @@
 package com.caolei.base.service;
 
 import com.caolei.base.pojo.Permission;
-import com.caolei.common.api.service.BaseCrudService;
 
 import java.util.List;
 

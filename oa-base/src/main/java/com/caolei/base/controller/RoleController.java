@@ -7,9 +7,8 @@ import com.caolei.base.service.PermissionService;
 import com.caolei.base.service.RoleService;
 import com.caolei.base.service.UserService;
 import com.caolei.base.util.UserUtils;
-import com.caolei.common.api.controller.BaseCrudController;
-import com.caolei.common.api.service.BaseCrudService;
-import com.caolei.common.util.EntityUtils;
+import com.caolei.base.service.BaseCrudService;
+import com.caolei.base.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -23,9 +22,6 @@ import java.util.Map;
 
 import static com.caolei.common.constant.Constants.*;
 
-/**
- * 使用RequiresRoles时需要使用open class 不然会报错 final 类不能 subclass
- */
 @RequestMapping("/base/role")
 @Controller
 public class RoleController
@@ -46,11 +42,7 @@ public class RoleController
     }
 
     @Override
-    public void modelAdvice(Model model) {
-        Map<String, Object> map = model.asMap();
-        Role role = (Role) map.get(className);
-        String operation = (String) map.get("op");
-
+    protected void modelAdvice(Model model, String operation,  Role role) {
         User currentUser = UserUtils.getCurrentUser();
         switch (operation) {
             case OP_DELETE:

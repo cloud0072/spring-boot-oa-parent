@@ -3,7 +3,7 @@ package com.caolei.webtest.controller;
 import com.caolei.base.exception.AjaxException;
 import com.caolei.base.pojo.User;
 import com.caolei.base.service.UserService;
-import com.caolei.common.api.controller.BaseController;
+import com.caolei.base.controller.BaseController;
 import com.caolei.common.autoconfig.LocationResource;
 import com.caolei.common.autoconfig.Shiro;
 import com.caolei.common.util.DateUtils;

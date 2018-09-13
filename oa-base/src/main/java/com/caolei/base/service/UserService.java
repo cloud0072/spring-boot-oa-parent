@@ -1,7 +1,6 @@
 package com.caolei.base.service;
 
 import com.caolei.base.pojo.User;
-import com.caolei.common.api.service.BaseCrudService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

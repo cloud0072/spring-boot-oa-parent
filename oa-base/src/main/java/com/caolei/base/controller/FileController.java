@@ -6,7 +6,6 @@ import com.caolei.base.pojo.User;
 import com.caolei.base.service.FileComponentService;
 import com.caolei.base.service.UserService;
 import com.caolei.base.util.UserUtils;
-import com.caolei.common.api.controller.BaseController;
 import com.caolei.common.constant.FileType;
 import com.caolei.common.util.HttpUtils;
 import com.caolei.common.util.StringUtils;

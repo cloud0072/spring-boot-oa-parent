@@ -1,7 +1,6 @@
 package com.caolei.base.repository;
 
 import com.caolei.base.pojo.Role;
-import com.caolei.common.api.repository.BaseRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

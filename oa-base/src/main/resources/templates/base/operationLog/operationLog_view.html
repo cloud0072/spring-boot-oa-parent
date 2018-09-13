@@ -35,7 +35,7 @@
                     </div>
                     <div class="panel-body">
 
-                        <!--/*@thymesVar id="permission" type="com.caolei.base.pojo.Permission"*/-->
+                        <!--/*@thymesVar id="operationLog" type="com.caolei.base.pojo.OperationLog"*/-->
                         <form id="menu_form" role="form" class="form-horizontal">
 
                             <div class="form-group">
@@ -43,7 +43,7 @@
 
                                 <div class="col-sm-8">
                                     <span class="form-control" id="userName"
-                                          data-th-text="${log.user?.userName}"></span>
+                                          data-th-text="${operationLog.user?.userName}"></span>
                                 </div>
                             </div>
 
@@ -53,18 +53,18 @@
 
                                 <div class="col-sm-8">
                                     <span class="form-control" id="ipAddress"
-                                          data-th-text="${log.ipAddress}"></span>
+                                          data-th-text="${operationLog.ipAddress}"></span>
                                 </div>
                             </div>
 
                             <div class="form-group-separator"></div>
                             <div class="form-group">
-                                <label class="col-sm-2 control-label" for="method">HTTP METHOD</label>
+                                <label class="col-sm-2 control-label" for="method">method</label>
 
                                 <!-- ${permission.entityResource?.code} 非空判断 -->
                                 <div class="col-sm-8">
                                     <span class="form-control" id="method"
-                                          data-th-text="${log.method}"></span>
+                                          data-th-text="${operationLog.method}"></span>
                                 </div>
                             </div>
 
@@ -74,7 +74,7 @@
 
                                 <div class="col-sm-8">
                                     <span class="form-control" id="requestUrl"
-                                          data-th-text="${log.requestUrl}"></span>
+                                          data-th-text="${operationLog.requestUrl}"></span>
                                 </div>
                             </div>
 
@@ -84,7 +84,7 @@
 
                                 <div class="col-sm-8">
                                     <span class="form-control" id="resourceId"
-                                          data-th-text="${log.createTime}"></span>
+                                          data-th-text="${operationLog.createTime}"></span>
                                 </div>
                             </div>
 

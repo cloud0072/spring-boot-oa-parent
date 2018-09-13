@@ -1,7 +1,6 @@
 package com.caolei.base.service;
 
 import com.caolei.base.pojo.FileComponent;
-import com.caolei.common.api.service.BaseCrudService;
 
 /**
  * @author caolei

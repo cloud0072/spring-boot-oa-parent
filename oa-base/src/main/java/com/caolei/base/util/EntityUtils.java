@@ -1,7 +1,7 @@
-package com.caolei.common.util;
+package com.caolei.base.util;
 
-import com.caolei.common.api.entity.BaseEntity;
-import com.caolei.common.api.entity.NamedEntity;
+import com.caolei.base.entity.NamedEntity;
+import com.caolei.common.util.ReflectUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
@@ -16,7 +16,7 @@ public class EntityUtils {
     /**
      * 实体类缓存
      */
-    private static final Map<String, BaseEntity> entityMap = new HashMap<>();
+    private static final Map<String, Object> entityMap = new HashMap<>();
 
     /**
      * 无法实例化，保证只能使用静态方法
@@ -40,10 +40,10 @@ public class EntityUtils {
      * @param typeIndex
      * @return
      */
-    public static BaseEntity interfaceGenericTypeInstance(Class<?> clazz, int interfaceIndex, int typeIndex) {
+    public static Object interfaceGenericTypeInstance(Class<?> clazz, int interfaceIndex, int typeIndex) {
         return entityMap.computeIfAbsent(clazz.getName(), v -> {
             try {
-                return (BaseEntity) ReflectUtils.getInterfaceGenericType(clazz, interfaceIndex, typeIndex).newInstance();
+                return ReflectUtils.getInterfaceGenericType(clazz, interfaceIndex, typeIndex).newInstance();
             } catch (Exception e) {
                 throw new UnsupportedOperationException(e);
             }

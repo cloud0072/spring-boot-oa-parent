@@ -1,21 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       lang="zh-CN">
-
 <head th:replace="fragment :: head"></head>
-<style>
-    img.portrait {
-        width: auto;
-        height: auto;
-        max-width: 100%;
-        max-height: 100%;
-    }
+<link rel="stylesheet" th:href="@{/base/css/user.css}">
 
-    div.upload-area {
-        min-width: 150px;
-        max-width: 150px;
-    }
-</style>
 <body class="page-body">
 <!-- 顶部用户信息和设置 (平时隐藏) -->
 <div th:replace="fragment :: settings-pane"></div>
@@ -34,25 +22,30 @@
 
 
         <div class="row">
-            <!--/*@thymesVar id="user" type="com.caolei.base.pojo.User"*/-->
-            <form id="main_form" role="form" class="form-horizontal" method="post">
 
-                <div class="col-sm-6">
+            <div class="col-sm-6">
 
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title" data-th-text="${type == 'self' ? '个人信息' : '用户信息'}"></h3>
-                            <div class="panel-options">
-                                <button class="btn btn-info save" data-th-attr="entity_id=${id}"
-                                        data-th-remove="${op == 'delete'?'all':'none'}">保存
-                                </button>
-                                <button class="btn btn-danger remove" data-th-attr="entity_id=${id}"
-                                        data-th-remove="${op == 'delete'?'none':'all'}">删除
-                                </button>
-                            </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title" data-th-text="${type == 'self' ? '个人信息' : '用户信息'}"></h3>
+                        <div class="panel-options">
+                            <button class="btn btn-info save" data-th-attr="entity_id=${id}"
+                                    data-th-remove="${op == 'delete'?'all':'none'}">保存
+                            </button>
+                            <button class="btn btn-danger remove" data-th-attr="entity_id=${id}"
+                                    data-th-remove="${op == 'delete'?'none':'all'}">删除
+                            </button>
                         </div>
+                    </div>
+
+                    <!--/*@thymesVar id="user" type="com.caolei.base.pojo.User"*/-->
+                    <form id="main_form" role="form" class="form-horizontal">
+                        <!--hidden value-->
+                        <input id="head_photo_id" name="head_photo_id" type="hidden"
+                               data-th-value="${user.extend?.headPhoto?.id}">
+                        <input type="hidden" name="id" data-th-value="${id}">
+
                         <div class="panel-body">
-                            <input hidden="hidden" name="id" data-th-value="${id}">
 
                             <div class="form-group">
                                 <label class="col-sm-2 control-label" for="userName">用户名</label>
@@ -143,38 +136,46 @@
                             <br>
 
                         </div>
-                    </div>
+
+                    </form>
 
                 </div>
+            </div>
 
-                <div class="col-sm-6">
+            <div class="col-sm-6">
 
-                    <div class="panel panel-default">
+                <div class="panel panel-default">
 
-                        <div class="panel-heading">
-                            <div class="panel-title">
-                                上传头像
-                            </div>
+                    <div class="panel-heading">
+                        <div class="panel-title">
+                            上传头像
                         </div>
+                    </div>
 
-                        <div class="panel-body">
+                    <div class="panel-body">
 
-                            <div class="form-group" onclick="fileUpload()" id="pic_box">
+                        <div class="form-group" onclick="fileUpload()" id="pic_box">
+                            <label class="col-sm-2 control-label" for="headPhoto">头像</label>
+
+                            <div class="col-sm-8">
                                 <div class="upload-area">
-                                    <img class="portrait" src="" th:src="${user.extend?.headPhoto?.getUrl()}"/>
+                                    <img class="portrait" src="" id="headPhoto"
+                                         data-th-src="${user.extend?.headPhoto?.getUrl()}"/>
                                 </div>
                                 <br>
-                                <input id="head_photo_id" name="extend.headPhoto.id"
-                                       type="hidden" th:value="${user.extend?.headPhoto?.id}">
                                 <input type="file" id="file_id" onchange="fileUpload()" value="上传头像">
-                                <!--style="display: none;"-->
                             </div>
+
                         </div>
+
+                        <div class="form-group-separator"></div>
+                        <br>
+
                     </div>
 
                 </div>
 
-            </form>
+            </div>
 
         </div>
 
@@ -205,18 +206,14 @@
             $("#account").attr("readOnly");
         }
 
-        console.log('123');
         var url = [[${user.extend?.headPhoto?.getUrl()}]];
-        console.log(url);
+        console.log("加载头像...url:\t" + url);
 
     });
 
-    function openUploadBox() {
-        var fileInput = $('file_id');
-        console.log(fileInput.files);
-        fileInput.click();
-        console.log(fileInput.files);
-    }
+    $("#pic").on('click', function () {
+        $("#file_id").click();
+    });
 
     //同时只有一个上传任务在执行
     var uploading = false;
@@ -239,11 +236,10 @@
                 processData: false,
                 success: function (data) {
                     if (data && data.message) {
-                        alert(data.message);
-                        $('img.portrait').attr('src', data.file_url);
                         $('#head_photo_id').val(data.file_id);
+                        $('img.portrait').attr('src', data.file_url);
+                        console.log(data.message);
                     }
-
                     uploading = false;
                 },
                 error: function () {
@@ -254,51 +250,6 @@
         }
 
     }
-
-    $("#pic").on('click', function () {
-        $("#file_id").click();
-    });
-
-    /*
-    Dropzone.autoDiscover = false;
-    var myDropzone = new Dropzone("#dropz", {
-        url: hostUrl + "/file/upload",//文件提交地址
-        method: "post",  //也可用put
-        paramName: "file", //默认为file
-        maxFiles: 1,//一次性上传的文件数量上限
-        maxFilesize: 5, //文件大小，单位：MB
-        acceptedFiles: ".jpg,.gif,.png,.jpeg,.bmp", //上传的类型
-        addRemoveLinks: true,
-        parallelUploads: 1,//一次上传的文件数量
-        //previewsContainer:"#preview",//上传图片的预览窗口
-        dictDefaultMessage: '拖动文件至此或者点击上传',
-        dictMaxFilesExceeded: "您最多只能上传1个文件！",
-        dictResponseError: '文件上传失败!',
-        dictInvalidFileType: "文件类型只能是*.jpg,*.gif,*.png,*.jpeg*.bmp。",
-        dictFallbackMessage: "浏览器不受支持",
-        dictFileTooBig: "文件过大上传文件最大支持.",
-        dictRemoveLinks: "删除",
-        dictCancelUpload: "取消",
-        init: function () {
-            this.on('sending', function (data, xhr, formData) {
-                //向后台发送该文件的参数
-                formData.append('fileType', 'PORTRAIT');
-            });
-            this.on('success', function (files, response) {
-                //文件上传成功之后的操作
-                $(".dz-default dz-message").remove();
-                $('#file_id').val(response.file_id);
-                if (response && response.file_url) {
-                    $('img.pic').attr("src",response.file_url);
-                }
-            });
-            this.on('error', function (files, response) {
-                //文件上传失败后的操作
-                console.log(files);
-                console.log(response);
-            });
-        }
-    });*/
 
 </script>
 </body>

@@ -51,9 +51,7 @@ public class UserServiceImpl
     }
 
     @Override
-    public User update(User input,
-                       HttpServletRequest request,
-                       HttpServletResponse response) {
+    public User update(User input, HttpServletRequest request, HttpServletResponse response) {
 
         User user = findById(input.getId());
 
@@ -81,22 +79,20 @@ public class UserServiceImpl
      * @return
      */
     @Override
-    public User save(User user,
-                     HttpServletRequest request,
-                     HttpServletResponse response) {
+    public User save(User user, HttpServletRequest request, HttpServletResponse response) {
         //调用save默认执行加密 如果有其他需求 置为false
         return this.save(user, request, response, true);
     }
 
     @Override
-    public User save(User user,
-                     HttpServletRequest request,
-                     HttpServletResponse response,
+    public User save(User user, HttpServletRequest request, HttpServletResponse response,
                      boolean encrypt) {
+
         user.setDefaultValue();
         if (encrypt) {
             user = UserUtils.encrypt(user);
         }
+
         updateUserAdvice(user, request);
 
         return repository().save(user);

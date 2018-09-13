@@ -3,8 +3,8 @@ package com.caolei.base.pojo;
 
 import com.caolei.base.util.UserUtils;
 import com.caolei.common.annotation.EntityInfo;
-import com.caolei.common.api.entity.BaseEntity;
-import com.caolei.common.api.module.BaseModuleEntity;
+import com.caolei.base.entity.BaseEntity;
+import com.caolei.common.module.BaseModuleEntity;
 import com.caolei.common.util.HttpUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

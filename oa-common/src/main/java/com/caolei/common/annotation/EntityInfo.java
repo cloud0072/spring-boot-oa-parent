@@ -1,6 +1,5 @@
 package com.caolei.common.annotation;
 
-
 import java.lang.annotation.*;
 
 /**

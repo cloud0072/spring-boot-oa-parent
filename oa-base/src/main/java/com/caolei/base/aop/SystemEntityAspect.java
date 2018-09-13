@@ -1,7 +1,7 @@
 package com.caolei.base.aop;
 
 import com.caolei.base.util.UserUtils;
-import com.caolei.common.api.entity.SystemEntity;
+import com.caolei.base.entity.SystemEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.aspectj.lang.JoinPoint;

@@ -33,7 +33,7 @@ public class WebLogAspect {
     /**
      * 使用 BaseController+ 表示他的所有子类
      */
-    @Pointcut("execution(* com.caolei.common.api.controller.BaseController+.*(..))")
+    @Pointcut("execution(* com.caolei.base.controller.BaseController+.*(..))")
     public void webLog() {
     }
 

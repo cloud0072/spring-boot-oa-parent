@@ -1,7 +1,6 @@
 package com.caolei.base.repository;
 
 import com.caolei.base.pojo.FileComponent;
-import com.caolei.common.api.repository.BaseRepository;
 import org.springframework.stereotype.Repository;
 
 /**

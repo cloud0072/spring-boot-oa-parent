@@ -3,7 +3,7 @@ package com.caolei.base.extend;
 import com.caolei.base.pojo.FileComponent;
 import com.caolei.base.pojo.OperationLog;
 import com.caolei.common.annotation.EntityInfo;
-import com.caolei.common.api.entity.BaseEntity;
+import com.caolei.base.entity.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

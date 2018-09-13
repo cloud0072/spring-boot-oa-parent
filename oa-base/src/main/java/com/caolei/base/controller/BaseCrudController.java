@@ -1,9 +1,9 @@
-package com.caolei.common.api.controller;
+package com.caolei.base.controller;
 
+import com.caolei.base.entity.BaseEntity;
+import com.caolei.base.service.BaseCrudService;
 import com.caolei.common.annotation.EntityInfo;
 import com.caolei.common.annotation.ModuleInfo;
-import com.caolei.common.api.entity.BaseEntity;
-import com.caolei.common.api.service.BaseCrudService;
 import com.caolei.common.util.ReflectUtils;
 import com.caolei.common.util.StringUtils;
 import io.swagger.annotations.Api;
@@ -84,11 +84,11 @@ public abstract class BaseCrudController<T extends BaseEntity> implements BaseCo
         model.addAttribute("type", TY_ADMIN);
         model.addAttribute("modulePath", modulePath());
         model.addAttribute("entityPath", entityPath());
-        modelAdvice(model);
+        modelAdvice(model, operation, t);
     }
 
     @ApiOperation("model增强方法,给子类扩展添加到model中的数据")
-    protected void modelAdvice(Model model) {
+    protected void modelAdvice(Model model, String operation, T t) {
     }
 
     @ApiOperation("获取实例对应的服务")

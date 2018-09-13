@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
       lang="zh-CN">
 <head th:replace="fragment :: head"></head>
+<link rel="stylesheet" th:href="@{/base/css/user.css}">
 
 <body class="page-body">
 <!-- 顶部用户信息和设置 (平时隐藏) -->
@@ -21,6 +22,7 @@
 
 
         <div class="row">
+
             <div class="col-sm-6">
 
                 <div class="panel panel-default">
@@ -108,11 +110,37 @@
                     </div>
                 </div>
             </div>
+
             <div class="col-sm-6">
+
                 <div class="panel panel-default">
 
+                    <div class="panel-heading">
+                        <div class="panel-title">
+                            &nbsp;
+                        </div>
+                    </div>
 
+                    <div class="panel-body">
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="headPhoto">头像</label>
+
+                            <div class="col-sm-8">
+                                <div class="upload-area">
+                                    <img class="portrait" src="" id="headPhoto"
+                                         data-th-src="${user.extend?.headPhoto?.getUrl()}"/>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group-separator"></div>
+                        <br>
+
+                    </div>
                 </div>
+
             </div>
         </div>
 

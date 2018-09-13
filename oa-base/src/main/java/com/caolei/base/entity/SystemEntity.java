@@ -1,4 +1,4 @@
-package com.caolei.common.api.entity;
+package com.caolei.base.entity;
 
 /**
  * @author caolei

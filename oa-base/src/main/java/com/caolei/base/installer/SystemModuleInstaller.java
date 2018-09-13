@@ -8,7 +8,7 @@ import com.caolei.base.repository.EntityResourceRepository;
 import com.caolei.base.service.PermissionService;
 import com.caolei.base.service.RoleService;
 import com.caolei.base.service.UserService;
-import com.caolei.common.api.entity.BaseEntity;
+import com.caolei.base.entity.BaseEntity;
 import com.caolei.common.constant.Operation;
 import com.caolei.common.util.ReflectUtils;
 import lombok.extern.slf4j.Slf4j;

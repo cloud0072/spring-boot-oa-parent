@@ -857,18 +857,21 @@
             var form = $("#main_form");
             var id = $(this).attr("entity_id");
             var method = id ? 'PUT' : 'POST';
-            var url = id ? baseUrl + "/" + id : baseUrl;
+            var url = id ? (baseUrl + "/" + id) : baseUrl;
             $.ajax({
                 url: url,
                 type: method,
                 data: form.serialize(),
                 success: function (data) {
-                    // console.log(data);
                     if (data && data.url) {
+                        // console.log(data);
                         location.href = hostUrl + data.url;
                     }
+                },
+                error:function (data) {
                 }
             });
+
         });
 
         $('.btn.remove').on('click', function () {

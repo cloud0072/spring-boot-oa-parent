@@ -6,8 +6,7 @@ import com.caolei.base.pojo.User;
 import com.caolei.base.service.PermissionService;
 import com.caolei.base.service.RoleService;
 import com.caolei.base.service.UserService;
-import com.caolei.common.api.controller.BaseCrudController;
-import com.caolei.common.api.service.BaseCrudService;
+import com.caolei.base.service.BaseCrudService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +22,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * 使用RequiresRoles时需要使用open class 不然会报错 final 类不能 subclass
- */
 @RequestMapping("/base/permission")
 @Controller
 public class PermissionController
@@ -50,9 +46,8 @@ public class PermissionController
     @ApiImplicitParam(name = "userId", value = "用户Id", paramType = "String")
     @GetMapping(value = "/user/{userId}")
     @ResponseBody
-    public ResponseEntity<List<Permission>> findUserPermission(@PathVariable(name = "userId") String userId,
-                                                               Permission permission,
-                                                               Model model) {
+    public ResponseEntity<List<Permission>> findUserPermission(
+            @PathVariable(name = "userId") String userId, Permission permission, Model model) {
         User user = userService.findById(userId);
         permission.setUsers(Collections.singletonList(user));
         return ResponseEntity.ok(permissionService.findAll(Example.of(permission)));
@@ -62,9 +57,8 @@ public class PermissionController
     @ApiImplicitParam(name = "roleId", value = "角色Id", paramType = "String")
     @GetMapping(value = "/role/{roleId}")
     @ResponseBody
-    public ResponseEntity<List<Permission>> findRolePermission(@PathVariable(name = "roleId") String roleId,
-                                                               Permission permission,
-                                                               Model model) {
+    public ResponseEntity<List<Permission>> findRolePermission(
+            @PathVariable(name = "roleId") String roleId, Permission permission, Model model) {
         Role role = roleService.findById(roleId);
         permission.setRoles(Collections.singletonList(role));
         return ResponseEntity.ok(permissionService.findAll(Example.of(permission)));

@@ -1,4 +1,4 @@
-package com.caolei.common.api.controller;
+package com.caolei.base.controller;
 
 import io.swagger.annotations.Api;
 

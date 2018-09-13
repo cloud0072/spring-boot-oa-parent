@@ -1,7 +1,6 @@
-package com.caolei.common.api.service;
+package com.caolei.base.service;
 
-
-import com.caolei.common.api.entity.BaseEntity;
+import com.caolei.base.entity.BaseEntity;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

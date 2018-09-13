@@ -1,4 +1,4 @@
-package com.caolei.common.api.repository;
+package com.caolei.base.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

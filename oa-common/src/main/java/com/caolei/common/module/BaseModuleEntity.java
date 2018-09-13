@@ -1,4 +1,4 @@
-package com.caolei.common.api.module;
+package com.caolei.common.module;
 
 import com.caolei.common.annotation.ModuleInfo;
 
