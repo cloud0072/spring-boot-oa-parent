@@ -5,7 +5,6 @@ import com.caolei.base.service.BaseCrudService;
 import com.caolei.common.annotation.EntityInfo;
 import com.caolei.common.annotation.ModuleInfo;
 import com.caolei.common.util.ReflectUtils;
-import com.caolei.common.util.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.NonNull;
@@ -33,29 +32,10 @@ import static com.caolei.common.constant.Constants.*;
 @RequiresAuthentication
 public abstract class BaseCrudController<T extends BaseEntity> implements BaseController {
 
-    protected Class<T> persistentClass = persistentClass();
-    protected String className = className();
-
-    @ApiOperation("返回一个当前控制器对应实体的类型")
-    private Class<T> persistentClass() {
-        if (persistentClass == null) {
-            try {
-                persistentClass = ReflectUtils.getClassGenericType(getClass(), 0);
-            } catch (Exception ignored) {
-            }
-        }
-
-        return persistentClass;
-    }
-
-    @ApiOperation("获取类型名")
-    private String className() {
-        if (StringUtils.isEmpty(className)) {
-            assert persistentClass != null;
-            className = StringUtils.toLowerCaseFirstOne(persistentClass.getSimpleName());
-        }
-        return className;
-    }
+    protected final Class<T> persistentClass = ReflectUtils.getClassGenericType(getClass(), 0);
+    protected final String entityName = AnnotationUtils.findAnnotation(persistentClass, EntityInfo.class).entityName();
+    protected final String entityPath = AnnotationUtils.findAnnotation(persistentClass, EntityInfo.class).entityPath();
+    protected final String modulePath = AnnotationUtils.findAnnotation(persistentClass, ModuleInfo.class).modulePath();
 
     @ApiOperation("返回一个当前控制器对应实体的实例")
     protected T instance() {
@@ -66,24 +46,14 @@ public abstract class BaseCrudController<T extends BaseEntity> implements BaseCo
         }
     }
 
-    @ApiOperation("获取实例名,和访问路径")
-    protected String entityPath() {
-        return AnnotationUtils.findAnnotation(persistentClass, EntityInfo.class).entityPath();
-    }
-
-    @ApiOperation("获取模块名,和访问路径")
-    protected String modulePath() {
-        return AnnotationUtils.findAnnotation(persistentClass, ModuleInfo.class).modulePath();
-    }
-
     @ApiOperation("将参数放入model中")
     protected void putModel(Model model, String operation, T t) {
-        model.addAttribute(className, t);
+        model.addAttribute(entityName, t);
         model.addAttribute("id", t.getId());
         model.addAttribute("op", operation);
         model.addAttribute("type", TY_ADMIN);
-        model.addAttribute("modulePath", modulePath());
-        model.addAttribute("entityPath", entityPath());
+        model.addAttribute("modulePath", modulePath);
+        model.addAttribute("entityPath", entityPath);
         modelAdvice(model, operation, t);
     }
 
@@ -98,9 +68,9 @@ public abstract class BaseCrudController<T extends BaseEntity> implements BaseCo
 
     @ApiOperation("查询所有对象")
     @GetMapping("/list")
-    protected String list(T t,
-                          HttpServletRequest request,
+    protected String list(HttpServletRequest request,
                           HttpServletResponse response,
+                          T t,
                           @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber,
                           @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
                           @RequestParam(value = "direction", defaultValue = "ASC") String direction,
@@ -111,7 +81,7 @@ public abstract class BaseCrudController<T extends BaseEntity> implements BaseCo
         model.addAttribute("page", list);
         model.addAttribute("search", t);
         putModel(model, OP_LIST, t);
-        return modulePath() + entityPath() + entityPath() + "_list";
+        return modulePath + entityPath + entityPath + "_list";
     }
 
     @ApiOperation("跳转 创建 或删除对象页")
@@ -122,31 +92,31 @@ public abstract class BaseCrudController<T extends BaseEntity> implements BaseCo
         T t = instance();
 //        SecurityUtils.checkOperation(t, operation);
         putModel(model, OP_CREATE, t);
-        return modulePath() + entityPath() + entityPath() + "_edit";
+        return modulePath + entityPath + entityPath + "_edit";
     }
 
     @ApiOperation("跳转 编辑 或删除对象页")
     @GetMapping(value = "/update/{id}")
-    protected String showUpdatePage(@PathVariable("id") @NonNull String id,
-                                    HttpServletRequest request,
+    protected String showUpdatePage(HttpServletRequest request,
                                     HttpServletResponse response,
+                                    @PathVariable("id") @NonNull String id,
                                     Model model) {
         T t = service().findById(id);
 //        SecurityUtils.checkOperation(t, operation);
         putModel(model, OP_UPDATE, t);
-        return modulePath() + entityPath() + entityPath() + "_edit";
+        return modulePath + entityPath + entityPath + "_edit";
     }
 
     @ApiOperation("跳转 查看 或删除对象页")
     @GetMapping(value = "/view/{id}")
-    protected String showViewPage(@PathVariable("id") @NonNull String id,
-                                  HttpServletRequest request,
+    protected String showViewPage(HttpServletRequest request,
                                   HttpServletResponse response,
+                                  @PathVariable("id") @NonNull String id,
                                   Model model) {
         T t = id == null ? instance() : service().findById(id);
 //        SecurityUtils.checkOperation(t, operation);
         putModel(model, OP_FIND, t);
-        return modulePath() + entityPath() + entityPath() + "_view";
+        return modulePath + entityPath + entityPath + "_view";
     }
 
     /******************************************************************************************************************/
@@ -154,71 +124,71 @@ public abstract class BaseCrudController<T extends BaseEntity> implements BaseCo
     @ApiOperation("根据对象的属性查询所有对象")
     @GetMapping
     @ResponseBody
-    protected ResponseEntity findAll(T t,
-                                     HttpServletRequest request,
-                                     HttpServletResponse response) {
+    protected ResponseEntity findAll(HttpServletRequest request,
+                                     HttpServletResponse response,
+                                     T t) {
         Map<String, Object> map = new HashMap<>();
         map.put("message", "查询成功");
-        map.put(className, service().findAll(Example.of(t)));
+        map.put(entityName, service().findAll(Example.of(t)));
         return ResponseEntity.ok(map);
     }
 
     @ApiOperation("查询对象")
     @GetMapping("/{id}")
     @ResponseBody
-    protected ResponseEntity find(@PathVariable("id") @NonNull String id,
-                                  HttpServletRequest request,
-                                  HttpServletResponse response) {
+    protected ResponseEntity find(HttpServletRequest request,
+                                  HttpServletResponse response,
+                                  @PathVariable("id") @NonNull String id) {
         T t = service().findById(id);
         Map<String, Object> map = new HashMap<>();
         map.put("message", "查询成功");
-        map.put(className, t);
+        map.put(entityName, t);
         return ResponseEntity.ok(map);
     }
 
     @ApiOperation("提交创建对象")
     @PostMapping
     @ResponseBody
-    protected ResponseEntity create(T t,
-                                    HttpServletRequest request,
-                                    HttpServletResponse response) {
+    protected ResponseEntity create(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    T t) {
 //        SecurityUtils.checkOperation(t, OP_CREATE);
         t = service().save(t, request, response);
         Map<String, Object> map = new HashMap<>();
         map.put("message", "新增成功");
-        map.put("url", modulePath() + entityPath() + "/view/" + t.getId());
+        map.put("url", modulePath + entityPath + "/view/" + t.getId());
         return ResponseEntity.ok(map);
     }
 
     @ApiOperation("提交更新对象")
     @PutMapping("/{id}")
     @ResponseBody
-    protected ResponseEntity update(@PathVariable("id") @NonNull String id,
-                                    T t,
-                                    HttpServletRequest request,
-                                    HttpServletResponse response) {
+    protected ResponseEntity update(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    @PathVariable("id") @NonNull String id,
+                                    T t) {
 //        SecurityUtils.checkOperation(t, OP_UPDATE);
         t = service().update(t, request, response);
         Map<String, Object> map = new HashMap<>();
         map.put("message", "修改成功");
-        map.put("url", modulePath() + entityPath() + "/view/" + t.getId());
+        map.put("url", modulePath + entityPath + "/view/" + t.getId());
         return ResponseEntity.ok(map);
     }
 
     @ApiOperation("提交删除对象")
     @DeleteMapping("/{id}")
     @ResponseBody
-    protected ResponseEntity delete(@PathVariable("id") @NonNull String id,
-                                    T t,
-                                    HttpServletRequest request,
-                                    HttpServletResponse response) {
+    protected ResponseEntity delete(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    @PathVariable("id") @NonNull String id,
+                                    T t) {
         t = service().findById(t.getId());
 //        SecurityUtils.checkOperation(t, OP_DELETE);
 
         service().deleteById(t.getId());
         Map<String, Object> map = new HashMap<>();
         map.put("message", "删除成功");
-        map.put("url", modulePath() + entityPath());
+        map.put("url", modulePath + entityPath);
         return ResponseEntity.ok(map);
     }
 

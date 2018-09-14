@@ -1,10 +1,10 @@
 package com.caolei.base.pojo;
 
-import com.caolei.base.extend.UserExtend;
-import com.caolei.common.annotation.EntityInfo;
 import com.caolei.base.entity.BaseEntity;
 import com.caolei.base.entity.NamedEntity;
 import com.caolei.base.entity.SystemEntity;
+import com.caolei.base.extend.UserExtend;
+import com.caolei.common.annotation.EntityInfo;
 import com.caolei.common.module.BaseModuleEntity;
 import com.caolei.common.util.StringUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -23,7 +23,7 @@ import java.util.Set;
  * @author cloud0072
  * @date 2018/6/12 22:37
  */
-@EntityInfo(entityName = "基础用户", entityPath = "/user")
+@EntityInfo(description = "基础用户", entityName = "user", entityPath = "/user")
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity

@@ -23,7 +23,7 @@ import java.util.List;
  * @author cloud0072
  * @date 2018/6/12 22:40
  */
-@EntityInfo(entityName = "权限", entityPath = "/permission")
+@EntityInfo(description="权限",entityName = "permission", entityPath = "/permission")
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity

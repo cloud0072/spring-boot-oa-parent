@@ -14,7 +14,7 @@ import java.util.Set;
 /**
  * 分类
  */
-@EntityInfo(entityName = "分类", entityPath = "")
+@EntityInfo(description="分类",entityName = "category", entityPath = "/category")
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity

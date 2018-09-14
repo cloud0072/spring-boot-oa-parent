@@ -18,7 +18,7 @@ import javax.persistence.UniqueConstraint;
  *
  * @author cloud0072
  */
-@EntityInfo(entityName = "实体的信息", entityPath = "/entityInfo", tableName = "实体名")
+@EntityInfo(description="实体的信息",entityName = "entityInfo", entityPath = "/entityInfo")
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity

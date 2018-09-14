@@ -3,6 +3,7 @@ package com.caolei.base.controller;
 import com.caolei.base.exception.AjaxException;
 import com.caolei.base.pojo.FileComponent;
 import com.caolei.base.pojo.User;
+import com.caolei.base.service.BaseCrudService;
 import com.caolei.base.service.FileComponentService;
 import com.caolei.base.service.UserService;
 import com.caolei.base.util.UserUtils;
@@ -18,6 +19,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +34,7 @@ import java.util.Map;
 @Api
 @RequestMapping("/file")
 @Controller
-public class FileController implements BaseController {
+public class FileController extends BaseCrudController<FileComponent> {
 
     @Autowired
     private FileComponentService fileComponentService;
@@ -105,4 +108,31 @@ public class FileController implements BaseController {
         }
     }
 
+//    @ApiOperation("统一文件下载")
+//    @GetMapping("/{id}")
+//    @ResponseBody
+//    @Override
+//    protected ResponseEntity find(HttpServletRequest request, HttpServletResponse response, String id) {
+//        return super.find(request, response, id);
+//    }
+//
+//    @Override
+//    protected ResponseEntity create(HttpServletRequest request, HttpServletResponse response, FileComponent fileComponent) {
+//        return super.create(request, response, fileComponent);
+//    }
+//
+//    @Override
+//    protected ResponseEntity update(HttpServletRequest request, HttpServletResponse response, String id, FileComponent fileComponent) {
+//        return super.update(request, response, id, fileComponent);
+//    }
+//
+//    @Override
+//    protected ResponseEntity delete(HttpServletRequest request, HttpServletResponse response, String id, FileComponent fileComponent) {
+//        return super.delete(request, response, id, fileComponent);
+//    }
+
+    @Override
+    protected BaseCrudService<FileComponent> service() {
+        return fileComponentService;
+    }
 }

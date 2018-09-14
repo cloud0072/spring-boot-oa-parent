@@ -18,7 +18,7 @@ import java.util.Date;
  *
  * @author cloud0072
  */
-@EntityInfo(entityName = "系统访问日志", entityPath = "/operationLog")
+@EntityInfo(description="系统访问日志",entityName = "operationLog", entityPath = "/operationLog")
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity

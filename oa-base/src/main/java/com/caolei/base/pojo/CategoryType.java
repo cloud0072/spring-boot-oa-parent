@@ -15,7 +15,7 @@
 // * 分类类型
 // * 用户可以自定义
 // */
-//@EntityInfo(entityName = "分类类型", entityPath = "/categoryType")
+//@EntityInfo(description="分类类型",entityName = "categoryType", entityPath = "/categoryType")
 //@EqualsAndHashCode(callSuper = true)
 //@Data
 //@Entity

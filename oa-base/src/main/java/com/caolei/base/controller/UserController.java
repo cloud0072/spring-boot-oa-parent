@@ -76,12 +76,18 @@ public class UserController
         return userService;
     }
 
+    /**
+     * 进入修改密码页面
+     * @param userId
+     * @param model
+     * @return
+     */
     @GetMapping("/resetpwd/{id}")
     public String showResetpwd(@PathVariable("id") String userId, Model model) {
         User u = UserUtils.getCurrentUser();
         if (u.getId().equals(userId) || u.isSuperUser()) {
             putModel(model, OP_FIND, u);
-            return modulePath() + entityPath() + entityPath() + "_resetpwd";
+            return modulePath + entityPath + entityPath + "_resetpwd";
         }
         throw new UnauthorizedException("您没有权限进行此操作！");
     }
@@ -94,7 +100,7 @@ public class UserController
 
             Map<String, Object> map = new HashMap<>();
             map.put("message", "修改成功");
-            map.put("url", modulePath() + entityPath() + "/view/" + userId);
+            map.put("url", modulePath + entityPath + "/view/" + userId);
             return ResponseEntity.ok(map);
         }
         throw new UnauthorizedException("您没有权限进行此操作！");

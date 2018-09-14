@@ -20,7 +20,7 @@ import java.util.List;
  * @author cloud0072
  * @date 2018/6/12 22:37
  */
-@EntityInfo(entityName = "角色", entityPath = "/role")
+@EntityInfo(description="角色",entityName = "role", entityPath = "/role")
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity

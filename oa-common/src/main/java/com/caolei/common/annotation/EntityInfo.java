@@ -11,24 +11,23 @@ import java.lang.annotation.*;
 public @interface EntityInfo {
 
     /**
-     * 实体名称
+     * 实体名称 一般使用class名 首字母小写
      *
      * @return
      */
     String entityName();
 
     /**
-     * 实体路径
+     * 实体路径 一般使用 '/' + entityName
      *
      * @return
      */
     String entityPath();
 
     /**
-     * 表名称
-     *
+     * 实体描述信息 中文描述信息
      * @return
      */
-    String tableName() default "";
+    String description() default "";
 
 }

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -33,13 +34,6 @@ public class RoleController
     private RoleService roleService;
     @Autowired
     private PermissionService permissionService;
-
-    @Autowired
-    public RoleController(UserService userService, RoleService roleService, PermissionService permissionService) {
-        this.userService = userService;
-        this.roleService = roleService;
-        this.permissionService = permissionService;
-    }
 
     @Override
     protected void modelAdvice(Model model, String operation,  Role role) {
@@ -75,7 +69,11 @@ public class RoleController
         return roleService;
     }
 
-    @RequestMapping(value = "/clearRoleCache", method = RequestMethod.GET)
+    /**
+     * 清空权限缓存
+     * @return
+     */
+    @DeleteMapping("/clearRoleCache")
     public ResponseEntity<String> clearRoleCache() {
         roleService.clearRoleCache();
         return ResponseEntity.ok("重新加载权限成功");

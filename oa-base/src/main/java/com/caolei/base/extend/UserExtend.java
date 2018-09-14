@@ -16,7 +16,7 @@ import java.util.Set;
 /**
  * 用户详情
  */
-@EntityInfo(entityName = "用户详情", entityPath = "/userDetails", tableName = "用户详情")
+@EntityInfo(description="用户详情",entityName = "userDetails", entityPath = "/userDetails")
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity

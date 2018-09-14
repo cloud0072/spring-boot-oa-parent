@@ -23,7 +23,7 @@ import java.util.Date;
  *
  * @author caolei
  */
-@EntityInfo(entityName = "文件组件", entityPath = "/file")
+@EntityInfo(description="文件组件",entityName = "file", entityPath = "/file")
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Slf4j
@@ -196,7 +196,7 @@ public class FileComponent
             throw new UnsupportedOperationException("请先保存文件组件才能获取访问路径!");
         }
 
-        return HttpUtils.serverAddress() + "/file/download/" + getId();
+        return HttpUtils.serverAddress() + "file/download/" + getId();
     }
 
     /**
