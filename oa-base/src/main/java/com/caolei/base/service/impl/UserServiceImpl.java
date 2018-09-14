@@ -159,6 +159,15 @@ public class UserServiceImpl
         return user;
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void resetpwd(String userId, String password) {
+        User user = findById(userId);
+        user.setPassword(password);
+        UserUtils.encrypt(user);
+        repository().save(user);
+    }
+
     private void updateUserAdvice(User user, HttpServletRequest request) {
         if (request != null) {
 

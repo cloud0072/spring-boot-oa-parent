@@ -51,4 +51,10 @@ public interface UserService
      */
     User findAuthorInfoByAccount(String account);
 
+    /**
+     * 修改密码
+     * @param userId
+     * @param password
+     */
+    void resetpwd(String userId, String password);
 }

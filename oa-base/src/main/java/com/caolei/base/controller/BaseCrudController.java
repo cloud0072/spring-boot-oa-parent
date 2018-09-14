@@ -77,7 +77,7 @@ public abstract class BaseCrudController<T extends BaseEntity> implements BaseCo
     }
 
     @ApiOperation("将参数放入model中")
-    private void putModel(Model model, String operation, T t) {
+    protected void putModel(Model model, String operation, T t) {
         model.addAttribute(className, t);
         model.addAttribute("id", t.getId());
         model.addAttribute("op", operation);

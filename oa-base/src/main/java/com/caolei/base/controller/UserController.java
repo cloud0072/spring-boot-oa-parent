@@ -2,15 +2,25 @@ package com.caolei.base.controller;
 
 import com.caolei.base.pojo.Role;
 import com.caolei.base.pojo.User;
-import com.caolei.base.service.*;
+import com.caolei.base.service.BaseCrudService;
+import com.caolei.base.service.PermissionService;
+import com.caolei.base.service.RoleService;
+import com.caolei.base.service.UserService;
 import com.caolei.base.util.EntityUtils;
 import com.caolei.base.util.UserUtils;
+import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
 import static com.caolei.common.constant.Constants.*;
@@ -65,5 +75,30 @@ public class UserController
     public BaseCrudService<User> service() {
         return userService;
     }
+
+    @GetMapping("/resetpwd/{id}")
+    public String showResetpwd(@PathVariable("id") String userId, Model model) {
+        User u = UserUtils.getCurrentUser();
+        if (u.getId().equals(userId) || u.isSuperUser()) {
+            putModel(model, OP_FIND, u);
+            return modulePath() + entityPath() + entityPath() + "_resetpwd";
+        }
+        throw new UnauthorizedException("您没有权限进行此操作！");
+    }
+
+    @PutMapping("/resetpwd/{id}")
+    public ResponseEntity resetpwd(@PathVariable("id") String userId, User user) {
+        User u = UserUtils.getCurrentUser();
+        if (u.getId().equals(userId) || u.isSuperUser()) {
+            userService.resetpwd(userId, user.getPassword());
+
+            Map<String, Object> map = new HashMap<>();
+            map.put("message", "修改成功");
+            map.put("url", modulePath() + entityPath() + "/view/" + userId);
+            return ResponseEntity.ok(map);
+        }
+        throw new UnauthorizedException("您没有权限进行此操作！");
+    }
+
 
 }
