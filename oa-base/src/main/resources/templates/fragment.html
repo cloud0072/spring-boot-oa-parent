@@ -834,6 +834,7 @@
 </div>
 
 <div th:fragment="common-js">
+    <script type="text/javascript" src="" th:src="@{/app/js/common.js}"></script>
     <!--crud js-->
     <script type="application/javascript" th:inline="javascript">
         var hostUrl = /*[[@{'/'}]]*/ +'';
@@ -858,20 +859,48 @@
             var id = $(this).attr("entity_id");
             var method = id ? 'PUT' : 'POST';
             var url = id ? (baseUrl + "/" + id) : baseUrl;
-            $.ajax({
-                url: url,
-                type: method,
-                data: form.serialize(),
-                success: function (data) {
-                    if (data && data.url) {
-                        // console.log(data);
-                        location.href = hostUrl + data.url;
-                    }
-                },
-                error:function (data) {
-                }
-            });
 
+            /**
+             * 如果validateAll 被定义且返回 false   不通过
+             * 如果validateAll 被定义且返回 true    通过
+             * 如果validateAll 未被定义            通过
+             */
+            if (typeof validateAll === 'function' && !validateAll()) {
+                console.log("validate false ...");
+
+                var opts = {
+                    "closeButton": true,
+                    "debug": false,
+                    "positionClass": "toast-top-right",
+                    "onclick": null,
+                    "showDuration": "300",
+                    "hideDuration": "1000",
+                    "timeOut": "5000",
+                    "extendedTimeOut": "1000",
+                    "showEasing": "swing",
+                    "hideEasing": "linear",
+                    "showMethod": "fadeIn",
+                    "hideMethod": "fadeOut"
+                };
+
+                toastr.error("请填写正确的信息后重试", "保存失败", opts);
+
+            } else {
+                console.log("validate true ...");
+                $.ajax({
+                    url: url,
+                    type: method,
+                    data: form.serialize(),
+                    success: function (data) {
+                        if (data && data.url) {
+                            // console.log(data);
+                            location.href = hostUrl + data.url;
+                        }
+                    },
+                    error: function (data) {
+                    }
+                });
+            }
         });
 
         $('.btn.remove').on('click', function () {
@@ -902,6 +931,9 @@
     <!-- JavaScripts initializations and stuff -->
     <script th:src="@{/assets/js/xenon-custom.js}" type="text/javascript"></script>
 
+    <!-- 提示信息 -->
+    <link rel="stylesheet" th:href="@{/assets/js/toastr/toastr.css}">
+    <script th:src="@{/assets/js/toastr/toastr.js}" type="text/javascript"></script>
 </div>
 
 </body>

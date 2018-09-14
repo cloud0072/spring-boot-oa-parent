@@ -1,3 +1,8 @@
+/* validate */
+.error.help-block {
+    color: red;
+}
+
 /* table */
 th.i-checkbox {
     width: 50px
