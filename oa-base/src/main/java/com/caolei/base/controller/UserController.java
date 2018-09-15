@@ -1,5 +1,6 @@
 package com.caolei.base.controller;
 
+import com.caolei.base.exception.AjaxException;
 import com.caolei.base.pojo.Role;
 import com.caolei.base.pojo.User;
 import com.caolei.base.service.BaseCrudService;
@@ -8,6 +9,7 @@ import com.caolei.base.service.RoleService;
 import com.caolei.base.service.UserService;
 import com.caolei.base.util.EntityUtils;
 import com.caolei.base.util.UserUtils;
+import lombok.NonNull;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -51,8 +53,9 @@ public class UserController
             model.addAttribute("type", TY_SELF);
         }
         switch (operation) {
-            case OP_UPDATE:
             case OP_DELETE:
+            case OP_UPDATE:
+                break;
             case OP_CREATE:
                 Set<Role> hasRoles = EntityUtils.orNull(user.getRoles(), new LinkedHashSet<>());
                 Set<Role> allRoles = currentUser.getRoles();
@@ -78,6 +81,7 @@ public class UserController
 
     /**
      * 进入修改密码页面
+     *
      * @param userId
      * @param model
      * @return
@@ -86,22 +90,35 @@ public class UserController
     public String showResetpwd(@PathVariable("id") String userId, Model model) {
         User u = UserUtils.getCurrentUser();
         if (u.getId().equals(userId) || u.isSuperUser()) {
-            putModel(model, OP_FIND, u);
+            putModel(model, OP_UPDATE, u);
             return modulePath + entityPath + entityPath + "_resetpwd";
         }
         throw new UnauthorizedException("您没有权限进行此操作！");
     }
 
+    /**
+     * 重置密码
+     * @param userId
+     * @param password
+     * @param newpassword
+     * @return
+     */
     @PutMapping("/resetpwd/{id}")
-    public ResponseEntity resetpwd(@PathVariable("id") String userId, User user) {
-        User u = UserUtils.getCurrentUser();
-        if (u.getId().equals(userId) || u.isSuperUser()) {
-            userService.resetpwd(userId, user.getPassword());
+    public ResponseEntity resetpwd(@PathVariable("id") String userId,
+                                   @NonNull String password,
+                                   @NonNull String newpassword) {
+        try {
+            User u = UserUtils.getCurrentUser();
+            if (u.getId().equals(userId) || u.isSuperUser()) {
+                String url = userService.resetpwd(userId, password, newpassword);
 
-            Map<String, Object> map = new HashMap<>();
-            map.put("message", "修改成功");
-            map.put("url", modulePath + entityPath + "/view/" + userId);
-            return ResponseEntity.ok(map);
+                Map<String, Object> map = new HashMap<>();
+                map.put("message", "修改成功! 请重新登陆");
+                map.put("url", url);
+                return ResponseEntity.ok(map);
+            }
+        } catch (Exception e) {
+            throw new AjaxException(e);
         }
         throw new UnauthorizedException("您没有权限进行此操作！");
     }

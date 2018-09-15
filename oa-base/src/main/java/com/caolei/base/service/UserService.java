@@ -55,6 +55,7 @@ public interface UserService
      * 修改密码
      * @param userId
      * @param password
+     * @param newpassword
      */
-    void resetpwd(String userId, String password);
+    String resetpwd(String userId, String password, String newpassword);
 }

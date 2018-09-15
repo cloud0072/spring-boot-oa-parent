@@ -25,12 +25,13 @@
 
         <!-- ********** 主页面 开始 ********** -->
 
+
         <div class="row">
             <div class="col-sm-6">
 
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">查看字典</h3>
+                        <h3 class="panel-title">查看权限</h3>
                         <div class="panel-options">
                             <button class="btn btn-secondary update" data-th-attr="entity_id=${id}">
                                 修改
@@ -39,41 +40,56 @@
                     </div>
                     <div class="panel-body">
 
-                        <!--/*@thymesVar id="dictCatalog" type="com.caolei.base.pojo.DictCatalog"*/-->
+                        <!--/*@thymesVar id="permission" type="com.caolei.base.pojo.Permission"*/-->
                         <form id="menu_form" role="form" class="form-horizontal">
-                            <label>
-                                <input hidden="hidden" name="id" data-th-value="${id}">
-                            </label>
 
                             <div class="form-group">
-                                <label class="col-sm-2 control-label" for="name">字典名称</label>
+                                <label class="col-sm-2 control-label" for="name">名称</label>
 
                                 <div class="col-sm-8">
-                                    <span class="form-control" id="name" data-th-text="${dictCatalog.name}"></span>
+                                    <span class="form-control" id="name"
+                                          data-th-text="${permission.name}"></span>
                                 </div>
                             </div>
 
                             <div class="form-group-separator"></div>
                             <div class="form-group">
-                                <label class="col-sm-2 control-label" for="description">描述信息</label>
+                                <label class="col-sm-2 control-label" for="code">编号</label>
 
                                 <div class="col-sm-8">
-                                    <span class="form-control" id="description"
-                                          data-th-text="${dictCatalog.description}"></span>
+                                    <span class="form-control" id="code"
+                                          data-th-text="${permission.code}"></span>
                                 </div>
                             </div>
 
-                            <div data-th-each="columnEntity ,columnEntityStat : ${dictCatalog.configs}">
-                                <div class="form-group-separator"></div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label" for="columnName"
-                                           data-th-text="${'第'+columnEntityStat+1+'列'}">
-                                    </label>
+                            <div class="form-group-separator"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="entityResource">资源</label>
 
-                                    <div class="col-sm-8">
-                                        <span class="form-control" id="columnName"
-                                              data-th-value="${columnEntity.columnName}"></span>
-                                    </div>
+                                <!-- ${permission.entityResource?.code} 非空判断 -->
+                                <div class="col-sm-8">
+                                    <span class="form-control" id="entityResource"
+                                          data-th-text="${permission.entityResource?.code}"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group-separator"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="operation">操作</label>
+
+                                <div class="col-sm-8">
+                                    <span class="form-control" id="operation"
+                                          data-th-text="${permission.operation}"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group-separator"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="resourceId">实体</label>
+
+                                <div class="col-sm-8">
+                                    <span class="form-control" id="resourceId"
+                                          data-th-text="${permission.resourceId}"></span>
                                 </div>
                             </div>
 

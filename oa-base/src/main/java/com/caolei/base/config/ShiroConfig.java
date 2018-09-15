@@ -2,12 +2,9 @@ package com.caolei.base.config;
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import com.caolei.base.shiro.DefaultRealm;
+import com.caolei.base.shiro.IHashedCredentialsMatcher;
 import com.caolei.common.autoconfig.Shiro;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
-import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.mgt.SecurityManager;
@@ -23,9 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.io.Serializable;
 import java.util.LinkedHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * shiro权限管理器
@@ -39,6 +34,8 @@ public class ShiroConfig {
     private Shiro shiro;
     @Autowired
     private EhCacheManager ehCacheManager;
+    @Autowired
+    private IHashedCredentialsMatcher hashedCredentialsMatcher;
 
     @Bean
     public static LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
@@ -52,7 +49,6 @@ public class ShiroConfig {
      */
     @Bean
     public HashedCredentialsMatcher hashedCredentialsMatcher() {
-        HashedCredentialsMatcher hashedCredentialsMatcher = new IHashedCredentialsMatcher();
         hashedCredentialsMatcher.setHashAlgorithmName(shiro.getHashAlgorithmName());
         hashedCredentialsMatcher.setHashIterations(shiro.getHashIterations());
         hashedCredentialsMatcher.setStoredCredentialsHexEncoded(true);
@@ -166,64 +162,6 @@ public class ShiroConfig {
         return shiroFilterFactoryBean;
     }
 
-    /**
-     * 自定义登陆验证器，验证密码错误次数,需要缓存
-     */
-    private class IHashedCredentialsMatcher extends HashedCredentialsMatcher {
-
-        private Cache<String, RetryCountAndTime> passwordRetryCache;
-
-        @Autowired
-        private IHashedCredentialsMatcher() {
-            passwordRetryCache = ehCacheManager.getCache("passwordRetryCache");
-        }
-
-        @Override
-        public boolean doCredentialsMatch(AuthenticationToken token, AuthenticationInfo info) {
-            String username = (String) token.getPrincipal();
-            RetryCountAndTime retry = passwordRetryCache.get(username);
-            // 设置重试时间和次数
-            if (retry == null) {
-                retry = new RetryCountAndTime();
-                passwordRetryCache.put(username, retry);
-            }
-            // 超过限定次数，抛异常
-            retry.checkRetryTimes();
-            // 判断登录
-            boolean matches = super.doCredentialsMatch(token, info);
-            if (matches) {
-                passwordRetryCache.remove(username);
-            }
-            return matches;
-        }
-    }
-
-    private class RetryCountAndTime implements Serializable {
-        private AtomicInteger count;
-        private long expiredTime;
-
-        RetryCountAndTime() {
-            this.count = new AtomicInteger(0);
-            this.expiredTime = System.currentTimeMillis() + shiro.getLockExpiredTime() * 1000;
-        }
-
-        void checkRetryTimes() {
-            //没有设置重试次数则默认跳过检测
-            if (shiro.getLoginRetryTimes() < 1) {
-                return;
-            }
-            //过期重置验证信息
-            if (expiredTime < System.currentTimeMillis()) {
-                this.count = new AtomicInteger(0);
-                this.expiredTime = System.currentTimeMillis() + shiro.getLockExpiredTime() * 1000;
-            }
-            if (shiro.getLoginRetryTimes() < count.incrementAndGet()) {
-                long second = (expiredTime - System.currentTimeMillis()) / 1000 + 1;
-                String timeMessage = second > 60 ? second / 60 + "分钟后重试" : second + "秒后重试";
-                throw new ExcessiveAttemptsException("您的登录失败次数过多! 请您在" + timeMessage);
-            }
-        }
-    }
 
     // shiro常用异常
 //

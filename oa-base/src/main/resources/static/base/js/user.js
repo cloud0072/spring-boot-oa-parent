@@ -18,15 +18,15 @@ $(document).ready(function () {
             userName: "required",
             account: {
                 required: true,
-                rangelength: [6, 20]
+                rangelength: [5, 20]
             },
             password: {
                 required: true,
-                rangelength: [6, 20]
+                rangelength: [5, 20]
             },
             passwordCheck: {
                 required: true,
-                rangelength: [6, 20],
+                rangelength: [5, 20],
                 equalTo: "#password"
             },
             phone: {
@@ -81,27 +81,6 @@ $(document).ready(function () {
             $(element).parents(".col-sm-5").addClass("has-success").removeClass("has-error");
         }
     });
-});
-
-/* 重置密码 */
-$('password-button').on('click', function () {
-    $.ajax({
-        url: baseUrl + "/resetpwd",
-        type: 'PUT',
-        data: {
-            id: $('id').val(),
-            password: $('#password').val(),
-            newpassword: $('newpassword').val()
-        },
-        success: function (data) {
-            if (data && data.message) {
-                console.log(data.message);
-            }
-            if (data && data.url) {
-                location.href = data.url;
-            }
-        }
-    })
 });
 
 $("#pic").on('click', function () {

@@ -29,7 +29,7 @@
                     <div class="panel-heading">
                         <h3 class="panel-title">修改密码</h3>
                         <div class="panel-options">
-                            <button class="btn btn-info " data-th-attr="entity_id=${id}"
+                            <button class="btn btn-info resetpwd" data-th-attr="entity_id=${id}"
                                     data-th-remove="${op == 'delete'?'all':'none'}"
                                     id="password-button">确认
                             </button>
@@ -39,7 +39,7 @@
                     <!--/*@thymesVar id="user" type="com.caolei.base.pojo.User"*/-->
                     <form id="main_form" role="form" class="form-horizontal">
                         <!--hidden value-->
-                        <input type="hidden" name="id" data-th-value="${id}">
+                        <input type="hidden" id="id" name="id" data-th-value="${id}">
 
                         <div class="panel-body">
 
@@ -49,27 +49,37 @@
 
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="account" name="account"
-                                           placeholder="账号" data-th-value="${user.account}">
+                                           placeholder="账号" data-th-value="${user.account}" readonly>
                                 </div>
                             </div>
 
                             <div class="form-group-separator"></div>
                             <div class="form-group">
-                                <label class="col-sm-2 control-label" for="password">密码</label>
+                                <label class="col-sm-2 control-label" for="password">原密码</label>
 
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="password" name="password"
-                                           placeholder="密码" onfocus="this.type='password'">
+                                    <input type="password" class="form-control" id="password" name="password"
+                                           placeholder="原密码" required>
                                 </div>
                             </div>
 
                             <div class="form-group-separator"></div>
                             <div class="form-group">
-                                <label class="col-sm-2 control-label" for="passwordCheck">确认密码</label>
+                                <label class="col-sm-2 control-label" for="newpassword">新密码</label>
 
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="passwordCheck" name="passwordCheck"
-                                           placeholder="确认密码" onfocus="this.type='password'">
+                                    <input type="password" class="form-control" id="newpassword" name="newpassword"
+                                           placeholder="新密码" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group-separator"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="newpasswordcheck">确认密码</label>
+
+                                <div class="col-sm-8">
+                                    <input type="password" class="form-control" id="newpasswordcheck"
+                                           name="newpasswordcheck" placeholder="确认密码" required>
                                 </div>
                             </div>
 
@@ -100,20 +110,105 @@
 </div>
 
 <!-- 引入js文件 -->
+<div th:replace="fragment :: common-js"></div>
 <!-- Imported styles on this page -->
-<link rel="stylesheet" th:href="@{/assets/js/dropzone/css/dropzone.css}">
-<!-- Imported scripts on this page -->
-<script th:src="@{/assets/js/dropzone/dropzone.js}"></script>
 <script th:src="@{/assets/js/datepicker/bootstrap-datepicker.js}" type="text/javascript"></script>
 <script th:src="@{/assets/js/timepicker/bootstrap-timepicker.min.js}" type="text/javascript"></script>
-<div th:replace="fragment :: common-js"></div>
-<script type="application/javascript" th:inline="javascript">
-    $(function () {
 
-        if ([[${op == 'find'}]]) {
-            $("#account").attr("readOnly");
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#main_form').validate({
+            rules: {
+                password: {
+                    required: true,
+                    rangelength: [5, 20]
+                },
+                newpassword: {
+                    required: true,
+                    rangelength: [5, 20]
+                },
+                newpasswordcheck: {
+                    equalTo: "#newpassword",
+                    required: true,
+                    rangelength: [5, 20]
+                }
+            },
+            messages: {
+                password: {
+                    required: "请输入原密码",
+                    rangelength: $.validator.format("密码长度必须在 {0} 到 {1} 之间")
+                },
+                newpassword: {
+                    required: "请输入新密码",
+                    rangelength: $.validator.format("密码长度必须在 {0} 到 {1} 之间")
+                },
+                newpasswordcheck: {
+                    equalTo: "两次输入密码不一致",
+                    required: "请再次输入新密码",
+                    rangelength: $.validator.format("密码长度必须在 {0} 到 {1} 之间")
+                }
+            },
+            // errorElement: "em",
+            /* 更改错误信息显示的位置 */
+            errorPlacement: function (error, element) {
+                // Add the `help-block` class to the error element
+                error.addClass("help-block");
+
+                if (element.prop("type") === "checkbox") {
+                    error.insertAfter(element.parent("label"));
+                } else {
+                    error.insertAfter(element);
+                }
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).parents(".col-sm-8").addClass("has-error").removeClass("has-success");
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).parents(".col-sm-8").addClass("has-success").removeClass("has-error");
+            }
+        });
+    });
+
+    /* 重置密码 */
+    $('.resetpwd').on('click', function () {
+        if ($('#main_form').valid()) {
+            $.ajax({
+                url: baseUrl + "/resetpwd/" + $('#id').val(),
+                type: 'PUT',
+                data: {
+                    password: $('#password').val(),
+                    newpassword: $('#newpassword').val()
+                },
+                success: function (data) {
+                    if (data && data.message) {
+                        console.log(data.message);
+                    }
+                    if (data && data.url) {
+                        location.href = hostUrl + data.url;
+                    }
+                },
+                error: function (data) {
+                    if (data && data.message) {
+                        var opts = {
+                            "closeButton": true,
+                            "debug": false,
+                            "positionClass": "toast-top-right",
+                            "onclick": null,
+                            "showDuration": "300",
+                            "hideDuration": "1000",
+                            "timeOut": "5000",
+                            "extendedTimeOut": "1000",
+                            "showEasing": "swing",
+                            "hideEasing": "linear",
+                            "showMethod": "fadeIn",
+                            "hideMethod": "fadeOut"
+                        };
+
+                        toastr.error(data.message, "保存失败", opts);
+                    }
+                }
+            })
         }
-
     });
 
 </script>

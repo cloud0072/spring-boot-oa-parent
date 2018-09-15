@@ -63,7 +63,7 @@ public class FileUtils {
         try {
             File file = new File(filePath);
             if (!file.exists() || file.isFile()) {
-                if (file.mkdirs()) {
+                if (!file.mkdirs()) {
                     throw new UnsupportedOperationException("无法初始化目录:\t" + filePath);
                 }
             }

@@ -5,15 +5,19 @@ import com.caolei.base.pojo.Role;
 import com.caolei.base.pojo.User;
 import com.caolei.base.repository.UserRepository;
 import com.caolei.base.service.FileComponentService;
-import com.caolei.base.service.PermissionService;
 import com.caolei.base.service.RoleService;
 import com.caolei.base.service.UserService;
+import com.caolei.base.shiro.RetryCountAndTime;
 import com.caolei.base.util.UserUtils;
+import com.caolei.common.autoconfig.Shiro;
 import com.caolei.common.constant.FileType;
 import com.caolei.common.util.SecurityUtils;
 import com.caolei.common.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.UnauthorizedException;
+import org.apache.shiro.cache.Cache;
+import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -33,17 +37,24 @@ import java.util.List;
 @Service
 public class UserServiceImpl
         implements UserService {
+
+    private final Cache<String, RetryCountAndTime> passwordRetryCache;
     /**
      * 不要使用 构造器方式注入 否则会产生循环注入的问题
      */
+    @Autowired
+    private Shiro shiro;
     @Autowired
     private UserRepository userRepository;
     @Autowired
     private RoleService roleService;
     @Autowired
-    private PermissionService permissionService;
-    @Autowired
     private FileComponentService fileComponentService;
+
+    @Autowired
+    public UserServiceImpl(EhCacheManager ehCacheManager) {
+        this.passwordRetryCache = ehCacheManager.getCache("passwordRetryCache");
+    }
 
     @Override
     public JpaRepository<User, String> repository() {
@@ -86,6 +97,7 @@ public class UserServiceImpl
 
     /**
      * 保存用户 可以控制是否对密码进行加密
+     *
      * @param user
      * @param request
      * @param response
@@ -161,11 +173,31 @@ public class UserServiceImpl
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void resetpwd(String userId, String password) {
+    public String resetpwd(String userId, String password, String newpassword) {
         User user = findById(userId);
-        user.setPassword(password);
-        UserUtils.encrypt(user);
-        repository().save(user);
+
+        String username = user.getUserName();
+
+        if (UserUtils.checkPwd(user, password)) {
+            passwordRetryCache.remove(username);
+
+            user.setPassword(newpassword);
+            UserUtils.encrypt(user);
+            repository().save(user);
+            return "/logout";
+        } else {
+            RetryCountAndTime retry = passwordRetryCache.get(username);
+            // 设置重试时间和次数
+            if (retry == null) {
+                retry = new RetryCountAndTime(shiro);
+                passwordRetryCache.put(username, retry);
+            }
+            // 超过限定次数，抛异常
+            retry.checkRetryTimes();
+
+            throw new UnauthorizedException("原密码输入错误");
+        }
+
     }
 
     private void updateUserAdvice(User user, HttpServletRequest request) {

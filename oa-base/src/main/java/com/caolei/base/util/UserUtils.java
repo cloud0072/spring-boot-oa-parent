@@ -60,4 +60,17 @@ public class UserUtils {
         return user;
     }
 
+    /**
+     * 验证密码是否正确
+     * @param user
+     * @param password
+     * @return
+     */
+    public static boolean checkPwd(User user, String password) {
+        if (user == null || StringUtils.isEmpty(user.getSalt()) || StringUtils.isEmpty(user.getPassword())) {
+            throw new NullPointerException("用户的加密信息缺失,请确认后重试");
+        }
+        return user.getPassword().equals(new Sha256Hash(password, user.getSalt(), shiro.getHashIterations()).toString());
+    }
+
 }

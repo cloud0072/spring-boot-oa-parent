@@ -27,17 +27,17 @@
 
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">字典管理</h3>
+                        <h3 class="panel-title">权限信息</h3>
                         <div class="panel-options">
                             <button class="btn btn-info create">
-                                创建字典
+                                创建权限
                             </button>
                         </div>
                     </div>
 
                     <div class="panel-body">
 
-                        <!--/*@thymesVar id="dict" type="com.caolei.base.pojo.DictCatalog"*/-->
+                        <!--/*@thymesVar id="permission" type="com.caolei.base.pojo.Permission"*/-->
                         <table class="table table-striped" id="main-table">
                             <thead>
                             <tr>
@@ -46,34 +46,32 @@
                                         <input type="checkbox" class="cbr">
                                     </label>
                                 </th>
-                                <th class="name-column">字典名</th>
-                                <th>描述</th>
-                                <th>字段数</th>
-                                <th>实体数</th>
+                                <th class="name-column">权限名</th>
+                                <th>编码</th>
+                                <th>资源</th>
+                                <th>操作</th>
+                                <th>实体</th>
                                 <th class="operation">操作</th>
                             </tr>
                             </thead>
 
                             <tbody class="middle-align">
 
-                            <tr data-th-each="dict : ${page}">
+                            <tr data-th-each="category : ${page}">
                                 <td>
-                                    <input type="checkbox" class="cbr" th:value="${dict.id}">
+                                    <input type="checkbox" class="cbr" th:value="${category.id}">
                                 </td>
-                                <td data-th-text="${dict.name}"></td>
-                                <td data-th-text="${dict.description}"></td>
-                                <td data-th-text="${dict.configs?.size()}"></td>
-                                <td data-th-text="${'-'}"></td>
+                                <td data-th-text="${category.name}"></td>
                                 <td>
-                                    <a href="javascript:void(0)" data-th-attr="entity_id=${dict.id}"
+                                    <a href="javascript:void(0)" data-th-attr="entity_id=${category.id}"
                                        class="btn btn-info btn-sm btn-icon icon-left view">
                                         查看
                                     </a>
-                                    <a href="javascript:void(0)" data-th-attr="entity_id=${dict.id}"
+                                    <a href="javascript:void(0)" data-th-attr="entity_id=${category.id}"
                                        class="btn btn-secondary btn-sm btn-icon icon-left update">
                                         修改
                                     </a>
-                                    <a href="javascript:void(0)" data-th-attr="entity_id=${dict.id}"
+                                    <a href="javascript:void(0)" data-th-attr="entity_id=${category.id}"
                                        class="btn btn-danger btn-sm btn-icon icon-left remove">
                                         删除
                                     </a>
@@ -83,7 +81,7 @@
                             </tbody>
                         </table>
 
-                        <div th:replace="fragment :: pagination"></div>
+                        <th:block th:replace="fragment :: pagination"/>
 
                     </div>
                 </div>
