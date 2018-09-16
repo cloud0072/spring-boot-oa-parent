@@ -1,7 +1,6 @@
-package com.caolei.base.pojo;
+package com.caolei.base.entity;
 
 import com.caolei.common.annotation.EntityInfo;
-import com.caolei.base.entity.BaseEntity;
 import com.caolei.common.module.BaseModuleEntity;
 import com.caolei.common.constant.FileType;
 import com.caolei.common.util.DateUtils;

@@ -1,10 +1,10 @@
 package com.caolei.base.service.impl;
 
-import com.caolei.base.pojo.OperationLog;
+import com.caolei.base.entity.OperationLog;
 import com.caolei.base.repository.OperationLogRepository;
 import com.caolei.base.service.OperationLogService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.caolei.base.repository.BaseRepository;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,7 +22,7 @@ public class OperationLogServiceImpl
     private OperationLogRepository operationLogRepository;
 
     @Override
-    public JpaRepository<OperationLog, String> repository() {
+    public BaseRepository<OperationLog, String> repository() {
         return operationLogRepository;
     }
 

@@ -1,8 +1,8 @@
 package com.caolei.base.service.impl;
 
-import com.caolei.base.pojo.FileComponent;
-import com.caolei.base.pojo.Role;
-import com.caolei.base.pojo.User;
+import com.caolei.base.entity.FileComponent;
+import com.caolei.base.entity.Role;
+import com.caolei.base.entity.User;
 import com.caolei.base.repository.UserRepository;
 import com.caolei.base.service.FileComponentService;
 import com.caolei.base.service.RoleService;
@@ -20,7 +20,7 @@ import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.caolei.base.repository.BaseRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,7 +57,7 @@ public class UserServiceImpl
     }
 
     @Override
-    public JpaRepository<User, String> repository() {
+    public BaseRepository<User, String> repository() {
         return userRepository;
     }
 

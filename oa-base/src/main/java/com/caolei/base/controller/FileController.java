@@ -1,8 +1,8 @@
 package com.caolei.base.controller;
 
 import com.caolei.base.exception.AjaxException;
-import com.caolei.base.pojo.FileComponent;
-import com.caolei.base.pojo.User;
+import com.caolei.base.entity.FileComponent;
+import com.caolei.base.entity.User;
 import com.caolei.base.service.BaseCrudService;
 import com.caolei.base.service.FileComponentService;
 import com.caolei.base.service.UserService;
@@ -19,8 +19,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;

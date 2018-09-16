@@ -1,13 +1,13 @@
 package com.caolei.base.service.impl;
 
-import com.caolei.base.pojo.Permission;
+import com.caolei.base.entity.Permission;
 import com.caolei.base.repository.EntityResourceRepository;
 import com.caolei.base.repository.PermissionRepository;
 import com.caolei.base.service.PermissionService;
 import com.caolei.base.service.RoleService;
 import com.caolei.common.constant.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.caolei.base.repository.BaseRepository;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,7 +30,7 @@ public class PermissionServiceImpl
     private RoleService roleService;
 
     @Override
-    public JpaRepository<Permission, String> repository() {
+    public BaseRepository<Permission, String> repository() {
         return permissionRepository;
     }
 

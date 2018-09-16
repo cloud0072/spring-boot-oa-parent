@@ -1,6 +1,6 @@
 package com.caolei.base.service;
 
-import com.caolei.base.pojo.FileComponent;
+import com.caolei.base.entity.FileComponent;
 
 /**
  * @author caolei

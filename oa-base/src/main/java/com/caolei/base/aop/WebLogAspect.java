@@ -1,6 +1,6 @@
 package com.caolei.base.aop;
 
-import com.caolei.base.pojo.OperationLog;
+import com.caolei.base.entity.OperationLog;
 import com.caolei.base.service.OperationLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;

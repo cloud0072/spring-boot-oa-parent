@@ -27,17 +27,17 @@
 
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">权限信息</h3>
+                        <h3 class="panel-title">分类信息</h3>
                         <div class="panel-options">
                             <button class="btn btn-info create">
-                                创建权限
+                                创建分类
                             </button>
                         </div>
                     </div>
 
                     <div class="panel-body">
 
-                        <!--/*@thymesVar id="permission" type="com.caolei.base.pojo.Permission"*/-->
+                        <!--/*@thymesVar id="category" type="com.caolei.base.entity.Category"*/-->
                         <table class="table table-striped" id="main-table">
                             <thead>
                             <tr>
@@ -46,11 +46,8 @@
                                         <input type="checkbox" class="cbr">
                                     </label>
                                 </th>
-                                <th class="name-column">权限名</th>
-                                <th>编码</th>
-                                <th>资源</th>
-                                <th>操作</th>
-                                <th>实体</th>
+                                <th class="name-column">分类名</th>
+                                <th>排序</th>
                                 <th class="operation">操作</th>
                             </tr>
                             </thead>
@@ -62,6 +59,7 @@
                                     <input type="checkbox" class="cbr" th:value="${category.id}">
                                 </td>
                                 <td data-th-text="${category.name}"></td>
+                                <td data-th-text="${category.categoryOrder}"></td>
                                 <td>
                                     <a href="javascript:void(0)" data-th-attr="entity_id=${category.id}"
                                        class="btn btn-info btn-sm btn-icon icon-left view">

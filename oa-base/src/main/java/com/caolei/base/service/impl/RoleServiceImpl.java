@@ -1,7 +1,8 @@
 package com.caolei.base.service.impl;
 
-import com.caolei.base.pojo.Permission;
-import com.caolei.base.pojo.Role;
+import com.caolei.base.entity.Permission;
+import com.caolei.base.entity.Role;
+import com.caolei.base.repository.BaseRepository;
 import com.caolei.base.repository.RoleRepository;
 import com.caolei.base.service.PermissionService;
 import com.caolei.base.service.RoleService;
@@ -13,7 +14,7 @@ import org.apache.shiro.realm.jdbc.JdbcRealm;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.caolei.base.repository.BaseRepository;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,7 +38,7 @@ public class RoleServiceImpl
     private EhCacheManager shiroCacheManager;
 
     @Override
-    public JpaRepository<Role, String> repository() {
+    public BaseRepository<Role, String> repository() {
         return roleRepository;
     }
 

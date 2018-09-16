@@ -1,12 +1,12 @@
 //package com.caolei.base.service.impl;
 //
 ////import com.caolei.base.extend.ColumnConfig;
-////import com.caolei.base.pojo.DictCatalog;
+////import com.caolei.base.entity.DictCatalog;
 //import com.caolei.base.repository.ColumnConfigRepository;
 //import com.caolei.base.repository.DictCatalogRepository;
 ////import com.caolei.base.service.DictCatalogService;
 //import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.data.jpa.repository.JpaRepository;
+//import com.caolei.base.repository.BaseRepository;
 //import org.springframework.stereotype.Service;
 //import org.springframework.transaction.annotation.Transactional;
 //
@@ -24,7 +24,7 @@
 //    private ColumnConfigRepository columnConfigRepository;
 //
 //    @Override
-//    public JpaRepository<DictCatalog, String> repository() {
+//    public BaseRepository<DictCatalog, String> repository() {
 //        return dictCatalogRepository;
 //    }
 //

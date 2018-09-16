@@ -1,8 +1,8 @@
 package com.caolei.base.controller;
 
-import com.caolei.base.pojo.Permission;
-import com.caolei.base.pojo.Role;
-import com.caolei.base.pojo.User;
+import com.caolei.base.entity.Permission;
+import com.caolei.base.entity.Role;
+import com.caolei.base.entity.User;
 import com.caolei.base.service.PermissionService;
 import com.caolei.base.service.RoleService;
 import com.caolei.base.service.UserService;
@@ -15,11 +15,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static com.caolei.common.constant.Constants.*;
 

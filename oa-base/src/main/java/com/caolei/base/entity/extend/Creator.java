@@ -1,6 +1,6 @@
-package com.caolei.base.extend;
+package com.caolei.base.entity.extend;
 
-import com.caolei.base.pojo.User;
+import com.caolei.base.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

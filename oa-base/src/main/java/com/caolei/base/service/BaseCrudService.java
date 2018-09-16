@@ -1,14 +1,14 @@
 package com.caolei.base.service;
 
 import com.caolei.base.entity.BaseEntity;
+import com.caolei.base.repository.BaseRepository;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.domain.Specification;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -28,23 +28,7 @@ public interface BaseCrudService<T extends BaseEntity>
      * @author cloud0072
      * @date 2018/6/12 21:50
      */
-    JpaRepository<T, String> repository();
-
-    /**
-     * 修改
-     *
-     * @param input
-     * @return
-     * @author cloud0072
-     * @date 2018/6/12 22:49
-     */
-    T update(T input,
-             HttpServletRequest request,
-             HttpServletResponse response);
-
-    default T update(T input) {
-        return update(input, null, null);
-    }
+    BaseRepository<T, String> repository();
 
     /**
      * 创建
@@ -54,9 +38,7 @@ public interface BaseCrudService<T extends BaseEntity>
      * @author cloud0072
      * @date 2018/6/12 22:49
      */
-    default T save(T t,
-                   HttpServletRequest request,
-                   HttpServletResponse response) {
+    default T save(T t, HttpServletRequest request, HttpServletResponse response) {
         return repository().save(t);
     }
 
@@ -67,14 +49,8 @@ public interface BaseCrudService<T extends BaseEntity>
      * @author cloud0072
      * @date 2018/6/12 22:49
      */
-    default void saveAll(Collection<? extends T> var,
-                         HttpServletRequest request,
-                         HttpServletResponse response) {
+    default void saveAll(Iterable<? extends T> var) {
         repository().saveAll(var);
-    }
-
-    default void saveAll(Collection<? extends T> var) {
-        saveAll(var, null, null);
     }
 
     /**
@@ -106,8 +82,32 @@ public interface BaseCrudService<T extends BaseEntity>
      * @author cloud0072
      * @date 2018/6/12 22:49
      */
-    default void deleteAll(Collection<? extends T> list) {
+    default void deleteAll(Iterable<? extends T> list) {
         repository().deleteAll(list);
+    }
+
+    /**
+     * 删除所有
+     * 通过id
+     *
+     * @param ids
+     */
+    default void deleteAllByIds(Iterable<String> ids) {
+        repository().deleteAllByIds(ids);
+    }
+
+    /**
+     * 修改
+     *
+     * @param input
+     * @return
+     * @author cloud0072
+     * @date 2018/6/12 22:49
+     */
+    T update(T input, HttpServletRequest request, HttpServletResponse response);
+
+    default T update(T input) {
+        return update(input, null, null);
     }
 
     /**
@@ -147,6 +147,10 @@ public interface BaseCrudService<T extends BaseEntity>
         return repository().findAll(example, pageable);
     }
 
+    default Page<T> findAll(Specification<T> spec, Pageable pageable) {
+        return repository().findAll(spec, pageable);
+    }
+
     /**
      * 查询所有
      *
@@ -167,6 +171,16 @@ public interface BaseCrudService<T extends BaseEntity>
      */
     default List<T> findAll() {
         return repository().findAll();
+    }
+
+    /**
+     * 查询所有id
+     *
+     * @param ids
+     * @return
+     */
+    default List<T> findAllByIds(Iterable<String> ids) {
+        return repository().findAllByIds(ids);
     }
 
 }

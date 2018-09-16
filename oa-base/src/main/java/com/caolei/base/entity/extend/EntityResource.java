@@ -1,7 +1,6 @@
-package com.caolei.base.extend;
+package com.caolei.base.entity.extend;
 
 
-import com.caolei.common.annotation.EntityInfo;
 import com.caolei.base.entity.BaseEntity;
 import com.caolei.base.entity.NamedEntity;
 import com.caolei.common.module.BaseModuleEntity;
@@ -18,7 +17,7 @@ import javax.persistence.UniqueConstraint;
  *
  * @author cloud0072
  */
-@EntityInfo(description="实体的信息",entityName = "entityInfo", entityPath = "/entityInfo")
+//@EntityInfo(description="实体的信息",entityName = "entityInfo", entityPath = "/entityInfo")
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
@@ -47,7 +46,7 @@ public class EntityResource
         if (path.length > 2) {
             this.label = path[path.length - 3];
         } else {
-            this.label = "pojo";
+            this.label = "entity";
         }
         this.code = path[path.length - 1];
         this.name = code;

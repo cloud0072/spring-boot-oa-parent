@@ -1,6 +1,6 @@
 /* 如果有多个需要验证的地方统一写在这个函数中 ， 提交时统一验证此方法 */
 function validateAll() {
-    return validateForm.valid();
+    return form.valid();
 }
 
 // 手机号码验证
@@ -11,9 +11,9 @@ jQuery.validator.addMethod("isMobile", function (value, element) {
 }, "请正确填写您的手机号码");
 
 //添加验证规则
-var validateForm = $("#main_form");
+var form = $("#main_form");
 $(document).ready(function () {
-    validateForm.validate({
+    form.validate({
         rules: {
             userName: "required",
             account: {

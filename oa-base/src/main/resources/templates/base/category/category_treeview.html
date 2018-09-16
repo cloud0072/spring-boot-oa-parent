@@ -4,6 +4,7 @@
 
 <head th:replace="fragment :: head"></head>
 
+
 <body class="page-body">
 <!-- 顶部用户信息和设置 (平时隐藏) -->
 <div th:replace="fragment :: settings-pane"></div>
@@ -20,42 +21,84 @@
 
         <!-- ********** 主页面 开始 ********** -->
 
+        <!--<div class="page-title">-->
+
+        <!--<div class="title-env">-->
+        <!--<h1 class="title">菜单管理</h1>-->
+        <!--<p class="description">编辑菜单信息和URL,调整菜单位置</p>-->
+        <!--</div>-->
+
+        <!--<div class="breadcrumb-env">-->
+
+        <!--<ol class="breadcrumb bc-1">-->
+        <!--<li>-->
+        <!--<a href="#"><i></i>分类管理</a>-->
+        <!--</li>-->
+        <!--<li class="active">-->
+        <!--<strong>菜单管理</strong>-->
+        <!--</li>-->
+        <!--</ol>-->
+
+        <!--</div>-->
+
+        <!--</div>-->
+
         <div class="row">
+
             <div class="col-sm-6">
 
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title" data-th-text="${op == 'create'? '新建分类':'编辑分类'}">编辑分类</h3>
+                        <h3 class="panel-title">选择要编辑的菜单</h3>
                         <div class="panel-options">
-                            <button class="btn btn-info save" data-th-attr="entity_id=${id}">
-                                保存
+                            <button class="btn btn-info btn-createNode">
+                                新建
                             </button>
                         </div>
                     </div>
                     <div class="panel-body">
 
-                        <!--/*@thymesVar id="category" type="com.caolei.base.entity.Category"*/-->
+                        <div id="main-tree" class="col-sm-12"></div>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-sm-6">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title" id="edit-title">节点信息</h3>
+                        <div class="panel-options">
+                            <button class="btn btn-success btn-submitNode">
+                                保存
+                            </button>
+                            <button class="btn btn-red btn-deleteNode">
+                                删除
+                            </button>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+
                         <form id="main_form" role="form" class="form-horizontal">
-                            <label>
-                                <input hidden="hidden" name="id" data-th-value="${id}">
-                            </label>
+                            <input id="pid" name="pid" type="hidden">
+                            <input id="id" name="id" type="hidden">
 
                             <div class="form-group">
                                 <label class="col-sm-2 control-label" for="name">名称</label>
 
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="name" name="name"
-                                           placeholder="分类名称" data-th-value="${category.name}">
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="名称">
                                 </div>
                             </div>
 
                             <div class="form-group-separator"></div>
                             <div class="form-group">
-                                <label class="col-sm-2 control-label" for="categoryOrder">顺序</label>
+                                <label class="col-sm-2 control-label" for="categoryOrder">排序</label>
 
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="categoryOrder" name="categoryOrder"
-                                           placeholder="菜单中显示的顺序" data-th-value="${category.categoryOrder}">
+                                           placeholder="排序">
                                 </div>
                             </div>
 
@@ -87,6 +130,7 @@
             </div>
         </div>
 
+
         <!-- ********** 主页面 结束 ********** -->
 
         <!-- 页脚版权信息 -->
@@ -100,10 +144,10 @@
 </div>
 
 <!-- 引入js文件 -->
-<div th:replace="fragment :: common-js"></div>
+<th:block th:replace="fragment :: common-js"/>
 <script type="text/javascript" th:src="@{/base/js/category.js}"></script>
 <script type="application/javascript" th:inline="javascript">
-
+    var root = [[${root}]];
 </script>
 </body>
 </html>

@@ -1,10 +1,7 @@
-package com.caolei.base.pojo;
+package com.caolei.base.entity;
 
 
 import com.caolei.common.annotation.EntityInfo;
-import com.caolei.base.entity.BaseEntity;
-import com.caolei.base.entity.NamedEntity;
-import com.caolei.base.entity.SystemEntity;
 import com.caolei.common.module.BaseModuleEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;

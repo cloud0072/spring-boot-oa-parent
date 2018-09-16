@@ -1,19 +1,23 @@
 package com.caolei.base.service.impl;
 
-import com.caolei.base.pojo.Category;
+import com.caolei.base.entity.Category;
+import com.caolei.base.entity.dto.CategoryDTO;
+import com.caolei.base.repository.BaseRepository;
 import com.caolei.base.repository.CategoryRepository;
 import com.caolei.base.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
+ * @author caolei
  * @ClassName: CategoryService
  * @Description: 分类服务类
- * @author caolei
  * @date 2018/9/12 19:52
  */
 @Service
@@ -24,7 +28,7 @@ public class CategoryServiceImpl
     private CategoryRepository categoryRepository;
 
     @Override
-    public JpaRepository<Category, String> repository() {
+    public BaseRepository<Category, String> repository() {
         return categoryRepository;
     }
 
@@ -32,8 +36,46 @@ public class CategoryServiceImpl
     public Category update(Category input,
                            HttpServletRequest request,
                            HttpServletResponse response) {
-        return null;
+        Category category = findById(input.getId());
+        if (input.getParent() != null) {
+            category.setParent(input.getParent());
+        }
+        category.setName(input.getName());
+        category.setCategoryOrder(input.getCategoryOrder());
+        category.setIcon(input.getIcon());
+        category.setUrl(input.getUrl());
+        return repository().save(category);
     }
 
+    @Override
+    public List<Category> findCategoriesByParent_Id(String parentId) {
+        return categoryRepository
+                .findCategoriesByParent_IdIsOrderByCategoryOrderAsc(parentId);
+    }
 
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public CategoryDTO findCategoryDTOById(String id) {
+        return new CategoryDTO(findById(id));
+    }
+
+    @Override
+    public CategoryDTO findCategoryDTOByIdWith2Level(String id) {
+        Category category = findById(id);
+        CategoryDTO categoryDTO = new CategoryDTO(category);
+        if (category.getChildren() != null) {
+            categoryDTO.setNodes(category.getChildren().stream()
+                    .map(CategoryDTO::new)
+                    .collect(Collectors.toList()));
+        }
+        return categoryDTO;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public List<CategoryDTO> findCategoryDTOsByParentId(String parentId) {
+        return findCategoriesByParent_Id(parentId).stream()
+                .map(CategoryDTO::new)
+                .collect(Collectors.toList());
+    }
 }

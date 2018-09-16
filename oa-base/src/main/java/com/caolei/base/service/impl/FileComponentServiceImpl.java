@@ -1,10 +1,10 @@
 package com.caolei.base.service.impl;
 
-import com.caolei.base.pojo.FileComponent;
+import com.caolei.base.entity.FileComponent;
 import com.caolei.base.repository.FileComponentRepository;
 import com.caolei.base.service.FileComponentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.caolei.base.repository.BaseRepository;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,7 +24,7 @@ public class FileComponentServiceImpl
     private FileComponentRepository fileComponentRepository;
 
     @Override
-    public JpaRepository<FileComponent, String> repository() {
+    public BaseRepository<FileComponent, String> repository() {
         return fileComponentRepository;
     }
 

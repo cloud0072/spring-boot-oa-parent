@@ -1,7 +1,9 @@
 package com.caolei.base.repository;
 
-import com.caolei.base.pojo.Category;
+import com.caolei.base.entity.Category;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @ClassName: CategoryTypeRepository
@@ -11,4 +13,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface CategoryRepository extends BaseRepository<Category, String> {
+
+    List<Category> findCategoriesByParent_IdIsOrderByCategoryOrderAsc(String parentId);
 }

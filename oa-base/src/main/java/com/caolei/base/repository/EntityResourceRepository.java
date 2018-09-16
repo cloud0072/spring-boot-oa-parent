@@ -1,6 +1,6 @@
 package com.caolei.base.repository;
 
-import com.caolei.base.extend.EntityResource;
+import com.caolei.base.entity.extend.EntityResource;
 import org.springframework.stereotype.Repository;
 
 /**

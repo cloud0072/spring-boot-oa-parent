@@ -1,9 +1,6 @@
-package com.caolei.base.pojo;
+package com.caolei.base.entity;
 
-import com.caolei.base.entity.BaseEntity;
-import com.caolei.base.entity.NamedEntity;
-import com.caolei.base.entity.SystemEntity;
-import com.caolei.base.extend.UserExtend;
+import com.caolei.base.entity.extend.UserExtend;
 import com.caolei.common.annotation.EntityInfo;
 import com.caolei.common.module.BaseModuleEntity;
 import com.caolei.common.util.StringUtils;

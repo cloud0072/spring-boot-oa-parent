@@ -1,6 +1,6 @@
 package com.caolei.base.repository;
 
-import com.caolei.base.pojo.OperationLog;
+import com.caolei.base.entity.OperationLog;
 import org.springframework.stereotype.Repository;
 
 /**

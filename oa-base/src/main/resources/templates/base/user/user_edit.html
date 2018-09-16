@@ -28,16 +28,13 @@
                     <div class="panel-heading">
                         <h3 class="panel-title" data-th-text="${type == 'self' ? '个人信息' : '用户信息'}"></h3>
                         <div class="panel-options">
-                            <button class="btn btn-info save" data-th-attr="entity_id=${id}"
-                                    data-th-remove="${op == 'delete'?'all':'none'}">保存
-                            </button>
-                            <button class="btn btn-danger remove" data-th-attr="entity_id=${id}"
-                                    data-th-remove="${op == 'delete'?'none':'all'}">删除
+                            <button class="btn btn-info save" data-th-attr="entity_id=${id}">
+                                保存
                             </button>
                         </div>
                     </div>
 
-                    <!--/*@thymesVar id="user" type="com.caolei.base.pojo.User"*/-->
+                    <!--/*@thymesVar id="user" type="com.caolei.base.entity.User"*/-->
                     <form id="main_form" role="form" class="form-horizontal">
                         <!--hidden value-->
                         <input id="head_photo_id" name="head_photo_id" type="hidden"

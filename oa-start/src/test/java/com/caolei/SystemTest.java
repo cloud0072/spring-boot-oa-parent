@@ -1,17 +1,15 @@
 package com.caolei;
 
 import com.caolei.common.constant.Operation;
-import com.caolei.base.pojo.OperationLog;
-import com.caolei.base.pojo.Permission;
-import com.caolei.base.pojo.Role;
-import com.caolei.base.pojo.User;
+import com.caolei.base.entity.OperationLog;
+import com.caolei.base.entity.Permission;
+import com.caolei.base.entity.Role;
+import com.caolei.base.entity.User;
 import com.caolei.base.repository.EntityResourceRepository;
 import com.caolei.base.repository.PermissionRepository;
 import com.caolei.base.service.PermissionService;
 import com.caolei.base.service.RoleService;
 import com.caolei.base.service.UserService;
-import org.apache.commons.collections4.MultiValuedMap;
-import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;

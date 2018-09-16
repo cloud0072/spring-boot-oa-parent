@@ -1,8 +1,8 @@
 package com.caolei.base.controller;
 
 import com.caolei.base.exception.AjaxException;
-import com.caolei.base.pojo.Role;
-import com.caolei.base.pojo.User;
+import com.caolei.base.entity.Role;
+import com.caolei.base.entity.User;
 import com.caolei.base.service.BaseCrudService;
 import com.caolei.base.service.PermissionService;
 import com.caolei.base.service.RoleService;

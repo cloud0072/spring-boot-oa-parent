@@ -1,14 +1,15 @@
 package com.caolei.base.installer;
 
-import com.caolei.base.extend.EntityResource;
-import com.caolei.base.pojo.Permission;
-import com.caolei.base.pojo.Role;
-import com.caolei.base.pojo.User;
+import com.caolei.base.entity.BaseEntity;
+import com.caolei.base.entity.Permission;
+import com.caolei.base.entity.Role;
+import com.caolei.base.entity.User;
+import com.caolei.base.entity.extend.EntityResource;
 import com.caolei.base.repository.EntityResourceRepository;
 import com.caolei.base.service.PermissionService;
 import com.caolei.base.service.RoleService;
 import com.caolei.base.service.UserService;
-import com.caolei.base.entity.BaseEntity;
+import com.caolei.common.annotation.EntityInfo;
 import com.caolei.common.constant.Operation;
 import com.caolei.common.util.ReflectUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.Ordered;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -67,7 +70,9 @@ public class SystemModuleInstaller
         /*
          * 添加实体
          */
-        Set<Class<?>> classes = ReflectUtils.getClasses("com.caolei.base.pojo");
+        Set<Class<?>> classes = ReflectUtils.getClasses("com.caolei").stream()
+                .filter(clazz -> AnnotationUtils.isAnnotationDeclaredLocally(EntityInfo.class, clazz))
+                .collect(Collectors.toSet());
         List<EntityResource> entityResources = classes.stream().filter(BaseEntity.class::isAssignableFrom)
                 .map(clazz -> new EntityResource((Class<? extends BaseEntity>) clazz)).collect(toList());
 

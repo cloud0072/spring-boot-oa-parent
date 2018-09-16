@@ -66,24 +66,6 @@ public abstract class BaseCrudController<T extends BaseEntity> implements BaseCo
 
     /******************************************************************************************************************/
 
-    @ApiOperation("查询所有对象")
-    @GetMapping("/list")
-    protected String list(HttpServletRequest request,
-                          HttpServletResponse response,
-                          T t,
-                          @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber,
-                          @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                          @RequestParam(value = "direction", defaultValue = "ASC") String direction,
-                          @RequestParam(value = "sortField", defaultValue = "id") String sortField,
-                          Model model) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, new Sort(Sort.Direction.fromString(direction), sortField));
-        Page<T> list = service().findAll(Example.of(t), pageable);
-        model.addAttribute("page", list);
-        model.addAttribute("search", t);
-        putModel(model, OP_LIST, t);
-        return modulePath + entityPath + entityPath + "_list";
-    }
-
     @ApiOperation("跳转 创建 或删除对象页")
     @GetMapping(value = "/create")
     protected String showCreatePage(HttpServletRequest request,
@@ -119,32 +101,25 @@ public abstract class BaseCrudController<T extends BaseEntity> implements BaseCo
         return modulePath + entityPath + entityPath + "_view";
     }
 
-    /******************************************************************************************************************/
-
-    @ApiOperation("根据对象的属性查询所有对象")
-    @GetMapping
-    @ResponseBody
-    protected ResponseEntity findAll(HttpServletRequest request,
-                                     HttpServletResponse response,
-                                     T t) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("message", "查询成功");
-        map.put(entityName, service().findAll(Example.of(t)));
-        return ResponseEntity.ok(map);
-    }
-
-    @ApiOperation("查询对象")
-    @GetMapping("/{id}")
-    @ResponseBody
-    protected ResponseEntity find(HttpServletRequest request,
+    @ApiOperation("查询所有对象")
+    @GetMapping("/list")
+    protected String showListPage(HttpServletRequest request,
                                   HttpServletResponse response,
-                                  @PathVariable("id") @NonNull String id) {
-        T t = service().findById(id);
-        Map<String, Object> map = new HashMap<>();
-        map.put("message", "查询成功");
-        map.put(entityName, t);
-        return ResponseEntity.ok(map);
+                                  T t,
+                                  @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber,
+                                  @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+                                  @RequestParam(value = "direction", defaultValue = "ASC") String direction,
+                                  @RequestParam(value = "sortField", defaultValue = "id") String sortField,
+                                  Model model) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, new Sort(Sort.Direction.fromString(direction), sortField));
+        Page<T> list = service().findAll(Example.of(t), pageable);
+        model.addAttribute("page", list);
+        model.addAttribute("search", t);
+        putModel(model, OP_LIST, t);
+        return modulePath + entityPath + entityPath + "_list";
     }
+
+    /******************************************************************************************************************/
 
     @ApiOperation("提交创建对象")
     @PostMapping
@@ -157,6 +132,23 @@ public abstract class BaseCrudController<T extends BaseEntity> implements BaseCo
         Map<String, Object> map = new HashMap<>();
         map.put("message", "新增成功");
         map.put("url", modulePath + entityPath + "/view/" + t.getId());
+        return ResponseEntity.ok(map);
+    }
+
+    @ApiOperation("提交删除对象")
+    @DeleteMapping("/{id}")
+    @ResponseBody
+    protected ResponseEntity delete(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    @PathVariable("id") @NonNull String id,
+                                    T t) {
+        t = service().findById(t.getId());
+//        SecurityUtils.checkOperation(t, OP_DELETE);
+
+        service().deleteById(t.getId());
+        Map<String, Object> map = new HashMap<>();
+        map.put("message", "删除成功");
+        map.put("url", modulePath + entityPath + "/list");
         return ResponseEntity.ok(map);
     }
 
@@ -175,20 +167,28 @@ public abstract class BaseCrudController<T extends BaseEntity> implements BaseCo
         return ResponseEntity.ok(map);
     }
 
-    @ApiOperation("提交删除对象")
-    @DeleteMapping("/{id}")
+    @ApiOperation("查询对象")
+    @GetMapping("/{id}")
     @ResponseBody
-    protected ResponseEntity delete(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    @PathVariable("id") @NonNull String id,
-                                    T t) {
-        t = service().findById(t.getId());
-//        SecurityUtils.checkOperation(t, OP_DELETE);
-
-        service().deleteById(t.getId());
+    protected ResponseEntity find(HttpServletRequest request,
+                                  HttpServletResponse response,
+                                  @PathVariable("id") @NonNull String id) {
+        T t = service().findById(id);
         Map<String, Object> map = new HashMap<>();
-        map.put("message", "删除成功");
-        map.put("url", modulePath + entityPath);
+        map.put("message", "查询成功");
+        map.put(entityName, t);
+        return ResponseEntity.ok(map);
+    }
+
+    @ApiOperation("根据对象的属性查询所有对象")
+    @GetMapping
+    @ResponseBody
+    protected ResponseEntity findAll(HttpServletRequest request,
+                                     HttpServletResponse response,
+                                     T t) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("message", "查询成功");
+        map.put(entityName, service().findAll(Example.of(t)));
         return ResponseEntity.ok(map);
     }
 

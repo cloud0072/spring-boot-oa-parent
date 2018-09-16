@@ -1,6 +1,6 @@
 package com.caolei.base.repository;
 
-import com.caolei.base.pojo.User;
+import com.caolei.base.entity.User;
 import org.springframework.stereotype.Repository;
 
 /**
