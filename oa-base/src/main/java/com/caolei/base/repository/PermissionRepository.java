@@ -22,5 +22,10 @@ public interface PermissionRepository
      */
     List<Permission> findPermissionsByEntityResource_CodeInAndOperationLessThanEqual(List<String> codes, Operation operation);
 
+    /**
+     * 使用 _ 可以查询关联实体的属性
+     * @param name
+     * @return
+     */
     List<Permission> findPermissionsByRoles_Users_AccountEquals(String name);
 }

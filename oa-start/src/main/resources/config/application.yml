@@ -1,7 +1,61 @@
+# server localhost:8888/oa/
+server:
+    port: 8888
+    servlet:
+        context-path: /oa
+    tomcat:
+        accesslog:
+          enabled: true
 spring:
     profiles:
 #        active: pord
-#        active: dev
-        active: h2
-
+        active: dev
+    resources:
+        static-locations:
+            - classpath:/META-INF/resources/
+            - classpath:/resources/
+            - classpath:/static/
+            - classpath:/public/
+            - file:${location.resource.static-path}/
+    mvc:
+        static-path-pattern: /**
+    servlet:
+        multipart:
+            max-file-size: 10Mb
+            max-request-size: 100Mb
+    thymeleaf:
+        prefix: classpath:/templates/
+        check-template-location: true
+        suffix: .html
+        encoding: UTF-8
+        mode: LEGACYHTML5
+        cache: false
+    aop:
+        auto: true
+        proxy-target-class: true
+    jackson:
+        serialization:
+            indent_output: true
+    cache:
+        ehcache:
+            config: classpath:config/ehcache.xml
+logging:
+    file: ${location.resource.log-path}/application.log
+location:
+    resource:
+        static-path: ${location.resource.base-path}/static
+        upload-path: ${location.resource.base-path}/upload
+        config-path: ${location.resource.base-path}/config
+        log-path: ${location.resource.base-path}/log
+        db-path: ${location.resource.base-path}/h2
+plugin:
+    swagger2:
+        enable: true
+    shiro:
+        cipher-key: 4028c081645b411c01645b4127c40026
+        hash-algorithm-name: SHA-256
+        login-retry-times: 5
+        hash-iterations: 100
+        lock-expired-time: 600
+        remember-me-age: 259200
 

@@ -11,7 +11,18 @@ import javax.servlet.http.HttpServletResponse;
 public interface UserService
         extends BaseCrudService<User> {
 
-    User save(User user, HttpServletRequest request, HttpServletResponse response, boolean encrypt);
+    /**
+     *
+     * @param user
+     * @param request
+     * @param response
+     * @param encrypt
+     * @return
+     */
+    User save(User user,
+              HttpServletRequest request,
+              HttpServletResponse response,
+              boolean encrypt);
 
     /**
      * 登陆

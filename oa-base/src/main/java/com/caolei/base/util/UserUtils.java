@@ -1,7 +1,7 @@
 package com.caolei.base.util;
 
 import com.caolei.base.entity.User;
-import com.caolei.common.autoconfig.Shiro;
+import com.caolei.common.autoconfig.ShiroProperties;
 import com.caolei.common.constant.Constants;
 import com.caolei.common.util.HttpUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -17,11 +17,11 @@ import org.springframework.util.StringUtils;
 @Component
 public class UserUtils {
 
-    private static Shiro shiro;
+    private static ShiroProperties shiroProperties;
 
     @Autowired
-    private UserUtils(Shiro shiro) {
-        UserUtils.shiro = shiro;
+    private UserUtils(ShiroProperties shiroProperties) {
+        UserUtils.shiroProperties = shiroProperties;
     }
 
     /**
@@ -56,7 +56,7 @@ public class UserUtils {
         if (user == null || StringUtils.isEmpty(user.getSalt()) || StringUtils.isEmpty(user.getPassword())) {
             throw new NullPointerException("用户的加密信息缺失,请确认后重试");
         }
-        user.setPassword(new Sha256Hash(user.getPassword(), user.getSalt(), shiro.getHashIterations()).toString());
+        user.setPassword(new Sha256Hash(user.getPassword(), user.getSalt(), shiroProperties.getHashIterations()).toString());
         return user;
     }
 
@@ -70,7 +70,7 @@ public class UserUtils {
         if (user == null || StringUtils.isEmpty(user.getSalt()) || StringUtils.isEmpty(user.getPassword())) {
             throw new NullPointerException("用户的加密信息缺失,请确认后重试");
         }
-        return user.getPassword().equals(new Sha256Hash(password, user.getSalt(), shiro.getHashIterations()).toString());
+        return user.getPassword().equals(new Sha256Hash(password, user.getSalt(), shiroProperties.getHashIterations()).toString());
     }
 
 }

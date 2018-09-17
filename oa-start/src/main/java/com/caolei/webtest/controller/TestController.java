@@ -4,8 +4,8 @@ import com.caolei.base.exception.AjaxException;
 import com.caolei.base.entity.User;
 import com.caolei.base.service.UserService;
 import com.caolei.base.controller.BaseController;
-import com.caolei.common.autoconfig.LocationResource;
-import com.caolei.common.autoconfig.Shiro;
+import com.caolei.common.autoconfig.LocationProperties;
+import com.caolei.common.autoconfig.ShiroProperties;
 import com.caolei.common.util.DateUtils;
 import com.caolei.common.util.FileUtils;
 import io.swagger.annotations.Api;
@@ -41,9 +41,9 @@ public class TestController implements BaseController {
     @Autowired
     private UserService userService;
     @Autowired
-    private Shiro shiro;
+    private ShiroProperties shiroProperties;
     @Autowired
-    private LocationResource location;
+    private LocationProperties location;
     @Value("spring.resources.static-locations")
     private String staticLocation;
 
@@ -72,7 +72,7 @@ public class TestController implements BaseController {
     @GetMapping("/04")
     public Object test0(HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> map = new HashMap<>();
-        map.put("shiro", shiro);
+        map.put("shiro", shiroProperties);
         map.put("location", location);
         map.put("staticLocation", staticLocation);
         return map;

@@ -25,10 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.toList;
 
 /**
  * 自动初始化数据库
@@ -70,14 +67,15 @@ public class SystemModuleInstaller
         /*
          * 添加实体
          */
-        Set<Class<?>> classes = ReflectUtils.getClasses("com.caolei").stream()
+        List<EntityResource> entityResources = ReflectUtils.getClasses("com.caolei").stream()
                 .filter(clazz -> AnnotationUtils.isAnnotationDeclaredLocally(EntityInfo.class, clazz))
-                .collect(Collectors.toSet());
-        List<EntityResource> entityResources = classes.stream().filter(BaseEntity.class::isAssignableFrom)
-                .map(clazz -> new EntityResource((Class<? extends BaseEntity>) clazz)).collect(toList());
+                .filter(BaseEntity.class::isAssignableFrom)
+                .map(clazz -> new EntityResource((Class<? extends BaseEntity>) clazz))
+                .collect(Collectors.toList());
 
         List<EntityResource> hasExistEntityResources = entityResourceRepository.findAll();
-        entityResources.removeIf(entity -> hasExistEntityResources.stream().anyMatch(has -> has.getName().equals(entity.getName())));
+        entityResources.removeIf(entity -> hasExistEntityResources.stream()
+                .anyMatch(has -> has.getName().equals(entity.getName())));
         try {
             entityResourceRepository.saveAll(entityResources);
         } catch (Exception ignored) {
@@ -91,7 +89,8 @@ public class SystemModuleInstaller
 
         entityResources.forEach(entity -> Arrays.stream(Operation.values())
                 .forEach(operation -> authPermissions.add(new Permission(entity, operation, null, true))));
-        authPermissions.removeIf(entity -> hasExistPermissions.stream().anyMatch(has -> has.getName().equals(entity.getName())));
+        authPermissions.removeIf(entity -> hasExistPermissions.stream()
+                .anyMatch(has -> has.getName().equals(entity.getName())));
         try {
             permissionService.saveAll(authPermissions);
         } catch (Exception ignored) {
@@ -103,7 +102,8 @@ public class SystemModuleInstaller
         List<Role> hasExistRoles = roleService.findAll();
         Role superuserRole = new Role("超级管理员", "superuser", "拥有管理系统所有权限", true);
         Role userRole = new Role("用户", "user", "普通用户", true);
-        if (hasExistRoles.stream().noneMatch(role -> role.getCode().equals("superuser"))) {
+        if (hasExistRoles.stream()
+                .noneMatch(role -> role.getCode().equals("superuser"))) {
             List<Role> roles = new ArrayList<>();
             roles.add(superuserRole);
             roles.add(userRole);

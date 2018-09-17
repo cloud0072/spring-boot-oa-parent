@@ -6,14 +6,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+
 /**
  * 启动方法的入口
  * 一定要在所有包的上级，不然无法扫描到注解
  *
  * @author cloud0072
  */
-@Slf4j
 @SpringBootApplication
+@Slf4j
 public class OaStartApplication {
 
     public static void main(String[] args) {

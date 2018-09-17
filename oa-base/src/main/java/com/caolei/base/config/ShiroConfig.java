@@ -3,7 +3,7 @@ package com.caolei.base.config;
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import com.caolei.base.shiro.DefaultRealm;
 import com.caolei.base.shiro.IHashedCredentialsMatcher;
-import com.caolei.common.autoconfig.Shiro;
+import com.caolei.common.autoconfig.ShiroProperties;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.codec.Base64;
@@ -31,7 +31,7 @@ import java.util.LinkedHashMap;
 public class ShiroConfig {
 
     @Autowired
-    private Shiro shiro;
+    private ShiroProperties shiroProperties;
     @Autowired
     private EhCacheManager ehCacheManager;
     @Autowired
@@ -49,8 +49,8 @@ public class ShiroConfig {
      */
     @Bean
     public HashedCredentialsMatcher hashedCredentialsMatcher() {
-        hashedCredentialsMatcher.setHashAlgorithmName(shiro.getHashAlgorithmName());
-        hashedCredentialsMatcher.setHashIterations(shiro.getHashIterations());
+        hashedCredentialsMatcher.setHashAlgorithmName(shiroProperties.getHashAlgorithmName());
+        hashedCredentialsMatcher.setHashIterations(shiroProperties.getHashIterations());
         hashedCredentialsMatcher.setStoredCredentialsHexEncoded(true);
         return hashedCredentialsMatcher;
     }
@@ -83,7 +83,7 @@ public class ShiroConfig {
         //这个参数是cookie的名称，对应前端的checkbox 的name = rememberMe
         SimpleCookie simpleCookie = new SimpleCookie("rememberMe");
         //记住我cookie生效时间30天（259200） ,单位秒
-        simpleCookie.setMaxAge(shiro.getRememberMeAge());
+        simpleCookie.setMaxAge(shiroProperties.getRememberMeAge());
         simpleCookie.setHttpOnly(true);
         return simpleCookie;
     }
@@ -94,7 +94,7 @@ public class ShiroConfig {
     @Bean
     public CookieRememberMeManager rememberMeManager() {
         CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
-        byte[] cipherKey = Base64.decode(shiro.getCipherKey());
+        byte[] cipherKey = Base64.decode(shiroProperties.getCipherKey());
         cookieRememberMeManager.setCipherKey(cipherKey);
         cookieRememberMeManager.setCookie(rememberMeCookie());
         return cookieRememberMeManager;

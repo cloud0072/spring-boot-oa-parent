@@ -1,6 +1,6 @@
 package com.caolei.common.util;
 
-import com.caolei.common.autoconfig.LocationResource;
+import com.caolei.common.autoconfig.LocationProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,12 +18,12 @@ import java.io.File;
 @Component
 public class FileUtils {
     //本地文件配置
-    private static LocationResource location;
+    private static LocationProperties location;
     //日志文件目录
     private static String logFile;
 
     @Autowired
-    private FileUtils(LocationResource location) {
+    private FileUtils(LocationProperties location) {
         FileUtils.location = location;
 
         initDirectory(location.getBasePath());

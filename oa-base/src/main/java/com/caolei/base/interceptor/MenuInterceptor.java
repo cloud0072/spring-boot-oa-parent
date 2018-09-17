@@ -40,6 +40,7 @@ public class MenuInterceptor implements HandlerInterceptor {
                 request.getSession().setAttribute("menuId", currentMenuId);
             }
 
+            //分类管理中直接列出顶级分类名称
             List<Category> categoryList = categoryService.findCategoriesByParent_Id(null);
             modelAndView.addObject("categories", categoryList);
         }

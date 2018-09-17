@@ -9,12 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EntityResourceRepository extends BaseRepository<EntityResource, String> {
 
-    /**
-     * 查询
-     *
-     * @param code
-     * @return
-     */
     EntityResource findEntityResourceByCode(String code);
 
 }

@@ -9,7 +9,7 @@ import com.caolei.base.service.RoleService;
 import com.caolei.base.service.UserService;
 import com.caolei.base.shiro.RetryCountAndTime;
 import com.caolei.base.util.UserUtils;
-import com.caolei.common.autoconfig.Shiro;
+import com.caolei.common.autoconfig.ShiroProperties;
 import com.caolei.common.constant.FileType;
 import com.caolei.common.util.SecurityUtils;
 import com.caolei.common.util.StringUtils;
@@ -43,7 +43,7 @@ public class UserServiceImpl
      * 不要使用 构造器方式注入 否则会产生循环注入的问题
      */
     @Autowired
-    private Shiro shiro;
+    private ShiroProperties shiroProperties;
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -189,7 +189,7 @@ public class UserServiceImpl
             RetryCountAndTime retry = passwordRetryCache.get(username);
             // 设置重试时间和次数
             if (retry == null) {
-                retry = new RetryCountAndTime(shiro);
+                retry = new RetryCountAndTime(shiroProperties);
                 passwordRetryCache.put(username, retry);
             }
             // 超过限定次数，抛异常

@@ -11,7 +11,7 @@ import java.util.List;
  * @param <T>
  */
 public interface NamedEntityCrudService<T extends BaseEntity>
-        extends BaseCrudService {
+        extends BaseCrudService<T> {
 
     /**
      * 数据源
