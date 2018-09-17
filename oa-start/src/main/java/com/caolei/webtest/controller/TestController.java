@@ -1,7 +1,7 @@
 package com.caolei.webtest.controller;
 
 import com.caolei.base.exception.AjaxException;
-import com.caolei.base.entity.User;
+import com.caolei.base.model.User;
 import com.caolei.base.service.UserService;
 import com.caolei.base.controller.BaseController;
 import com.caolei.common.autoconfig.LocationProperties;

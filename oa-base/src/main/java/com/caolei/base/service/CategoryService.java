@@ -1,7 +1,7 @@
 package com.caolei.base.service;
 
-import com.caolei.base.entity.Category;
-import com.caolei.base.entity.dto.CategoryDTO;
+import com.caolei.base.model.Category;
+import com.caolei.base.model.dto.CategoryDTO;
 
 import java.util.List;
 

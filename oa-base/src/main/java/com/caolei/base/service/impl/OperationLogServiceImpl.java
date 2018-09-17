@@ -1,6 +1,6 @@
 package com.caolei.base.service.impl;
 
-import com.caolei.base.entity.OperationLog;
+import com.caolei.base.model.OperationLog;
 import com.caolei.base.repository.OperationLogRepository;
 import com.caolei.base.service.OperationLogService;
 import org.springframework.beans.factory.annotation.Autowired;

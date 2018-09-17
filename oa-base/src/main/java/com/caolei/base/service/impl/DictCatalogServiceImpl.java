@@ -1,7 +1,7 @@
 //package com.caolei.base.service.impl;
 //
 ////import com.caolei.base.extend.ColumnConfig;
-////import com.caolei.base.entity.DictCatalog;
+////import com.caolei.base.model.DictCatalog;
 //import com.caolei.base.repository.ColumnConfigRepository;
 //import com.caolei.base.repository.DictCatalogRepository;
 ////import com.caolei.base.service.DictCatalogService;

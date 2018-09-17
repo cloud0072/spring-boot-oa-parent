@@ -1,6 +1,6 @@
 package com.caolei.base.service;
 
-import com.caolei.base.entity.FileComponent;
+import com.caolei.base.model.FileComponent;
 
 /**
  * @author caolei

@@ -1,4 +1,4 @@
-package com.caolei.base.shiro;
+package com.caolei.base.config.shiro;
 
 import com.caolei.common.autoconfig.ShiroProperties;
 import org.apache.shiro.authc.AuthenticationInfo;

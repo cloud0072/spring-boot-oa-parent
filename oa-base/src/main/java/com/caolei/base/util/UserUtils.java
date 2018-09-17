@@ -1,6 +1,6 @@
 package com.caolei.base.util;
 
-import com.caolei.base.entity.User;
+import com.caolei.base.model.User;
 import com.caolei.common.autoconfig.ShiroProperties;
 import com.caolei.common.constant.Constants;
 import com.caolei.common.util.HttpUtils;

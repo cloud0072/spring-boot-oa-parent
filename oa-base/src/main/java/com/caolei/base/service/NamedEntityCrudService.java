@@ -1,6 +1,6 @@
 package com.caolei.base.service;
 
-import com.caolei.base.entity.BaseEntity;
+import com.caolei.base.model.BaseEntity;
 import com.caolei.base.repository.NamedEntityRepository;
 
 import java.util.List;

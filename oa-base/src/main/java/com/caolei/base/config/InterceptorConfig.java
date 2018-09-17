@@ -4,9 +4,11 @@ import com.caolei.base.interceptor.DefaultInterceptor;
 import com.caolei.base.interceptor.MenuInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 拦截器在此注册
@@ -17,26 +19,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class InterceptorConfig
         implements WebMvcConfigurer {
 
-    private final DefaultInterceptor defaultInterceptor;
-    private final MenuInterceptor menuInterceptor;
-
     @Autowired
-    public InterceptorConfig(DefaultInterceptor defaultInterceptor,
-                             MenuInterceptor menuInterceptor) {
-        this.defaultInterceptor = defaultInterceptor;
-        this.menuInterceptor = menuInterceptor;
-    }
-
-    private static void excludeStaticResource(InterceptorRegistration registration) {
-        registration
-                .excludePathPatterns("/**/*.js")
-                .excludePathPatterns("/**/*.css")
-                .excludePathPatterns("/**/*.png")
-                .excludePathPatterns("/**/*.gif")
-                .excludePathPatterns("/**/*.jpg")
-                .excludePathPatterns("/**/*.jpeg")
-                .excludePathPatterns("/**/*.woff");
-    }
+    private DefaultInterceptor defaultInterceptor;
+    @Autowired
+    private MenuInterceptor menuInterceptor;
 
     /**
      * 多个拦截器组成一个拦截器链
@@ -47,12 +33,26 @@ public class InterceptorConfig
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        InterceptorRegistration ir1 = registry.addInterceptor(defaultInterceptor).addPathPatterns("/**");
-        excludeStaticResource(ir1);
+        List<String> excludePatterns = new ArrayList<>();
+        excludePatterns.add("/**/*.js");
+        excludePatterns.add("/**/*.css");
+        excludePatterns.add("/**/*.png");
+        excludePatterns.add("/**/*.gif");
+        excludePatterns.add("/**/*.jpg");
+        excludePatterns.add("/**/*.jpeg");
+        excludePatterns.add("/**/*.woff");
 
-        InterceptorRegistration ir2 = registry.addInterceptor(menuInterceptor).addPathPatterns("/**");
-        excludeStaticResource(ir2);
+        registry.addInterceptor(defaultInterceptor)
+                .addPathPatterns("/**")
+                .excludePathPatterns(excludePatterns);
 
+        registry.addInterceptor(menuInterceptor)
+                .addPathPatterns("/**")
+                .excludePathPatterns(excludePatterns);
+
+//        registry.addInterceptor(urlPathMatchingInterceptor)
+//                .addPathPatterns("/**")
+//                .excludePathPatterns(excludePatterns);
     }
 
 }

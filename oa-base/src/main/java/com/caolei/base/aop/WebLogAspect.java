@@ -1,8 +1,11 @@
 package com.caolei.base.aop;
 
-import com.caolei.base.entity.OperationLog;
+import com.caolei.base.model.OperationLog;
 import com.caolei.base.service.OperationLogService;
+import com.caolei.common.util.SecurityUtils;
+import com.caolei.common.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.web.util.WebUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.*;
@@ -11,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 
@@ -41,22 +45,32 @@ public class WebLogAspect {
     public void doBefore(JoinPoint joinPoint) {
         startTime.set(System.currentTimeMillis());
 
-        //接收到请求，记录请求内容
+        // 接收到请求，记录请求内容
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
         Signature signature = joinPoint.getSignature();
 
         // 记录下请求内容
-        log.info("URL : " + request.getRequestURL().toString());
-        log.info("IP : " + request.getRemoteAddr());
-        log.info("HTTP_METHOD : " + request.getMethod());
-        log.info("CLASS_METHOD : " + signature.getDeclaringTypeName() + "." + signature.getName());
-        log.info("ARGS : " + Arrays.toString(joinPoint.getArgs()));
+        log.info("URL :\t" + request.getRequestURL().toString());
+        log.info("IP :\t" + request.getRemoteAddr());
+        log.info("HTTP_METHOD\t: " + request.getMethod());
+        log.info("CLASS :\t" + signature.getDeclaringTypeName());
+        log.info("METHOD :\t" + signature.getName());
+        log.info("ARGS :\t" + Arrays.toString(joinPoint.getArgs()));
         try {
             operationLogService.save(new OperationLog(request), request, null);
         } catch (Exception e) {
             log.error(e.getMessage());
         }
+
+//        // 验证权限
+//        String path = WebUtils.getPathWithinApplication(request);
+//        path = path.startsWith("/")? path.replaceFirst("/", "") : path;
+//        if (!StringUtils.isEmpty(path)){
+//            String permission = path.replaceAll("/",":");
+//            SecurityUtils.getSubject().checkPermission(permission);
+//        }
+
     }
 
     @AfterReturning(value = "webLog()", returning = "ret")
@@ -70,7 +84,7 @@ public class WebLogAspect {
     @AfterThrowing(value = "webLog()", throwing = "thr")
     public void doAfterThrowing(JoinPoint joinPoint, Throwable thr) {
         log.error("CLASS_METHOD : " + joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName() + " 执行失败");
-        log.error("TIME_SPEND : " + (System.currentTimeMillis() - startTime.get()));
+        log.error("TIME_SPEND : " + (System.currentTimeMillis() - startTime.get()) + "\n");
         startTime.remove();
     }
 

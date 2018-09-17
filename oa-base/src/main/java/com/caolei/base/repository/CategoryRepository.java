@@ -1,6 +1,6 @@
 package com.caolei.base.repository;
 
-import com.caolei.base.entity.Category;
+import com.caolei.base.model.Category;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

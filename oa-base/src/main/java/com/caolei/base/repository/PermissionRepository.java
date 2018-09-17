@@ -1,6 +1,6 @@
 package com.caolei.base.repository;
 
-import com.caolei.base.entity.Permission;
+import com.caolei.base.model.Permission;
 import com.caolei.common.constant.Operation;
 import org.springframework.stereotype.Repository;
 

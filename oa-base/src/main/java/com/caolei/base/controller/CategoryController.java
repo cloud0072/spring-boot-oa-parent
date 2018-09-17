@@ -1,7 +1,7 @@
 package com.caolei.base.controller;
 
-import com.caolei.base.entity.Category;
-import com.caolei.base.entity.dto.CategoryDTO;
+import com.caolei.base.model.Category;
+import com.caolei.base.model.dto.CategoryDTO;
 import com.caolei.base.service.BaseCrudService;
 import com.caolei.base.service.CategoryService;
 import com.caolei.common.util.StringUtils;

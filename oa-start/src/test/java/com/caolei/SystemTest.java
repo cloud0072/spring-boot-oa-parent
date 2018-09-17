@@ -1,10 +1,10 @@
 package com.caolei;
 
 import com.caolei.common.constant.Operation;
-import com.caolei.base.entity.OperationLog;
-import com.caolei.base.entity.Permission;
-import com.caolei.base.entity.Role;
-import com.caolei.base.entity.User;
+import com.caolei.base.model.OperationLog;
+import com.caolei.base.model.Permission;
+import com.caolei.base.model.Role;
+import com.caolei.base.model.User;
 import com.caolei.base.repository.EntityResourceRepository;
 import com.caolei.base.repository.PermissionRepository;
 import com.caolei.base.service.PermissionService;

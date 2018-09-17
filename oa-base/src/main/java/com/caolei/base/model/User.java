@@ -1,6 +1,6 @@
-package com.caolei.base.entity;
+package com.caolei.base.model;
 
-import com.caolei.base.entity.extend.UserExtend;
+import com.caolei.base.model.extend.UserExtend;
 import com.caolei.common.annotation.EntityInfo;
 import com.caolei.common.module.BaseModuleEntity;
 import com.caolei.common.util.StringUtils;

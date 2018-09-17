@@ -1,13 +1,13 @@
 package com.caolei.base.service.impl;
 
-import com.caolei.base.entity.FileComponent;
-import com.caolei.base.entity.Role;
-import com.caolei.base.entity.User;
+import com.caolei.base.model.FileComponent;
+import com.caolei.base.model.Role;
+import com.caolei.base.model.User;
 import com.caolei.base.repository.UserRepository;
 import com.caolei.base.service.FileComponentService;
 import com.caolei.base.service.RoleService;
 import com.caolei.base.service.UserService;
-import com.caolei.base.shiro.RetryCountAndTime;
+import com.caolei.base.config.shiro.RetryCountAndTime;
 import com.caolei.base.util.UserUtils;
 import com.caolei.common.autoconfig.ShiroProperties;
 import com.caolei.common.constant.FileType;

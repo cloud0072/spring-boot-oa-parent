@@ -1,6 +1,6 @@
 package com.caolei.base.service;
 
-import com.caolei.base.entity.User;
+import com.caolei.base.model.User;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

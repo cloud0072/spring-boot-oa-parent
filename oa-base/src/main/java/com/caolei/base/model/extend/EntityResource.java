@@ -1,8 +1,8 @@
-package com.caolei.base.entity.extend;
+package com.caolei.base.model.extend;
 
 
-import com.caolei.base.entity.BaseEntity;
-import com.caolei.base.entity.NamedEntity;
+import com.caolei.base.model.BaseEntity;
+import com.caolei.base.model.NamedEntity;
 import com.caolei.common.module.BaseModuleEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -46,7 +46,7 @@ public class EntityResource
         if (path.length > 2) {
             this.label = path[path.length - 3];
         } else {
-            this.label = "entity";
+            this.label = "model";
         }
         this.code = path[path.length - 1];
         this.name = code;

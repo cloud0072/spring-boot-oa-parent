@@ -1,7 +1,7 @@
 package com.caolei.base.service.impl;
 
-import com.caolei.base.entity.Category;
-import com.caolei.base.entity.dto.CategoryDTO;
+import com.caolei.base.model.Category;
+import com.caolei.base.model.dto.CategoryDTO;
 import com.caolei.base.repository.BaseRepository;
 import com.caolei.base.repository.CategoryRepository;
 import com.caolei.base.service.CategoryService;

@@ -1,8 +1,8 @@
 package com.caolei.base.controller;
 
 import com.caolei.base.exception.AjaxException;
-import com.caolei.base.entity.FileComponent;
-import com.caolei.base.entity.User;
+import com.caolei.base.model.FileComponent;
+import com.caolei.base.model.User;
 import com.caolei.base.service.BaseCrudService;
 import com.caolei.base.service.FileComponentService;
 import com.caolei.base.service.UserService;

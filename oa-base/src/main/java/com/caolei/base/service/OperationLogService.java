@@ -1,6 +1,6 @@
 package com.caolei.base.service;
 
-import com.caolei.base.entity.OperationLog;
+import com.caolei.base.model.OperationLog;
 
 /**
  * @author cloud0072

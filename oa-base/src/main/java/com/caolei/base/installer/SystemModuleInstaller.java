@@ -1,10 +1,10 @@
 package com.caolei.base.installer;
 
-import com.caolei.base.entity.BaseEntity;
-import com.caolei.base.entity.Permission;
-import com.caolei.base.entity.Role;
-import com.caolei.base.entity.User;
-import com.caolei.base.entity.extend.EntityResource;
+import com.caolei.base.model.BaseEntity;
+import com.caolei.base.model.Permission;
+import com.caolei.base.model.Role;
+import com.caolei.base.model.User;
+import com.caolei.base.model.extend.EntityResource;
 import com.caolei.base.repository.EntityResourceRepository;
 import com.caolei.base.service.PermissionService;
 import com.caolei.base.service.RoleService;

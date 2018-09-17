@@ -1,4 +1,4 @@
-package com.caolei.base.entity;
+package com.caolei.base.model;
 
 
 import com.caolei.base.util.UserUtils;

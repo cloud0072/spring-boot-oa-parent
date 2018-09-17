@@ -1,6 +1,6 @@
 package com.caolei.base.service;
 
-import com.caolei.base.entity.BaseEntity;
+import com.caolei.base.model.BaseEntity;
 import com.caolei.base.repository.BaseRepository;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * crud服务接口
  *
- * @param <T> entity class
+ * @param <T> model class
  * @author cloud0072
  * @date 2018/6/12 22:48
  */

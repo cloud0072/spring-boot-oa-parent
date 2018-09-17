@@ -2,7 +2,7 @@ package com.caolei;
 
 import com.caolei.common.util.ReflectUtils;
 import com.caolei.common.util.StringUtils;
-import com.caolei.base.entity.User;
+import com.caolei.base.model.User;
 import com.caolei.base.util.UserUtils;
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
@@ -22,7 +22,7 @@ public class BaseTest {
 
     @Test
     public void test01() {
-        Set<Class<?>> classSet = ReflectUtils.getClasses("com.caolei.common.entity");
+        Set<Class<?>> classSet = ReflectUtils.getClasses("com.caolei.common.model");
 
         System.out.println(classSet);
 

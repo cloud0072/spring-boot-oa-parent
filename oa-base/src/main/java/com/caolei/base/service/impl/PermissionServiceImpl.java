@@ -1,6 +1,6 @@
 package com.caolei.base.service.impl;
 
-import com.caolei.base.entity.Permission;
+import com.caolei.base.model.Permission;
 import com.caolei.base.repository.EntityResourceRepository;
 import com.caolei.base.repository.PermissionRepository;
 import com.caolei.base.service.PermissionService;

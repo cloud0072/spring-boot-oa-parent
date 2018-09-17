@@ -1,6 +1,6 @@
 package com.caolei.base.service;
 
-import com.caolei.base.entity.Role;
+import com.caolei.base.model.Role;
 
 /**
  * @author cloud0072

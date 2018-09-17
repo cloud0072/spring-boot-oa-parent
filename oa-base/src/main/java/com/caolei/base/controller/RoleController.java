@@ -1,8 +1,8 @@
 package com.caolei.base.controller;
 
-import com.caolei.base.entity.Permission;
-import com.caolei.base.entity.Role;
-import com.caolei.base.entity.User;
+import com.caolei.base.model.Permission;
+import com.caolei.base.model.Role;
+import com.caolei.base.model.User;
 import com.caolei.base.service.PermissionService;
 import com.caolei.base.service.RoleService;
 import com.caolei.base.service.UserService;

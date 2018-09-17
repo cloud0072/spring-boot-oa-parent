@@ -1,6 +1,6 @@
-package com.caolei.base.entity;
+package com.caolei.base.model;
 
-import com.caolei.base.entity.extend.EntityResource;
+import com.caolei.base.model.extend.EntityResource;
 import com.caolei.common.annotation.EntityInfo;
 import com.caolei.common.module.BaseModuleEntity;
 import com.caolei.common.constant.Operation;

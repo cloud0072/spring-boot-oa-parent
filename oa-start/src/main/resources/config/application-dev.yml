@@ -41,3 +41,6 @@ logging:
        org.hibernate: error
        com.caolei.base.handle.GlobalExceptionHandler: error
        com.caolei.base.aop.WebLogAspect: info
+plugin:
+    swagger2:
+        enable: true

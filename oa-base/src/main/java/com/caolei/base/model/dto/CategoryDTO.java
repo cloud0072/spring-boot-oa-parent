@@ -1,10 +1,13 @@
-package com.caolei.base.entity.dto;
+package com.caolei.base.model.dto;
 
-import com.caolei.base.entity.Category;
+import com.caolei.base.model.Category;
 import lombok.Data;
 
 import java.util.List;
 
+/**
+ * 分类 数据传输对象
+ */
 @Data
 public class CategoryDTO {
 
@@ -30,9 +33,6 @@ public class CategoryDTO {
                 this.pid = category.getParent().getId();
             }
         }
-    }
-
-    public CategoryDTO() {
     }
 
 }

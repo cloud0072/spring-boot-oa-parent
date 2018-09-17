@@ -1,6 +1,6 @@
 package com.caolei.base.util;
 
-import com.caolei.base.entity.NamedEntity;
+import com.caolei.base.model.NamedEntity;
 import com.caolei.common.util.ReflectUtils;
 import lombok.extern.slf4j.Slf4j;
 

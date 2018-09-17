@@ -1,6 +1,6 @@
 package com.caolei.base.service;
 
-import com.caolei.base.entity.Permission;
+import com.caolei.base.model.Permission;
 
 import java.util.List;
 

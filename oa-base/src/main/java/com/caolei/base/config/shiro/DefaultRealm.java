@@ -1,7 +1,7 @@
-package com.caolei.base.shiro;
+package com.caolei.base.config.shiro;
 
 
-import com.caolei.base.entity.User;
+import com.caolei.base.model.User;
 import com.caolei.base.service.UserService;
 import com.caolei.base.util.UserUtils;
 import com.caolei.common.util.SecurityUtils;

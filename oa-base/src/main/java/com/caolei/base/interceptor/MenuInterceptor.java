@@ -1,8 +1,7 @@
 package com.caolei.base.interceptor;
 
 
-import com.caolei.base.entity.Category;
-import com.caolei.base.repository.CategoryRepository;
+import com.caolei.base.model.Category;
 import com.caolei.base.service.CategoryService;
 import com.caolei.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -50,7 +50,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = {AuthenticationException.class})
     public ModelAndView authenticationExceptionHandler(HttpServletRequest request, HttpServletResponse response,
                                                        Exception ex) {
-
         ModelAndView modelAndView = new ModelAndView("forward:/prepare_login");
         if (ex instanceof IncorrectCredentialsException) {
             ex = new IncorrectCredentialsException("用户名或密码错误");

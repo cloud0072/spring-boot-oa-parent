@@ -49,8 +49,6 @@ location:
         log-path: ${location.resource.base-path}/log
         db-path: ${location.resource.base-path}/h2
 plugin:
-    swagger2:
-        enable: true
     shiro:
         cipher-key: 4028c081645b411c01645b4127c40026
         hash-algorithm-name: SHA-256

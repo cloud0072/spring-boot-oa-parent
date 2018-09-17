@@ -1,8 +1,8 @@
-package com.caolei.base.entity.extend;
+package com.caolei.base.model.extend;
 
-import com.caolei.base.entity.FileComponent;
-import com.caolei.base.entity.OperationLog;
-import com.caolei.base.entity.BaseEntity;
+import com.caolei.base.model.FileComponent;
+import com.caolei.base.model.OperationLog;
+import com.caolei.base.model.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

@@ -1,9 +1,8 @@
-package com.caolei.base.config;
+package com.caolei.base.config.shiro;
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
-import com.caolei.base.shiro.DefaultRealm;
-import com.caolei.base.shiro.IHashedCredentialsMatcher;
 import com.caolei.common.autoconfig.ShiroProperties;
+import com.caolei.common.util.StringUtils;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.codec.Base64;
@@ -17,10 +16,13 @@ import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.servlet.Filter;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * shiro权限管理器
@@ -36,6 +38,8 @@ public class ShiroConfig {
     private EhCacheManager ehCacheManager;
     @Autowired
     private IHashedCredentialsMatcher hashedCredentialsMatcher;
+    @Value("${spring.h2.console.path}")
+    private String h2WebConsole;
 
     @Bean
     public static LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
@@ -137,28 +141,36 @@ public class ShiroConfig {
     @Bean
     public ShiroFilterFactoryBean shiroFilter() {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
+        //配置安全管理器
         shiroFilterFactoryBean.setSecurityManager(securityManager());
+
         //配置登录的url和登录成功的url
         shiroFilterFactoryBean.setLoginUrl("/prepare_login");
         shiroFilterFactoryBean.setSuccessUrl("/index");
+
         //配置访问权限
         LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         //静态资源
         filterChainDefinitionMap.put("/bootstrap/**", "anon");
         filterChainDefinitionMap.put("/assets/**", "anon");
         filterChainDefinitionMap.put("/s/**", "anon");
-        //h2web控制台
-        filterChainDefinitionMap.put("/h2-console/**", "anon");
+        //h2数据库web控制台
+        if (!StringUtils.isEmpty(h2WebConsole)) {
+            filterChainDefinitionMap.put(h2WebConsole + "/**", "anon");
+        }
         //表示可以匿名访问
         filterChainDefinitionMap.put("/prepare_login", "anon");
         filterChainDefinitionMap.put("/login", "anon");
         filterChainDefinitionMap.put("/test/**", "anon");
-//        filterChainDefinitionMap.put("/", "authc");
         //表示需要认证才可以访问
-        filterChainDefinitionMap.put("/*", "authc");
         filterChainDefinitionMap.put("/**", "authc");
 
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
+
+        //配置自定义拦截器
+        Map<String, Filter> filtersMap = new LinkedHashMap<>();
+        shiroFilterFactoryBean.setFilters(filtersMap);
+
         return shiroFilterFactoryBean;
     }
 
@@ -189,14 +201,14 @@ public class ShiroConfig {
 // 凭据异常
 // org.apache.shiro.authc.CredentialsException
 // org.apache.shiro.authc.AuthenticationException
+// org.apache.shiro.authz.UnauthenticatedException
 //
 // 权限异常
 // 没有访问权限，访问异常
 // org.apache.shiro.authz.HostUnauthorizedException
-// org.apache.shiro.authz.UnauthorizedException
 // 授权异常
-// org.apache.shiro.authz.UnauthenticatedException
 // org.apache.shiro.authz.AuthorizationException
+// org.apache.shiro.authz.UnauthorizedException
 //
 // shiro全局异常
 // org.apache.shiro.ShiroException

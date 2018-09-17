@@ -1,6 +1,6 @@
 package com.caolei.base.service.impl;
 
-import com.caolei.base.entity.FileComponent;
+import com.caolei.base.model.FileComponent;
 import com.caolei.base.repository.FileComponentRepository;
 import com.caolei.base.service.FileComponentService;
 import org.springframework.beans.factory.annotation.Autowired;

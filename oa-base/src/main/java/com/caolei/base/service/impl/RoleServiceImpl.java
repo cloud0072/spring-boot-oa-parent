@@ -1,7 +1,7 @@
 package com.caolei.base.service.impl;
 
-import com.caolei.base.entity.Permission;
-import com.caolei.base.entity.Role;
+import com.caolei.base.model.Permission;
+import com.caolei.base.model.Role;
 import com.caolei.base.repository.BaseRepository;
 import com.caolei.base.repository.RoleRepository;
 import com.caolei.base.service.PermissionService;
@@ -14,7 +14,6 @@ import org.apache.shiro.realm.jdbc.JdbcRealm;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
-import com.caolei.base.repository.BaseRepository;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;

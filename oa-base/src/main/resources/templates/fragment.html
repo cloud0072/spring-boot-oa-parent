@@ -585,7 +585,7 @@
                             <span class="title" th:text="分类一览"></span>
                         </a>
                     </li>
-                    <!--/*@thymesVar id="category" type="com.caolei.base.entity.Category"*/-->
+                    <!--/*@thymesVar id="category" type="com.caolei.base.model.Category"*/-->
                     <th:block th:if="${categories ne null}" th:each="category : ${categories}">
                         <li th:class="${'menu-32-'+ category.categoryOrder}">
                             <a th:href="@{'/base/category/treeview/'+${category.id}(menuId='32-'+ ${category.categoryOrder})}">

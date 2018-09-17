@@ -1,6 +1,6 @@
 package com.caolei.base.repository;
 
-import com.caolei.base.entity.FileComponent;
+import com.caolei.base.model.FileComponent;
 import org.springframework.stereotype.Repository;
 
 /**
