@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -146,7 +148,7 @@ public abstract class BaseCrudController<T extends BaseEntity> implements BaseCo
                                     T t) {
         SecurityUtils.checkOperation(entityName, OP_DELETE, id);
         t = service().findById(t.getId());
-        service().deleteById(t.getId());
+        service().deleteAllByIds(Collections.singletonList(t.getId()));
         Map<String, Object> map = new HashMap<>();
         map.put("message", "删除成功");
         map.put("url", modulePath + entityPath + "/list");
