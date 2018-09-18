@@ -15,6 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 
 /**
+ * 项目对shiro有一定的封装 避免直接使用shiro原有的方法
+ * 切面只能切spring生成的对象 而且 不能切静态方法??? 太菜了吧
+ *
  * @author caolei
  * @ClassName: WebLogAop
  * @Description: TODO
@@ -83,5 +86,8 @@ public class WebLogAspect {
         log.error("TIME_SPEND : " + (System.currentTimeMillis() - startTime.get()) + "\n");
         startTime.remove();
     }
+
+//  @Around() 方法进行切面 可以控制方法是否执行，和修改执行后的返回值
+//
 
 }

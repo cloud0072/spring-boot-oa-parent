@@ -10,12 +10,15 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
-@Aspect
-@Component
+/**
+ * 暂时不生效 正在排查原因
+ */
+//@Aspect
+//@Component
 @Slf4j
 public class SystemEntityAspect {
 
-    @Pointcut("execution(* org.springframework.data.jpa.repository.support.SimpleJpaRepository.delete(..))")
+    @Pointcut("execution(* com.caolei.base.repository.BaseRepository+.delete(..))")
     public void delete() {
     }
 

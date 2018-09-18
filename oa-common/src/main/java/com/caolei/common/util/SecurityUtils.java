@@ -17,8 +17,8 @@ import java.util.Arrays;
 @Slf4j
 public class SecurityUtils extends org.apache.shiro.SecurityUtils {
 
-//    private SecurityUtils() {
-//    }
+    private SecurityUtils() {
+    }
 
     /**
      * 判断shiro是否可用
