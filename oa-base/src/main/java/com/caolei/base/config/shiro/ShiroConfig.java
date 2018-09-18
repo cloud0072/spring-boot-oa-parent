@@ -151,9 +151,7 @@ public class ShiroConfig {
         //配置访问权限
         LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         //静态资源
-        filterChainDefinitionMap.put("/bootstrap/**", "anon");
         filterChainDefinitionMap.put("/assets/**", "anon");
-        filterChainDefinitionMap.put("/s/**", "anon");
         //h2数据库web控制台
         if (!StringUtils.isEmpty(h2WebConsole)) {
             filterChainDefinitionMap.put(h2WebConsole + "/**", "anon");

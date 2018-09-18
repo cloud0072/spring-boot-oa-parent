@@ -144,7 +144,7 @@ public abstract class BaseCrudController<T extends BaseEntity> implements BaseCo
                                     HttpServletResponse response,
                                     @PathVariable("id") @NonNull String id,
                                     T t) {
-        SecurityUtils.checkOperation(entityName, OP_DELETE);
+        SecurityUtils.checkOperation(entityName, OP_DELETE, id);
         t = service().findById(t.getId());
         service().deleteById(t.getId());
         Map<String, Object> map = new HashMap<>();

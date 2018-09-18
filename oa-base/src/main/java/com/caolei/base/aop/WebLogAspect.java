@@ -2,19 +2,15 @@ package com.caolei.base.aop;
 
 import com.caolei.base.model.OperationLog;
 import com.caolei.base.service.OperationLogService;
-import com.caolei.common.util.SecurityUtils;
-import com.caolei.common.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.web.util.WebUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 
@@ -25,7 +21,7 @@ import java.util.Arrays;
  * @date 2018/9/7 14:26
  */
 @Aspect
-@Component
+@Configuration
 @Slf4j
 public class WebLogAspect {
 

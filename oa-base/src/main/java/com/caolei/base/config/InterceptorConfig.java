@@ -34,13 +34,7 @@ public class InterceptorConfig
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         List<String> excludePatterns = new ArrayList<>();
-        excludePatterns.add("/**/*.js");
-        excludePatterns.add("/**/*.css");
-        excludePatterns.add("/**/*.png");
-        excludePatterns.add("/**/*.gif");
-        excludePatterns.add("/**/*.jpg");
-        excludePatterns.add("/**/*.jpeg");
-        excludePatterns.add("/**/*.woff");
+        excludePatterns.add("/assets/**");
 
         registry.addInterceptor(defaultInterceptor)
                 .addPathPatterns("/**")

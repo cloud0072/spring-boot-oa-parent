@@ -1,13 +1,14 @@
 package com.caolei.webtest.controller;
 
+import com.caolei.base.controller.BaseController;
 import com.caolei.base.exception.AjaxException;
 import com.caolei.base.model.User;
 import com.caolei.base.service.UserService;
-import com.caolei.base.controller.BaseController;
 import com.caolei.common.autoconfig.LocationProperties;
 import com.caolei.common.autoconfig.ShiroProperties;
 import com.caolei.common.util.DateUtils;
 import com.caolei.common.util.FileUtils;
+import com.caolei.common.util.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -70,12 +71,32 @@ public class TestController implements BaseController {
 
     @ApiOperation("测试环境变量是否正确引入")
     @GetMapping("/04")
-    public Object test0(HttpServletRequest request, HttpServletResponse response) {
+    public Object test04(HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> map = new HashMap<>();
         map.put("shiro", shiroProperties);
         map.put("location", location);
         map.put("staticLocation", staticLocation);
         return map;
+    }
+
+    @ApiOperation("测试shiro通配符范围")
+    @GetMapping("/05")
+    public ResponseEntity test05(HttpServletRequest request, HttpServletResponse response) {
+        String p1 = "base:entity:123:UPDATE";
+        String p2 = "base:entity:123:FIND";
+        String p3 = "base:entity:123:*";
+        String p4 = "base:entity:*";
+        String p5 = "base:entity:*:FIND";
+        String p6 = "base:entity:*:UPDATE";
+
+        log.info(p1 + "\t" + SecurityUtils.hasPermission(p1));
+        log.info(p2 + "\t" + SecurityUtils.hasPermission(p2));
+        log.info(p3 + "\t" + SecurityUtils.hasPermission(p3));
+        log.info(p4 + "\t" + SecurityUtils.hasPermission(p4));
+        log.info(p5 + "\t" + SecurityUtils.hasPermission(p5));
+        log.info(p6 + "\t" + SecurityUtils.hasPermission(p6));
+
+        return ResponseEntity.ok("");
     }
 
     @ApiOperation("恢复admin密码为admin")

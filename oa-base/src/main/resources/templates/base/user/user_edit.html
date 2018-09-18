@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
       lang="zh-CN">
 <head th:replace="fragment :: head"></head>
-<link rel="stylesheet" th:href="@{/base/css/user.css}">
+<link rel="stylesheet" th:href="@{/assets/base/css/user.css}">
 
 <body class="page-body">
 <!-- 顶部用户信息和设置 (平时隐藏) -->
@@ -196,7 +196,7 @@
 <script th:src="@{/assets/js/datepicker/bootstrap-datepicker.js}" type="text/javascript"></script>
 <script th:src="@{/assets/js/timepicker/bootstrap-timepicker.min.js}" type="text/javascript"></script>
 
-<script th:src="@{/base/js/user.js}" type="text/javascript"></script>
+<script th:src="@{/assets/base/js/user.js}" type="text/javascript"></script>
 <script type="application/javascript" th:inline="javascript">
     $(function () {
         if ([[${op == 'find'}]]) {

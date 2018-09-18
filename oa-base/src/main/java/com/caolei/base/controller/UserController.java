@@ -55,10 +55,9 @@ public class UserController
         switch (operation) {
             case OP_DELETE:
             case OP_UPDATE:
-                break;
             case OP_CREATE:
                 Set<Role> hasRoles = EntityUtils.orNull(user.getRoles(), new LinkedHashSet<>());
-                Set<Role> allRoles = currentUser.getRoles();
+                Set<Role> allRoles = userService.findById(currentUser.getId()).getRoles();
                 //如果是超级用户可以 授权所有角色 否则只能赋予自身拥有的角色
                 if (currentUser.getSuperUser()) {
                     allRoles = new LinkedHashSet<>(roleService.findAll());
@@ -98,6 +97,7 @@ public class UserController
 
     /**
      * 重置密码
+     *
      * @param userId
      * @param password
      * @param newpassword

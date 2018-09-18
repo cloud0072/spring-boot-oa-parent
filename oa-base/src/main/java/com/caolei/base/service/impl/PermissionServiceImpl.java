@@ -1,13 +1,13 @@
 package com.caolei.base.service.impl;
 
 import com.caolei.base.model.Permission;
+import com.caolei.base.repository.BaseRepository;
 import com.caolei.base.repository.EntityResourceRepository;
 import com.caolei.base.repository.PermissionRepository;
 import com.caolei.base.service.PermissionService;
 import com.caolei.base.service.RoleService;
 import com.caolei.common.constant.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.caolei.base.repository.BaseRepository;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -38,7 +38,12 @@ public class PermissionServiceImpl
     public Permission update(Permission input,
                              HttpServletRequest request,
                              HttpServletResponse response) {
-        return null;
+        Permission permission = findById(input.getId());
+        permission.setName(input.getName());
+        permission.setCode(input.getCode());
+        permission.setOperation(input.getOperation());
+        permission.setResourceId(input.getResourceId());
+        return repository().save(permission);
     }
 
 

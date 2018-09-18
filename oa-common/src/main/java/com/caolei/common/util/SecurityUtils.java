@@ -3,11 +3,9 @@ package com.caolei.common.util;
 import com.caolei.common.constant.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.UnauthorizedException;
+import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Stream;
 
 /**
  * 加密工具
@@ -15,12 +13,12 @@ import java.util.stream.Stream;
  * @author cloud0072
  * @date 2018/6/12 22:37
  */
+@Component
 @Slf4j
 public class SecurityUtils extends org.apache.shiro.SecurityUtils {
 
-    private SecurityUtils() {
-
-    }
+//    private SecurityUtils() {
+//    }
 
     /**
      * 判断shiro是否可用
@@ -43,12 +41,37 @@ public class SecurityUtils extends org.apache.shiro.SecurityUtils {
      * @param roles
      */
     public static void checkAnyRole(String... roles) {
-        List<Boolean> flag = new ArrayList<>();
-        Stream.of(roles).forEach(role -> flag.add(getSubject().hasRole(role.toLowerCase())));
-        if (!flag.contains(true)) {
+        boolean[] ret = hasRoles(roles);
+        boolean flag = false;
+        for (boolean b : ret) {
+            if (b) {
+                flag = true;
+            }
+        }
+        if (!flag) {
             String name = getSubject().getPrincipal().toString();
             throw new UnauthorizedException(name + " do not has role " + Arrays.asList(roles));
         }
+    }
+
+    public static void checkRole(String role) {
+        getSubject().checkRole(role);
+    }
+
+    public static void checkAllRoles(String... roles) {
+        getSubject().checkRoles(roles);
+    }
+
+    public static boolean hasRole(String role) {
+        return getSubject().hasRole(role);
+    }
+
+    public static boolean[] hasRoles(String... roles) {
+        return getSubject().hasRoles(Arrays.asList(roles));
+    }
+
+    public static boolean hasAllRoles(String... roles) {
+        return getSubject().hasAllRoles(Arrays.asList(roles));
     }
 
     /**
@@ -57,12 +80,37 @@ public class SecurityUtils extends org.apache.shiro.SecurityUtils {
      * @param permissions
      */
     public static void checkAnyPermission(String... permissions) {
-        List<Boolean> flag = new ArrayList<>();
-        Stream.of(permissions).forEach(permission -> flag.add(getSubject().isPermitted(permission.toLowerCase())));
-        if (!flag.contains(true)) {
+        boolean[] ret = hasPermissions(permissions);
+        boolean flag = false;
+        for (boolean b : ret) {
+            if (b) {
+                flag = true;
+            }
+        }
+        if (!flag) {
             String name = getSubject().getPrincipal().toString();
             throw new UnauthorizedException(name + " do not has permission " + Arrays.asList(permissions));
         }
+    }
+
+    public static void checkPermission(String permission) {
+        getSubject().checkPermission(permission);
+    }
+
+    public static void checkAllPermissions(String... permission) {
+        getSubject().checkPermissions(permission);
+    }
+
+    public static boolean hasPermission(String permission) {
+        return getSubject().isPermitted(permission);
+    }
+
+    public static boolean[] hasPermissions(String... permission) {
+        return getSubject().isPermitted(permission);
+    }
+
+    public static boolean hasAllPermission(String... permission) {
+        return getSubject().isPermittedAll(permission);
     }
 
     /**
