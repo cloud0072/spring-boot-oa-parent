@@ -63,4 +63,17 @@ public class StringUtils {
         }
         return extendName;
     }
+
+    /**
+     * 验证是否是32位的uuid格式
+     * @param lastParam
+     * @return
+     */
+    public static boolean isUUID32(String lastParam) {
+        if (!StringUtils.isEmpty(lastParam)) {
+            return lastParam.matches("^[0-9a-fA-F]{32}$");
+        }
+
+        return false;
+    }
 }

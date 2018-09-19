@@ -4,6 +4,7 @@ import com.caolei.base.model.Category;
 import com.caolei.base.model.dto.CategoryDTO;
 import com.caolei.base.service.BaseCrudService;
 import com.caolei.base.service.CategoryService;
+import com.caolei.common.constant.Operation;
 import com.caolei.common.util.StringUtils;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +25,6 @@ import javax.persistence.criteria.Path;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
-
-import static com.caolei.common.constant.Constants.OP_FIND;
-import static com.caolei.common.constant.Constants.OP_LIST;
 
 @RequestMapping("/base/category")
 @Controller
@@ -60,30 +58,8 @@ public class CategoryController
                 }, pageable);
         model.addAttribute("page", list);
         model.addAttribute("search", category);
-        putModel(model, OP_LIST, category);
+        putModel(model, Operation.GET, category);
         return modulePath + entityPath + entityPath + "_list";
-    }
-
-    @GetMapping("/treeview/{id}")
-    public String treeview(HttpServletRequest request,
-                           HttpServletResponse response,
-                           @PathVariable("id") String id,
-                           Model model) {
-        Category category = categoryService.findById(id);
-        CategoryDTO categoryDTO = categoryService.findCategoryDTOByIdWith2Level(id);
-        model.addAttribute("root", categoryDTO);
-
-        putModel(model, OP_FIND, category);
-
-        return modulePath + entityPath + entityPath + "_treeview";
-    }
-
-    @GetMapping("/findByParentId/{id}")
-    public ResponseEntity findByParentId(HttpServletRequest request,
-                                         HttpServletResponse response,
-                                         @PathVariable("id") String id) {
-        List<CategoryDTO> CategoryDTOs = categoryService.findCategoryDTOsByParentId(id);
-        return ResponseEntity.ok(CategoryDTOs);
     }
 
     @Override
@@ -106,8 +82,7 @@ public class CategoryController
     @Override
     protected ResponseEntity delete(HttpServletRequest request,
                                     HttpServletResponse response,
-                                    @PathVariable("id") String id,
-                                    Category category) {
+                                    @PathVariable("id") String id) {
         String ids = request.getParameter("ids");
         Set<String> idSet = new HashSet<>();
         idSet.add(id);
@@ -137,6 +112,29 @@ public class CategoryController
         map.put("url", modulePath + entityPath + "/view/" + category.getId());
         map.put("newnode", new CategoryDTO(category));
         return ResponseEntity.ok(map);
+    }
+
+    @GetMapping("/treeview/{id}")
+    public String treeview(HttpServletRequest request,
+                           HttpServletResponse response,
+                           @PathVariable("id") String id,
+                           Model model) {
+        Category category = categoryService.findById(id);
+        CategoryDTO categoryDTO = categoryService.findCategoryDTOByIdWith2Level(id);
+        model.addAttribute("root", categoryDTO);
+
+        putModel(model, Operation.GET, category);
+
+        return modulePath + entityPath + entityPath + "_treeview";
+    }
+
+
+    @GetMapping("/findByParentId/{id}")
+    public ResponseEntity findByParentId(HttpServletRequest request,
+                                         HttpServletResponse response,
+                                         @PathVariable("id") String id) {
+        List<CategoryDTO> CategoryDTOs = categoryService.findCategoryDTOsByParentId(id);
+        return ResponseEntity.ok(CategoryDTOs);
     }
 
 }

@@ -2,17 +2,23 @@ package com.caolei.base.aop;
 
 import com.caolei.base.model.OperationLog;
 import com.caolei.base.service.OperationLogService;
+import com.caolei.common.util.SecurityUtils;
+import com.caolei.common.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.web.util.WebUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * 项目对shiro有一定的封装 避免直接使用shiro原有的方法
@@ -28,10 +34,45 @@ import java.util.Arrays;
 @Slf4j
 public class WebLogAspect {
 
+//    private Set<String> whitelist;
+    private ThreadLocal<Long> startTime = new ThreadLocal<>();
+
     @Autowired
     OperationLogService operationLogService;
+    @Autowired
+    ApplicationContext ctx;
 
-    private ThreadLocal<Long> startTime = new ThreadLocal<>();
+    /**
+     * 验证权限
+     * @param request
+     * @param signature
+     */
+//    private void checkPermission(HttpServletRequest request, Signature signature) {
+//        String path = WebUtils.getPathWithinApplication(request);
+//        if (whitelist == null) {
+//            whitelist = new HashSet<>();
+//
+//
+//        }
+//        if (!StringUtils.isEmpty(path) && !whitelist.contains(path)) {
+//            try {
+//                Object bean = ctx.getBean(signature.getDeclaringTypeName());
+//                String module = (String) signature.getDeclaringType().getField("modulePath").get(bean);
+//                String entity = (String) signature.getDeclaringType().getField("entityPath").get(bean);
+//                String id = request.getParameter("id");
+//                if (StringUtils.isEmpty(id)) {
+//                    String lastParam = path.substring(path.lastIndexOf("/"));
+//                    id = StringUtils.isUUID32(lastParam) ? lastParam : "*";
+//                }
+//                String method = request.getMethod();
+//                String permission = String.format("%s:%s:%s:%s", module, entity, id, method);
+//                SecurityUtils.getSubject().checkPermission(permission);
+//
+//            } catch (NoSuchFieldException | IllegalAccessException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 
     /**
      * 使用 BaseController+ 表示他的所有子类
@@ -56,20 +97,14 @@ public class WebLogAspect {
         log.info("CLASS :\t" + signature.getDeclaringTypeName());
         log.info("METHOD :\t" + signature.getName());
         log.info("ARGS :\t" + Arrays.toString(joinPoint.getArgs()));
+
         try {
             operationLogService.save(new OperationLog(request), request, null);
         } catch (Exception e) {
             log.error(e.getMessage());
         }
 
-//        // 验证权限
-//        String path = WebUtils.getPathWithinApplication(request);
-//        path = path.startsWith("/")? path.replaceFirst("/", "") : path;
-//        if (!StringUtils.isEmpty(path)){
-//            String permission = path.replaceAll("/",":");
-//            SecurityUtils.getSubject().checkPermission(permission);
-//        }
-
+//        checkPermission(request, signature);
     }
 
     @AfterReturning(value = "webLog()", returning = "ret")

@@ -22,16 +22,6 @@ public class Constants {
 
     public static final String USER_INFO = "user_info";
 
-    //operation
-    public static final String OP_LIST = "list";
-    public static final String OP_FIND = "find";
-    public static final String OP_CREATE = "create";
-    public static final String OP_UPDATE = "update";
-    public static final String OP_DELETE = "delete";
-    public static final String OP_IMPORT = "import";
-    public static final String OP_EXPORT = "export";
-    public static final String OP_DOWNLOAD = "download";
-
     //类型
     public static final String TY_SELF = "self";
     public static final String TY_ADMIN = "admin";

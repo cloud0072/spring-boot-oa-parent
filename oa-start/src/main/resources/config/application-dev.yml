@@ -1,6 +1,6 @@
 location:
     resource:
-        base-path: c:/cloud0072/spring-boot
+        base-path: d:/spring-boot
 spring:
     jpa:
         database: h2

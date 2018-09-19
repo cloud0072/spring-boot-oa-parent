@@ -9,6 +9,7 @@ import com.caolei.base.service.RoleService;
 import com.caolei.base.service.UserService;
 import com.caolei.base.util.EntityUtils;
 import com.caolei.base.util.UserUtils;
+import com.caolei.common.constant.Operation;
 import lombok.NonNull;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
-import static com.caolei.common.constant.Constants.*;
+import static com.caolei.common.constant.Constants.TY_SELF;
 
 @RequestMapping("/base/user")
 @Controller
@@ -46,29 +47,32 @@ public class UserController
      * @param model
      */
     @Override
-    protected void modelAdvice(Model model, String operation, User user) {
+    protected void modelAdvice(Model model, Operation operation, User user) {
         User currentUser = UserUtils.getCurrentUser();
         //修改自己的个人信息
         if (UserUtils.getCurrentUser().getId().equals(user.getId())) {
             model.addAttribute("type", TY_SELF);
         }
         switch (operation) {
-            case OP_DELETE:
-            case OP_UPDATE:
-            case OP_CREATE:
-                Set<Role> hasRoles = EntityUtils.orNull(user.getRoles(), new LinkedHashSet<>());
+            case DELETE:
+            case PUT:
+            case POST:
                 Set<Role> allRoles = userService.findById(currentUser.getId()).getRoles();
+                Set<Role> hasRoles = EntityUtils.orNull(user.getRoles(), new LinkedHashSet<>());
                 //如果是超级用户可以 授权所有角色 否则只能赋予自身拥有的角色
                 if (currentUser.getSuperUser()) {
                     allRoles = new LinkedHashSet<>(roleService.findAll());
                 }
-                model.addAttribute("roles", EntityUtils.getCheckedList(allRoles, hasRoles));
+                if (hasRoles != null) {
+                    model.addAttribute("roles", EntityUtils.getCheckedList(allRoles, hasRoles));
+                }
                 break;
-            case OP_FIND:
+            case GET:
+                allRoles = userService.findById(currentUser.getId()).getRoles();
                 hasRoles = user.getRoles();
-                model.addAttribute("roles", EntityUtils.getCheckedList(hasRoles, hasRoles));
-                break;
-            case OP_LIST:
+                if (hasRoles != null) {
+                    model.addAttribute("roles", EntityUtils.getCheckedList(allRoles, hasRoles));
+                }
                 break;
         }
     }
@@ -89,7 +93,7 @@ public class UserController
     public String showResetpwd(@PathVariable("id") String userId, Model model) {
         User u = UserUtils.getCurrentUser();
         if (u.getId().equals(userId) || u.isSuperUser()) {
-            putModel(model, OP_UPDATE, u);
+            putModel(model, Operation.PUT, u);
             return modulePath + entityPath + entityPath + "_resetpwd";
         }
         throw new UnauthorizedException("您没有权限进行此操作！");

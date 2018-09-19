@@ -9,6 +9,7 @@ import com.caolei.base.service.UserService;
 import com.caolei.base.util.UserUtils;
 import com.caolei.base.service.BaseCrudService;
 import com.caolei.base.util.EntityUtils;
+import com.caolei.common.constant.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -34,12 +35,12 @@ public class RoleController
     private PermissionService permissionService;
 
     @Override
-    protected void modelAdvice(Model model, String operation,  Role role) {
+    protected void modelAdvice(Model model, Operation operation, Role role) {
         User currentUser = UserUtils.getCurrentUser();
         switch (operation) {
-            case OP_DELETE:
-            case OP_UPDATE:
-            case OP_CREATE:
+            case DELETE:
+            case PUT:
+            case POST:
                 List<Permission> hasPermissions = EntityUtils.orNull(role.getPermissions(), new ArrayList<>());
                 List<Permission> allPermissions = new ArrayList<>();
 
@@ -53,11 +54,11 @@ public class RoleController
                 }
                 model.addAttribute("permissions", EntityUtils.getCheckedList(allPermissions, hasPermissions));
                 break;
-            case OP_FIND:
+            case GET:
                 hasPermissions = role.getPermissions();
-                model.addAttribute("permissions", EntityUtils.getCheckedList(hasPermissions, hasPermissions));
-                break;
-            case OP_LIST:
+                if (hasPermissions!=null){
+                    model.addAttribute("permissions", EntityUtils.getCheckedList(hasPermissions, hasPermissions));
+                }
                 break;
         }
     }

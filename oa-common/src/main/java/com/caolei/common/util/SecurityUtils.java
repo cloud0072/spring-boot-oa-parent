@@ -114,15 +114,15 @@ public class SecurityUtils extends org.apache.shiro.SecurityUtils {
     }
 
     /**
-     * 判断当前用户是否有权限进行操作 OP_LIST 需要 FIND_ALL 权限
+     * 判断当前用户是否有权限进行操作 GET 需要 FIND_ALL 权限
      * FIXME: 另一种策略是 有多少权限就能查到多少元素，待完善
      *
      * @param entityName
      * @param operation
      * @param resourceId
      */
-    public static void checkOperation(String entityName, String operation, String resourceId) {
-        String op = Operation.of(operation).name();
+    public static void checkOperation(String entityName, Operation operation, String resourceId) {
+        String op = operation.code();
         String id = resourceId == null ? "*" : resourceId;
         String permission = entityName + ":" + op + ":" + id;
         checkAnyPermission(permission);
@@ -135,7 +135,7 @@ public class SecurityUtils extends org.apache.shiro.SecurityUtils {
      * @param entityName
      * @param operation
      */
-    public static void checkOperation(String entityName, String operation) {
+    public static void checkOperation(String entityName, Operation operation) {
         checkOperation(entityName, operation, null);
     }
 

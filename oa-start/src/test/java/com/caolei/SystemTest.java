@@ -72,7 +72,7 @@ public class SystemTest {
     public void test04FindPermissions() {
         printIndex();
         Permission permission = new Permission();
-        permission.setOperation(Operation.CREATE);
+        permission.setOperation(Operation.POST);
         System.out.println(permissionService.findAll(Example.of(permission)));
     }
 
@@ -86,7 +86,7 @@ public class SystemTest {
         User user = userService.findAuthorInfoByAccount("cloud0072");
 
         Permission permission = new Permission();
-        permission.setOperation(Operation.CREATE);
+        permission.setOperation(Operation.POST);
         List<Permission> permissions = permissionService.findAll(Example.of(permission));
         System.out.println(permissions.size());
 
