@@ -2,23 +2,30 @@ package com.caolei.base.aop;
 
 import com.caolei.base.model.OperationLog;
 import com.caolei.base.service.OperationLogService;
-import com.caolei.common.util.SecurityUtils;
-import com.caolei.common.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.web.util.WebUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.*;
+import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.servlet.HandlerMapping;
+import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
+import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Map;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * 项目对shiro有一定的封装 避免直接使用shiro原有的方法
@@ -34,19 +41,18 @@ import java.util.Set;
 @Slf4j
 public class WebLogAspect {
 
-//    private Set<String> whitelist;
-    private ThreadLocal<Long> startTime = new ThreadLocal<>();
-
     @Autowired
     OperationLogService operationLogService;
     @Autowired
     ApplicationContext ctx;
+    //    private Set<String> whitelist;
+    private ThreadLocal<Long> startTime = new ThreadLocal<>();
 
-    /**
-     * 验证权限
-     * @param request
-     * @param signature
-     */
+    //    /**
+//     * 验证权限
+//     * @param request
+//     * @param signature
+//     */
 //    private void checkPermission(HttpServletRequest request, Signature signature) {
 //        String path = WebUtils.getPathWithinApplication(request);
 //        if (whitelist == null) {
@@ -73,6 +79,43 @@ public class WebLogAspect {
 //            }
 //        }
 //    }
+
+    /**
+     * 获取所有url的映射
+     * @param context
+     */
+    public static void handler(ServletContext context) {
+        WebApplicationContext appContext = WebApplicationContextUtils.getWebApplicationContext(context);
+
+        //获取所有的RequestMapping
+        Map<String, HandlerMapping> allRequestMappings = BeanFactoryUtils.beansOfTypeIncludingAncestors(appContext,
+                HandlerMapping.class, true, false);
+
+        for (HandlerMapping handlerMapping : allRequestMappings.values()) {
+            //本项目只需要RequestMappingHandlerMapping中的URL映射
+            if (handlerMapping instanceof RequestMappingHandlerMapping) {
+                Map<RequestMappingInfo, HandlerMethod> handlerMethods = ((RequestMappingHandlerMapping) handlerMapping).getHandlerMethods();
+
+                for (Map.Entry<RequestMappingInfo, HandlerMethod> requestMappingInfoHandlerMethodEntry : handlerMethods.entrySet()) {
+                    RequestMappingInfo requestMappingInfo = requestMappingInfoHandlerMethodEntry.getKey();
+                    HandlerMethod mappingInfoValue = requestMappingInfoHandlerMethodEntry.getValue();
+
+                    PatternsRequestCondition patternsCondition = requestMappingInfo.getPatternsCondition();
+                    String controllerName = mappingInfoValue.getBeanType().toString().replace("class", "").trim();
+                    String requestMethodName = mappingInfoValue.getMethod().getName();
+                    Class<?>[] methodParamTypes = mappingInfoValue.getMethod().getParameterTypes();
+
+                    log.info("patternsCondition:\t" + patternsCondition);
+                    log.info("controllerName:\t" + controllerName);
+                    log.info("methodParamTypes:\t" + Arrays.stream(methodParamTypes).map(Class::getName).collect(toList()));
+                    log.info("requestMethodName:\t" + requestMethodName);
+                    log.info("==================");
+
+                }
+                break;
+            }
+        }
+    }
 
     /**
      * 使用 BaseController+ 表示他的所有子类
@@ -105,6 +148,7 @@ public class WebLogAspect {
         }
 
 //        checkPermission(request, signature);
+//        handler(request);
     }
 
     @AfterReturning(value = "webLog()", returning = "ret")
