@@ -20,7 +20,7 @@
     <link rel="stylesheet" th:href="@{/assets/css/xenon-components.css}">
     <link rel="stylesheet" th:href="@{/assets/js/bootstrap-treeview/bootstrap-treeview.css}">
     <link rel="stylesheet" th:href="@{/assets/js/toastr/toastr.css}">
-    <link rel="stylesheet" th:href="@{/assets/common/css/common.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/common.css}">
 
     <!--<script th:src="@{/assets/js/jquery-1.11.1.min.js}" type="text/javascript"></script>-->
     <script th:src="@{/assets/js/jquery-3.3.1.min.js}" type="text/javascript"></script>
@@ -585,7 +585,7 @@
                             <span class="title" th:text="分类一览"></span>
                         </a>
                     </li>
-                    <!--/*@thymesVar id="category" type="com.caolei.base.model.Category"*/-->
+                    <!--/*@thymesVar id="category" type="com.github.cloud0072.base.model.Category"*/-->
                     <th:block th:if="${categories ne null}" th:each="category : ${categories}">
                         <li th:class="${'menu-32-'+ category.categoryOrder}">
                             <a th:href="@{'/base/category/treeview/'+${category.id}(menuId='32-'+ ${category.categoryOrder})}">
@@ -872,11 +872,12 @@
 </div>
 
 <div th:fragment="common-js">
-    <script type="text/javascript" src="" th:src="@{/assets/common/js/common.js}"></script>
+    <script type="text/javascript" src="" th:src="@{/assets/js/common.js}"></script>
     <!--crud js-->
     <script type="application/javascript" th:inline="javascript">
         var hostUrl = /*[[@{'/'}]]*/ +'';
         var baseUrl = /*[[@{'/'+${modulePath}+${entityPath}}]]*/ +'';
+        var contextPath = /*[[${session.contextPath}]]*/ +'';
     </script>
 
     <!-- Bottom Scripts -->

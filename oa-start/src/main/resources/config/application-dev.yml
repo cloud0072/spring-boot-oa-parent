@@ -39,8 +39,8 @@ logging:
     level:
        org.springfromework.web: info
        org.hibernate: error
-       com.caolei.base.handle.GlobalExceptionHandler: error
-       com.caolei.base.aop.WebLogAspect: info
+       com.github.cloud0072.base.handle.GlobalExceptionHandler: error
+       com.github.cloud0072.base.aop.WebLogAspect: info
 plugin:
     swagger2:
         enable: true

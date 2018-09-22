@@ -91,15 +91,21 @@ $("#pic").on('click', function () {
 var uploading = false;
 
 function fileUpload() {
+    var headPhoto_id = $('#head_photo_id').val();
     var file = document.getElementById("file_id").files[0];
+    var url = hostUrl + "/file/PORTRAIT";
+    var type = "POST";
+    if (headPhoto_id) {
+        url = hostUrl + "/file/PORTRAIT/" + headPhoto_id;
+        type = "PUT";
+    }
     if (!uploading && file) {
         uploading = true;
         var formData = new FormData();
         formData.append("file", file);
-        formData.append("fileType", 'PORTRAIT');
         $.ajax({
-            url: hostUrl + "/file/upload",
-            type: "POST",
+            url: url,
+            type: type,
             data: formData,
             //必须false才会自动加上正确的Content-Type
             contentType: false,

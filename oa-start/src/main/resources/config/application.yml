@@ -5,7 +5,13 @@ server:
         context-path: /oa
     tomcat:
         accesslog:
-          enabled: true
+            pattern: common
+            enabled: true
+            directory: ../logs
+            prefix: access_log
+            suffix: .log
+            request-attributes-enabled: true
+            rename-on-rotate: true
 spring:
     profiles:
 #        active: pord
