@@ -1,7 +1,7 @@
 package com.github.cloud0072.base.config;
 
-import com.github.cloud0072.base.interceptor.DefaultInterceptor;
-import com.github.cloud0072.base.interceptor.MenuInterceptor;
+import com.github.cloud0072.base.interceptor.BaseInterceptor;
+import com.github.cloud0072.base.interceptor.ModelAndViewInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -20,9 +20,9 @@ public class InterceptorConfig
         implements WebMvcConfigurer {
 
     @Autowired
-    private DefaultInterceptor defaultInterceptor;
+    private BaseInterceptor baseInterceptor;
     @Autowired
-    private MenuInterceptor menuInterceptor;
+    private ModelAndViewInterceptor modelAndViewInterceptor;
 
     /**
      * 多个拦截器组成一个拦截器链
@@ -36,11 +36,11 @@ public class InterceptorConfig
         List<String> excludePatterns = new ArrayList<>();
         excludePatterns.add("/assets/**");
 
-        registry.addInterceptor(defaultInterceptor)
+        registry.addInterceptor(baseInterceptor)
                 .addPathPatterns("/**")
                 .excludePathPatterns(excludePatterns);
 
-        registry.addInterceptor(menuInterceptor)
+        registry.addInterceptor(modelAndViewInterceptor)
                 .addPathPatterns("/**")
                 .excludePathPatterns(excludePatterns);
 

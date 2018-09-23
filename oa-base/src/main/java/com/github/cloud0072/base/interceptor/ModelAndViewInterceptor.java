@@ -1,6 +1,7 @@
 package com.github.cloud0072.base.interceptor;
 
 
+import com.github.cloud0072.base.config.Global;
 import com.github.cloud0072.base.model.Category;
 import com.github.cloud0072.base.service.CategoryService;
 import com.github.cloud0072.common.util.StringUtils;
@@ -17,10 +18,13 @@ import java.util.List;
  * 将menuId存入session中 实现菜单高亮
  */
 @Component
-public class MenuInterceptor implements HandlerInterceptor {
+public class ModelAndViewInterceptor implements HandlerInterceptor {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private Global global;
 
     /**
      * 菜单 状态拦截器
@@ -42,6 +46,8 @@ public class MenuInterceptor implements HandlerInterceptor {
             //分类管理中直接列出顶级分类名称
             List<Category> categoryList = categoryService.findCategoriesByParent_Id(null);
             modelAndView.addObject("categories", categoryList);
+
+            modelAndView.addObject("Global", global);
         }
     }
 }

@@ -26,17 +26,6 @@
         <h3>Hello World！ 这是一个空的标准模板页面</h3>
         <span th:text="${session.user_info.id}"></span>
 
-        <div th:id="WebSocket">
-            <span th:id="state-info"></span>
-            <span th:id="chat-message"></span>
-        </div>
-
-        <div>
-            <label>
-                <input type="text" th:id="message" name="message">
-            </label>
-            <button type="button" onclick="send()">发送</button>
-        </div>
 
         <!-- ********** 主页面 结束 ********** -->
 
@@ -50,49 +39,9 @@
 <!-- 引入js文件 -->
 <div th:replace="fragment :: common-js"></div>
 <script type="application/javascript" src="http://cdn.bootcss.com/stomp.js/2.3.3/stomp.min.js"></script>
-<script src="//cdn.jsdelivr.net/sockjs/1.0.0/sockjs.min.js"></script>
+<script type="application/javascript" src="//cdn.jsdelivr.net/sockjs/1.0.0/sockjs.min.js"></script>
 <script type="text/javascript">
-    var client;
-    var sockUrl = contextPath +'/ws/endpointChat';
-    var subscribeUrl = contextPath +'/queue/chat';
-    var sendUrl = contextPath +'/topic/chat';
 
-    $(function () {
-        // 建立连接对象（还未发起连接）
-        console.log(sockUrl);
-        var socket = new SockJS(sockUrl);
-        // 获取 STOMP 子协议的客户端对象
-        client = Stomp.over(socket);
-
-        // 向服务器发起websocket连接并发送CONNECT帧
-        client.connect({}, function connectCallback(frame) {
-            // 连接成功时（服务器响应 CONNECTED 帧）的回调方法
-            $("#state-info").html("连接成功");
-            console.log('已连接' + frame);
-            client.subscribe(subscribeUrl, function (response) {
-                $("#chat-message").html(response.body);
-            });
-
-        }, function errorCallBack(error) {
-            // 连接失败时（服务器响应 ERROR 帧）的回调方法
-            $("#state-info").html("连接失败");
-            console.log('连接失败' + error);
-
-        });
-
-        $(window).bind('beforeunload', function () {
-            client.disconnect()
-        });
-
-    });
-
-    function send() {
-        var message = $("#message").val();
-        if (message) {
-            console.log("send:\t" + message);
-            client.send(sendUrl, {}, message);
-        }
-    }
 
 </script>
 

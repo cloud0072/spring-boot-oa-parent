@@ -596,6 +596,20 @@
                     </th:block>
                 </ul>
             </li>
+            <li class="menu-4" th:remove="${Global.containModule('websocket')?'none':'all'}">
+                <a href="#?menuId=4">
+                    <i></i>
+                    <span class="title" th:text="通知管理"></span>
+                </a>
+                <ul>
+                    <li class="menu-31">
+                        <a th:href="@{/base/category/list/(menuId='41')}">
+                            <i></i>
+                            <span class="title" th:text="发布通知"></span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
         </ul>
 
         <script th:inline="javascript">
@@ -871,13 +885,14 @@
     </script>
 </div>
 
+<!-- 公共js -->
 <div th:fragment="common-js">
     <script type="text/javascript" src="" th:src="@{/assets/js/common.js}"></script>
     <!--crud js-->
     <script type="application/javascript" th:inline="javascript">
-        var hostUrl = /*[[@{'/'}]]*/ +'';
-        var baseUrl = /*[[@{'/'+${modulePath}+${entityPath}}]]*/ +'';
-        var contextPath = /*[[${session.contextPath}]]*/ +'';
+        const hostUrl = /*[[@{'/'}]]*/ +'';
+        const baseUrl = /*[[@{'/'+${modulePath}+${entityPath}}]]*/ +'';
+        const contextPath = /*[[${#servletContext.contextPath}]]*/ +'';
     </script>
 
     <!-- Bottom Scripts -->

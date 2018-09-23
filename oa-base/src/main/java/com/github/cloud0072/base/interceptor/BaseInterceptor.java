@@ -1,7 +1,6 @@
 package com.github.cloud0072.base.interceptor;
 
 
-import com.github.cloud0072.common.util.HttpUtils;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -17,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
  * @date 2018/6/12 22:41
  */
 @Component
-public class DefaultInterceptor implements HandlerInterceptor {
+public class BaseInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -26,7 +25,7 @@ public class DefaultInterceptor implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable ModelAndView modelAndView) throws Exception {
-        request.getSession().setAttribute("contextPath",HttpUtils.getContext_path());
+
     }
 
     @Override

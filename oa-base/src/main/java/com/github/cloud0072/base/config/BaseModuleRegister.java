@@ -1,4 +1,4 @@
-package com.github.cloud0072.base.installer;
+package com.github.cloud0072.base.config;
 
 import com.github.cloud0072.base.model.BaseEntity;
 import com.github.cloud0072.base.model.Permission;
@@ -40,14 +40,14 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toList;
 
 /**
- * 自动初始化数据库
+ * 自动初始化数据库,注册功能
  *
  * @author cloud0072
  * @date 2018/6/12 22:39
  */
 @Slf4j
 @Component
-public class SystemModuleInstaller
+public class BaseModuleRegister
         implements ApplicationRunner, Ordered {
 
     @Autowired
@@ -67,6 +67,9 @@ public class SystemModuleInstaller
 
         initializeDB();
 //        RequestMappingInfo();
+
+
+        Global.addModule("base", "base");
 
         log.info("finish ...");
     }
@@ -174,7 +177,7 @@ public class SystemModuleInstaller
         for (HandlerMapping handlerMapping : allRequestMappings.values()) {
             //本项目只需要RequestMappingHandlerMapping中的URL映射
             if (handlerMapping instanceof RequestMappingHandlerMapping) {
-                Map<RequestMappingInfo, HandlerMethod> handlerMethods = ((RequestMappingHandlerMapping) handlerMapping).getHandlerMethods();
+                Map<org.springframework.web.servlet.mvc.method.RequestMappingInfo, HandlerMethod> handlerMethods = ((RequestMappingHandlerMapping) handlerMapping).getHandlerMethods();
 
                 for (Map.Entry<RequestMappingInfo, HandlerMethod> requestMappingInfoHandlerMethodEntry : handlerMethods.entrySet()) {
                     RequestMappingInfo requestMappingInfo = requestMappingInfoHandlerMethodEntry.getKey();

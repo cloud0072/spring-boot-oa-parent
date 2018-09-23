@@ -1,38 +1,42 @@
 package com.github.cloud0072.websocket.controller;
 
-import com.github.cloud0072.base.controller.BaseController;
-import com.github.cloud0072.base.util.UserUtils;
+import com.github.cloud0072.websocket.model.ChatMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.security.Principal;
 
 /**
  * websocket 消息进出控制器
  */
 @Controller
 @Slf4j
-public class WsController implements BaseController {
+public class WsController {
 
     @Autowired
-    private SimpMessagingTemplate messagingTemplate;
+    SimpMessagingTemplate messagingTemplate;
 
-//    @MessageMapping("/topic/chat")
-//    public void userChat(UserChatCommand userChat) {
-//        //找到需要发送的地址
-//        String dest = "/queue/chat" + userChat.getCoordinationId();
-//        //发送用户的聊天记录
-//        this.messagingTemplate.convertAndSend(dest, userChat);
-//    }
+    @MessageMapping("/queue-chat")
+    public void chat(Principal principal, ChatMessage msg) {
+        log.info(principal + "\t:\t" + msg.toString());
 
-    @MessageMapping("/topic/chat")
-    public void test(String message) {
-        log.info(UserUtils.getCurrentUser().getUserName() + ":\t" + message);
-        //找到需要发送的地址
-        String dest = "/queue/chat";
-        //发送用户的聊天记录
-        this.messagingTemplate.convertAndSend(dest, message);
+        messagingTemplate.convertAndSendToUser(msg.getDestuser(), "/queue/chat", msg);
     }
 
+    @MessageMapping("/topic-system")
+    public void topic(Principal principal, ChatMessage msg) {
+        log.info(principal + "\t:\t" + msg.toString());
+
+        //广播使用convertAndSend方法，第一个参数为目的地，和js中订阅的目的地要一致
+        messagingTemplate.convertAndSend("/topic/system", msg);
+    }
+
+    @RequestMapping("/chat/index")
+    public String showChatPage() {
+        return "/websocket/index";
+    }
 }

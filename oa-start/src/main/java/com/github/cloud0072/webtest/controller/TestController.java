@@ -1,4 +1,4 @@
-package com.github.cloud0072webtest.controller;
+package com.github.cloud0072.webtest.controller;
 
 import com.github.cloud0072.base.controller.BaseController;
 import com.github.cloud0072.base.exception.AjaxException;

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      lang="zh-CN">
+
+<head th:replace="fragment :: head"></head>
+<body class="page-body" onload="disconnect()">
+<!-- 顶部用户信息和设置 (平时隐藏) -->
+<div th:replace="fragment :: settings-pane"></div>
+
+<div class="page-container">
+
+    <!-- 左侧菜单栏 -->
+    <div th:replace="fragment :: main-menu"></div>
+
+    <div class="main-content">
+
+        <!-- 顶部用户信息栏 -->
+        <div th:replace="fragment :: user-info"></div>
+
+        <!-- 页脚版权信息 -->
+        <footer th:replace="fragment :: footer"></footer>
+
+        <!-- ********** 主页面 开始 ********** -->
+
+
+        <h3>聊天室</h3>
+        <span th:id="account" th:text="${session.user_info.account}"></span>
+        <br>
+
+        <noscript>
+            <h2 style="color: #ff0000">
+                Seems your browser doesn't support Javascript! Websocket relies on Javascript
+                being enabled. Please enable
+                Javascript and reload this page!
+            </h2>
+        </noscript>
+
+        <div>
+            <div>
+                <button id="connect" onclick="connect();">Connect</button>
+                <button id="disconnect" disabled="disabled" onclick="disconnect();">
+                    Disconnect
+                </button>
+            </div>
+            <div id="conversationDiv">
+                <label for="chatContent">姓名</label>
+                <input type="text" id="chatContent"/>
+                <button id="sendMessage" onclick="sendMessage();">Send</button>
+                <p id="response"></p>
+            </div>
+        </div>
+
+        <!-- ********** 主页面 结束 ********** -->
+
+    </div>
+
+    <!-- 右侧聊天面板 -->
+    <div th:replace="fragment :: chat-pane"></div>
+
+</div>
+
+<!-- 引入js文件 -->
+<div th:replace="fragment :: common-js"></div>
+<script type="application/javascript" th:src="@{/assets/websocket/js/sockjs.min.js}"></script>
+<script type="application/javascript" th:src="@{/assets/websocket/js/stomp.js}"></script>
+
+<script type="application/javascript" th:inline="javascript">
+    var stompClient = null;
+
+    var endpoint = hostUrl + "/chat/endpoint";
+    var subscribeUrl = '/topic/system';
+    var sendUrl = '/topic-system';
+
+    var account = $("#account").val();
+
+    function setConnected(connected) {
+        document.getElementById("connect").disabled = connected;
+        document.getElementById("disconnect").disabled = !connected;
+        $("#response").html();
+    }
+
+    function connect() {
+        var socket = new SockJS(endpoint);
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function () {
+            setConnected(true);
+            stompClient.subscribe(subscribeUrl, function (response) {
+                if (response && response.body) {
+                    var data = JSON.parse(response.body);
+                    toastr.success(data.chatContent, "您收到了新的消息:");
+                }
+
+            });
+        });
+    }
+
+    function sendMessage() {
+        var chatContent = $('#chatContent').val();
+        stompClient.send(sendUrl, {}, JSON.stringify({
+            "account": account,
+            "chatContent": chatContent
+        }));
+    }
+
+    function disconnect() {
+        if (stompClient != null) {
+            stompClient.disconnect();
+        }
+        setConnected(false);
+        console.log("Disconnected");
+    }
+
+</script>
+
+</body>
+</html>
