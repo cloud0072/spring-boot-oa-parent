@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       lang="zh-CN">
-
 <head th:replace="fragment :: head"></head>
+<link rel="stylesheet" th:href="@{/assets/bootstrap-select/css/bootstrap-select.min.css}">
+<script type="text/javascript" th:src="@{/assets/bootstrap-select/js/bootstrap-select.min.js}"></script>
+<script type="text/javascript" th:src="@{/assets/bootstrap-select/js/i18n/defaults-zh_CN.min.js}"></script>
+
 <body class="page-body" onload="disconnect()">
 <!-- 顶部用户信息和设置 (平时隐藏) -->
 <div th:replace="fragment :: settings-pane"></div>
@@ -22,11 +25,6 @@
 
         <!-- ********** 主页面 开始 ********** -->
 
-
-        <h3>聊天室</h3>
-        <span th:id="account" th:text="${session.user_info.account}"></span>
-        <br>
-
         <noscript>
             <h2 style="color: #ff0000">
                 Seems your browser doesn't support Javascript! Websocket relies on Javascript
@@ -35,20 +33,61 @@
             </h2>
         </noscript>
 
-        <div>
-            <div>
-                <button id="connect" onclick="connect();">Connect</button>
-                <button id="disconnect" disabled="disabled" onclick="disconnect();">
-                    Disconnect
-                </button>
-            </div>
-            <div id="conversationDiv">
-                <label for="chatContent">姓名</label>
-                <input type="text" id="chatContent"/>
-                <button id="sendMessage" onclick="sendMessage();">Send</button>
-                <p id="response"></p>
+        <div class="row">
+            <div class="col-sm-6">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">在线推送</h3>
+                        <div class="panel-options">
+                            <button class="btn btn-secondary" id="connect" onclick="connect();" style="display: none">
+                                重新连接
+                            </button>
+                            <button class="btn btn-info" id="sendMessage" onclick="sendMessage();" type="button">
+                                发布
+                            </button>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+
+                        <!--/*@thymesVar id="category" type="com.github.cloud0072.base.model.Category"*/-->
+                        <form id="main_form" role="form" class="form-horizontal">
+                            <label>
+                                <input hidden="hidden" th:id="account" th:value="   ${session.user_info.account}">
+                            </label>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="chatContent">信息</label>
+
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="chatContent" name="chatContent"
+                                           placeholder="信息">
+                                </div>
+                            </div>
+
+                            <div class="form-group-separator"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="userGroup">用户组</label>
+
+                                <div class="col-sm-8">
+                                    <select class="selectpicker" id="userGroup" name="userGroup"
+                                            data-style="btn-info" data-live-search="true" multiple>
+                                        <option value="1">广东省</option>
+                                        <option value="2">广西省</option>
+                                        <option value="3">福建省</option>
+                                        <option value="4">湖南省</option>
+                                        <option value="5">山东省</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+
             </div>
         </div>
+
 
         <!-- ********** 主页面 结束 ********** -->
 
@@ -61,8 +100,8 @@
 
 <!-- 引入js文件 -->
 <div th:replace="fragment :: common-js"></div>
-<script type="application/javascript" th:src="@{/assets/websocket/js/sockjs.min.js}"></script>
-<script type="application/javascript" th:src="@{/assets/websocket/js/stomp.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/sockjs.min.js}"></script>
+<script type="text/javascript" th:src="@{/assets/js/stomp.js}"></script>
 
 <script type="application/javascript" th:inline="javascript">
     var stompClient = null;
@@ -70,14 +109,18 @@
     var endpoint = hostUrl + "/chat/endpoint";
     var subscribeUrl = '/topic/system';
     var sendUrl = '/topic-system';
-
     var account = $("#account").val();
 
-    function setConnected(connected) {
-        document.getElementById("connect").disabled = connected;
-        document.getElementById("disconnect").disabled = !connected;
-        $("#response").html();
-    }
+    $(function () {
+        $("#userGroup").selectpicker({
+            width: '100%'
+        });
+
+        connect();
+        window.onunload = function () {
+            disconnect();
+        }
+    });
 
     function connect() {
         var socket = new SockJS(endpoint);
@@ -87,7 +130,20 @@
             stompClient.subscribe(subscribeUrl, function (response) {
                 if (response && response.body) {
                     var data = JSON.parse(response.body);
-                    toastr.success(data.chatContent, "您收到了新的消息:");
+                    if (data.account !== account) {
+                        toastr.success(data.chatContent, "您收到了新的消息:");
+                    } else {
+                        bootbox.alert({
+                            message: '发送成功!',
+                            size: 'small',
+                            buttons: {
+                                ok: {
+                                    label: "确认",
+                                    className: "btn-info"
+                                }
+                            }
+                        });
+                    }
                 }
 
             });
@@ -95,11 +151,20 @@
     }
 
     function sendMessage() {
-        var chatContent = $('#chatContent').val();
+
         stompClient.send(sendUrl, {}, JSON.stringify({
             "account": account,
-            "chatContent": chatContent
+            "chatContent": $('#chatContent').val(),
+            "userGroup": $('#userGroup').val()
         }));
+    }
+
+    function setConnected(connected) {
+        if (connected) {
+            $("#connect").hide();
+        } else {
+            $("#connect").show();
+        }
     }
 
     function disconnect() {
