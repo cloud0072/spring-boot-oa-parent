@@ -11,6 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.NonNull;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.data.domain.*;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +40,9 @@ public abstract class BaseCrudController<T extends BaseEntity> implements BaseCo
     public final String entityPath = AnnotationUtils.findAnnotation(persistentClass, EntityInfo.class).entityPath();
     public final String modulePath = AnnotationUtils.findAnnotation(persistentClass, ModuleInfo.class).modulePath();
 
+    @Autowired
+    protected BaseCrudService<T> service;
+
     @ApiOperation("返回一个当前控制器对应实体的实例")
     protected T instance() {
         try {
@@ -64,7 +68,9 @@ public abstract class BaseCrudController<T extends BaseEntity> implements BaseCo
     }
 
     @ApiOperation("获取实例对应的服务")
-    protected abstract BaseCrudService<T> service();
+    protected BaseCrudService<T> service() {
+        return service;
+    }
 
     /******************************************************************************************************************/
 
