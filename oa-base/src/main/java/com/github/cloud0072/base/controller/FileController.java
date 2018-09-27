@@ -11,6 +11,7 @@ import com.github.cloud0072.common.util.HttpUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -30,6 +31,7 @@ import java.util.Map;
 @Api
 @RequestMapping("/file")
 @Controller
+@Slf4j
 public class FileController implements BaseController {
 
     @Autowired
@@ -51,7 +53,11 @@ public class FileController implements BaseController {
             component = fileComponentService.save(component, null, null);
             File f = new File(component.getAbsolutePath());
             if (!f.getParentFile().exists()) {
-                f.getParentFile().mkdirs();
+                if (f.getParentFile().mkdirs()) {
+                    log.info("创建文件夹成功\t:\t" + f.getParentFile().getAbsolutePath());
+                } else {
+                    throw new UnsupportedOperationException("创建文件夹失败\t:\t" + f.getParentFile().getAbsolutePath());
+                }
             }
             file.transferTo(f);
 
@@ -84,7 +90,11 @@ public class FileController implements BaseController {
                 fileComponent = fileComponentService.save(fileComponent, null, null);
                 File f = new File(fileComponent.getAbsolutePath());
                 if (!f.getParentFile().exists()) {
-                    f.getParentFile().mkdirs();
+                    if (f.getParentFile().mkdirs()) {
+                        log.info("创建文件夹成功\t:\t" + f.getParentFile().getAbsolutePath());
+                    } else {
+                        throw new UnsupportedOperationException("创建文件夹失败\t:\t" + f.getParentFile().getAbsolutePath());
+                    }
                 }
                 file.transferTo(f);
 

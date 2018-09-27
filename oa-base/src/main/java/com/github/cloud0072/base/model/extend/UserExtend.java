@@ -9,6 +9,7 @@ import lombok.EqualsAndHashCode;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Set;
 
@@ -33,7 +34,7 @@ public class UserExtend extends BaseEntity {
      */
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column
-    private Date birthday;
+    private LocalDateTime birthday;
     /**
      * 操作日志
      */

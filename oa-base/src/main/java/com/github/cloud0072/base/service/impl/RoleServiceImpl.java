@@ -6,7 +6,7 @@ import com.github.cloud0072.base.repository.BaseRepository;
 import com.github.cloud0072.base.repository.RoleRepository;
 import com.github.cloud0072.base.service.PermissionService;
 import com.github.cloud0072.base.service.RoleService;
-import com.github.cloud0072.common.util.SecurityUtils;
+import com.github.cloud0072.common.util.MySecurityUtils;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.mgt.RealmSecurityManager;
@@ -85,16 +85,16 @@ public class RoleServiceImpl
 
     @Override
     public void clearRoleCache() {
-        Cache<Object, Object> cache = shiroCacheManager.getCache("org.apache.shiro.realm.jdbc.JdbcRealm.authorizationCache");
+//        Cache<Object, Object> cache = shiroCacheManager.getCache("org.apache.shiro.realm.jdbc.JdbcRealm.authorizationCache");
 //        shiroCacheManager.destroy();//清除全部缓存
 //        LifecycleUtils.destroy(cache);//清除某个缓存
-        Subject subject = SecurityUtils.getSubject();
+        Subject subject = MySecurityUtils.getSubject();
         /*subject.getPrincipal()------>登录名
         String realmName = subject.getPrincipals().getRealmNames().iterator().next();
         //第一个参数为用户名,想要操作权限的用户，第二个参数为realmName,
         SimplePrincipalCollection principals = new SimplePrincipalCollection(subject.getPrincipal(),realmName);
         */
-        RealmSecurityManager securityManager = (RealmSecurityManager) SecurityUtils.getSecurityManager();
+        RealmSecurityManager securityManager = (RealmSecurityManager) MySecurityUtils.getSecurityManager();
         JdbcRealm jdbcRealm = (JdbcRealm) securityManager.getRealms().iterator().next();
         //删除登陆人
         jdbcRealm.getAuthorizationCache().remove(subject.getPrincipal());

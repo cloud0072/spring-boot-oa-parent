@@ -70,7 +70,7 @@ public class Permission
         this.resourceId = resourceId;
         this.code = code();
         this.name = name();
-        this.systemEntity = systemEntity == null ? false : systemEntity;
+        this.systemEntity = systemEntity == null ? Boolean.FALSE : systemEntity;
     }
 
     public Permission() {

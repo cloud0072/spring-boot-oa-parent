@@ -1,8 +1,9 @@
 package com.github.cloud0072.base.model;
 
+import com.github.cloud0072.base.model.extend.Creator;
 import com.github.cloud0072.common.annotation.EntityInfo;
-import com.github.cloud0072.common.module.BaseModuleEntity;
 import com.github.cloud0072.common.constant.FileType;
+import com.github.cloud0072.common.module.BaseModuleEntity;
 import com.github.cloud0072.common.util.DateUtils;
 import com.github.cloud0072.common.util.FileUtils;
 import com.github.cloud0072.common.util.HttpUtils;
@@ -10,19 +11,21 @@ import com.github.cloud0072.common.util.StringUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.io.File;
 import java.io.IOException;
-import java.util.Date;
+import java.time.LocalDate;
 
 /**
  * 文件上传和储存组件
  *
  * @author caolei
  */
-@EntityInfo(description="文件组件",entityName = "file", entityPath = "/file")
+@EntityInfo(description = "文件组件", entityName = "file", entityPath = "/file")
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Slf4j
@@ -68,29 +71,10 @@ public class FileComponent
     @Column
     private Integer downloadTimes;
     /**
-     * 创建时间
+     * 创建人时间戳等
      */
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Column
-    private Date createTime;
-    /**
-     * 修改时间
-     */
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Column
-    private Date modifyTime;
-    /**
-     * 创建人
-     */
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
-    @JoinColumn(name = "creator_id")
-    private User creator;
-    /**
-     * 修改人
-     */
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
-    @JoinColumn(name = "modifier_id")
-    private User modifier;
+    @Embedded
+    private Creator creator;
 
     public FileComponent() {
     }
@@ -105,7 +89,7 @@ public class FileComponent
     public void createOrUpdateFile(String fileName, String contentType, FileType category, User user) {
         deleteFile();
 
-        Date date = new Date();
+        LocalDate date = LocalDate.now();
         this.fileName = fileName;
         this.contentType = contentType;
         this.category = category;
@@ -113,11 +97,8 @@ public class FileComponent
         this.UUIDName = StringUtils.UUID32();
         this.extendName = StringUtils.extendName(fileName);
 
-        this.downloadTimes = downloadTimes == null ? 0 : downloadTimes;
-        this.createTime = createTime == null ? date : createTime;
-        this.modifyTime = date;
-        this.creator = creator == null ? user : creator;
-        this.modifier = user;
+        this.downloadTimes = downloadTimes == null ? Integer.valueOf(0) : downloadTimes;
+        this.creator = this.creator == null ? new Creator().modifyBy(user) : creator.modifyBy(user);
     }
 
     /**
@@ -174,7 +155,11 @@ public class FileComponent
         File file = new File(getAbsolutePath());
         if (!file.exists()) {
             if (!file.getParentFile().exists()) {
-                file.getParentFile().mkdirs();
+                if (file.getParentFile().mkdirs()) {
+                    log.info("创建文件夹成功\t:\t" + file.getParentFile().getAbsolutePath());
+                } else {
+                    throw new UnsupportedOperationException("创建文件夹失败\t:\t" + file.getParentFile().getAbsolutePath());
+                }
             }
             try {
                 file.createNewFile();
@@ -222,8 +207,7 @@ public class FileComponent
                 ", category=" + category +
                 ", datePath='" + datePath + '\'' +
                 ", downloadTimes=" + downloadTimes +
-                ", createTime=" + createTime +
-                ", modifyTime=" + modifyTime +
+                ", creator=" + creator +
                 '}';
     }
 }

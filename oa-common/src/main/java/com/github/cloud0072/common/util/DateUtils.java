@@ -5,8 +5,10 @@ import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -20,8 +22,8 @@ import java.util.stream.Stream;
 @Slf4j
 public class DateUtils {
 
-    private static final SimpleDateFormat defaultDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    private static final SimpleDateFormat datePathFormat = new SimpleDateFormat("yyyyMM/dd");
+    private static final DateTimeFormatter defaultDateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+    private static final DateTimeFormatter datePathFormatter = DateTimeFormatter.ofPattern("yyyyMM/dd");
     private static final MultiValuedMap<DayOfWeek, String> weekMap = new ArrayListValuedHashMap<DayOfWeek, String>() {{
         putAll(DayOfWeek.MONDAY, Arrays.asList("一", "周一", "星期一"));
         putAll(DayOfWeek.TUESDAY, Arrays.asList("二", "周二", "星期二"));
@@ -42,6 +44,7 @@ public class DateUtils {
      * @return
      */
     public static DayOfWeek parseDayOfWeek(String chinese) {
+
         log.info("parseDayOfWeek - > {}", chinese);
         //java自带的日期枚举类，同类的还有 Month 等
         return weekMap.entries().stream().filter(entry -> entry.getValue().contains(chinese)).findFirst()
@@ -69,20 +72,20 @@ public class DateUtils {
         return parseToChinese(dayOfWeek, TextStyle.FULL);
     }
 
-    public static String defaultDateFormat(Date date) {
-        return defaultDateFormat.format(date);
+    public static String defaultDateTimeFormatter(LocalDateTime date) {
+        return date.format(defaultDateFormatter);
     }
 
-    public static SimpleDateFormat defaultDateFormat() {
-        return defaultDateFormat;
+    public static DateTimeFormatter defaultDateTimeFormatter() {
+        return defaultDateFormatter;
     }
 
-    public static String datePathFormat(Date date) {
-        return datePathFormat.format(date);
+    public static String datePathFormat(LocalDate date) {
+        return date.format(datePathFormatter);
     }
 
-    public static SimpleDateFormat datePathFormat() {
-        return datePathFormat;
+    public static DateTimeFormatter datePathFormat() {
+        return datePathFormatter;
     }
 
     public static Date of(java.sql.Date date) {

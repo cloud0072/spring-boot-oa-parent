@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class RetryCountAndTime implements Serializable {
 
-    private ShiroProperties shiroProperties;
+    private transient ShiroProperties shiroProperties;
     private AtomicInteger count;
     private long expiredTime;
 

@@ -4,6 +4,7 @@ import com.github.cloud0072.common.util.ReflectUtils;
 import com.github.cloud0072.common.util.StringUtils;
 import com.github.cloud0072.base.model.User;
 import com.github.cloud0072.base.util.UserUtils;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 import org.apache.shiro.crypto.hash.Md5Hash;
@@ -13,11 +14,13 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.text.MessageFormat;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
-
+@SuppressWarnings("all")
+@SuppressFBWarnings
 public class BaseTest {
 
     @Test
@@ -165,10 +168,6 @@ public class BaseTest {
 
     @Test
     public void test16() {
-        Map map1 = new HashMap(); // pageIt 系统查出来的
-        Map map2 = null;    //手动改的
-
-        System.out.println(map2.get(""));
 
     }
 
@@ -212,7 +211,7 @@ public class BaseTest {
 
         System.out.println(MessageFormat.format("执行{0}次,耗时{1}毫秒", times, (System.currentTimeMillis() - startTime)));
 
-//        System.out.println(MessageFormat.format("现在时间是 {0}",new Date()));
+//        System.out.println(MessageFormat.format("现在时间是 {0}",LocalDateTime.now()));
 
     }
 
@@ -241,4 +240,15 @@ public class BaseTest {
 
         System.out.println(map.get("name"));
     }
+
+    @Test
+    public void testChangeValue(){
+        User user = new User();
+        user.setDefaultValue();
+
+        LocalDateTime date = user.getCreateTime();
+
+        System.out.println(date);
+    }
+
 }

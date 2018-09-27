@@ -15,9 +15,9 @@ import java.util.Arrays;
  */
 @Component
 @Slf4j
-public class SecurityUtils extends org.apache.shiro.SecurityUtils {
+public class MySecurityUtils extends org.apache.shiro.SecurityUtils {
 
-    private SecurityUtils() {
+    private MySecurityUtils() {
     }
 
     /**

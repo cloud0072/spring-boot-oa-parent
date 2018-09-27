@@ -1,6 +1,5 @@
 package com.github.cloud0072;
 
-import com.github.cloud0072.common.constant.Operation;
 import com.github.cloud0072.base.model.OperationLog;
 import com.github.cloud0072.base.model.Permission;
 import com.github.cloud0072.base.model.Role;
@@ -10,6 +9,8 @@ import com.github.cloud0072.base.repository.PermissionRepository;
 import com.github.cloud0072.base.service.PermissionService;
 import com.github.cloud0072.base.service.RoleService;
 import com.github.cloud0072.base.service.UserService;
+import com.github.cloud0072.common.constant.Operation;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,11 +22,17 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
+@SuppressWarnings("all")
+@SuppressFBWarnings
 public class SystemTest {
 
     private static int index = 1;
@@ -50,7 +57,7 @@ public class SystemTest {
         printIndex();
         String key = "cloud0072";
         User user = new User(key, key, key, null, false).setDefaultValue();
-        userService.save(user,null,null);
+        userService.save(user, null, null);
     }
 
     @Test
@@ -65,7 +72,7 @@ public class SystemTest {
         User user = userService.findUserByAccount("cloud0072");
         user.setEmail("352419394@qq.com");
         user.setUserName("caolei");
-        userService.save(user,null,null);
+        userService.save(user, null, null);
     }
 
     @Test
@@ -91,7 +98,7 @@ public class SystemTest {
         System.out.println(permissions.size());
 
         user.getPermissions().addAll(permissions);
-        userService.save(user,null,null);
+        userService.save(user, null, null);
     }
 
     @Transactional
@@ -112,7 +119,7 @@ public class SystemTest {
 
         user.setRoles(Collections.singleton(role));
 
-        userService.save(user,null,null);
+        userService.save(user, null, null);
     }
 
     @Transactional
@@ -122,12 +129,12 @@ public class SystemTest {
         User user = userService.findUserWithLogsByAccount("cloud0072");
 
         OperationLog log = new OperationLog();
-        log.setCreateTime(new Date());
+        log.setCreateTime(LocalDateTime.now());
         log.setUser(user);
 
         user.getExtend().getLogs().addAll(Collections.singletonList(log));
 
-        userService.save(user,null,null);
+        userService.save(user, null, null);
     }
 
     @Transactional
@@ -138,7 +145,7 @@ public class SystemTest {
 
         user.getExtend().getLogs().clear();
 
-        userService.save(user,null,null);
+        userService.save(user, null, null);
     }
 
     @Transactional
@@ -153,8 +160,9 @@ public class SystemTest {
     public void test11UserRemoveRoles() {
         printIndex();
         User user = userService.findAuthorInfoByAccount("cloud0072");
-        user.getRoles().remove(0);
-        userService.save(user,null,null);
+        Iterator it = user.getRoles().iterator();
+        if (it.hasNext()) it.remove();
+        userService.save(user, null, null);
     }
 
     //    @Test
@@ -175,13 +183,13 @@ public class SystemTest {
     public void test18() {
 //        List<EntityResource> entities = entityResourceRepository.findByPropertyEquals("name","User");
 //        System.out.println(entities);
-        Permission permission = permissionRepository.findOne((Specification<Permission>)
-                (root, criteriaQuery, criteriaBuilder) -> null).orElse(null);
+        Permission permission = permissionRepository.findOne(
+                (Specification<Permission>)(root, criteriaQuery, criteriaBuilder) -> null).orElse(null);
 
     }
 
     @Test
-    public void changPassword(){
+    public void changPassword() {
         User user = userService.findUserByAccount("admin");
         user.setPassword("admin");
         userService.update(user);

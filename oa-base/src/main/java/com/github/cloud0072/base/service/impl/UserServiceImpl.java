@@ -11,7 +11,7 @@ import com.github.cloud0072.base.config.shiro.RetryCountAndTime;
 import com.github.cloud0072.base.util.UserUtils;
 import com.github.cloud0072.common.autoconfig.ShiroProperties;
 import com.github.cloud0072.common.constant.FileType;
-import com.github.cloud0072.common.util.SecurityUtils;
+import com.github.cloud0072.common.util.MySecurityUtils;
 import com.github.cloud0072.common.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -121,7 +121,7 @@ public class UserServiceImpl
     @Override
     public boolean login(User user) {
         //subject理解成权限对象。类似user
-        Subject subject = SecurityUtils.getSubject();
+        Subject subject = MySecurityUtils.getSubject();
         //创建用户名和密码的令牌
         UsernamePasswordToken token = new UsernamePasswordToken(user.getAccount(), user.getPassword());
         //记录该令牌，如果不记录则类似购物车功能不能使用。
@@ -140,7 +140,7 @@ public class UserServiceImpl
 
     @Override
     public void logout() {
-        SecurityUtils.getSubject().logout();
+        MySecurityUtils.getSubject().logout();
     }
 
     @Override

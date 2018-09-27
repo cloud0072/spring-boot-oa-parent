@@ -8,11 +8,11 @@ import com.github.cloud0072.common.autoconfig.LocationProperties;
 import com.github.cloud0072.common.autoconfig.ShiroProperties;
 import com.github.cloud0072.common.util.DateUtils;
 import com.github.cloud0072.common.util.FileUtils;
-import com.github.cloud0072.common.util.SecurityUtils;
+import com.github.cloud0072.common.util.MySecurityUtils;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.annotation.Around;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +38,7 @@ import java.util.Map;
 @Slf4j
 @RequestMapping("/test")
 @RestController
+@SuppressFBWarnings
 public class TestController implements BaseController {
 
     @Autowired
@@ -65,7 +66,7 @@ public class TestController implements BaseController {
     @GetMapping("/03")
     public Object test03(HttpServletRequest request, HttpServletResponse response) {
         User u = null;
-        u.getRoles();
+        u.getRoles().size();
         Integer i = 1 / 0;
         return null;
     }
@@ -90,12 +91,12 @@ public class TestController implements BaseController {
         String p5 = "base:entity:*:FIND";
         String p6 = "base:entity:*:UPDATE";
 
-        log.info(p1 + "\t" + SecurityUtils.hasPermission(p1));
-        log.info(p2 + "\t" + SecurityUtils.hasPermission(p2));
-        log.info(p3 + "\t" + SecurityUtils.hasPermission(p3));
-        log.info(p4 + "\t" + SecurityUtils.hasPermission(p4));
-        log.info(p5 + "\t" + SecurityUtils.hasPermission(p5));
-        log.info(p6 + "\t" + SecurityUtils.hasPermission(p6));
+        log.info(p1 + "\t" + MySecurityUtils.hasPermission(p1));
+        log.info(p2 + "\t" + MySecurityUtils.hasPermission(p2));
+        log.info(p3 + "\t" + MySecurityUtils.hasPermission(p3));
+        log.info(p4 + "\t" + MySecurityUtils.hasPermission(p4));
+        log.info(p5 + "\t" + MySecurityUtils.hasPermission(p5));
+        log.info(p6 + "\t" + MySecurityUtils.hasPermission(p6));
 
         return ResponseEntity.ok("");
     }

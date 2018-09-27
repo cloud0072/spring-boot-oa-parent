@@ -135,11 +135,7 @@
     function connect() {
         var socket = new SockJS(endpoint);
         stompClient = Stomp.over(socket);
-        var headers={
-            username:'admin',
-            password:'admin'
-        };
-        stompClient.connect(headers, function () {
+        stompClient.connect({}, function () {
             setConnected(true);
             stompClient.subscribe(subscribeUrl, function (response) {
                 if (response && response.body) {

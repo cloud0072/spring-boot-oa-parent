@@ -62,7 +62,7 @@ public class Role
         this.name = name;
         this.code = code;
         this.description = description;
-        this.systemEntity = systemEntity == null ? false : systemEntity;
+        this.systemEntity = systemEntity == null ? Boolean.FALSE : systemEntity;
     }
 
     @Override

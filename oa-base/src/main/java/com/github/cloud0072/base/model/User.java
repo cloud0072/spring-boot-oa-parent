@@ -1,16 +1,16 @@
 package com.github.cloud0072.base.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.cloud0072.base.model.extend.UserExtend;
 import com.github.cloud0072.common.annotation.EntityInfo;
 import com.github.cloud0072.common.module.BaseModuleEntity;
 import com.github.cloud0072.common.util.StringUtils;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -51,19 +51,18 @@ public class User
      */
     @Column
     private Boolean systemEntity;
-
     /**
      * 祖册时间
      */
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column
-    private Date createTime;
+    private LocalDateTime createTime;
     /**
      * 最后登录时间
      */
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column
-    private Date lastLoginTime;
+    private LocalDateTime lastLoginTime;
     /**
      * 用户详情
      */
@@ -84,6 +83,10 @@ public class User
             inverseJoinColumns = @JoinColumn(name = "auth_permission_id"))
     private Set<Permission> permissions;
 
+    @JsonIgnore
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "user", fetch = FetchType.LAZY)
+    private Set<OperationLog> operationLogs;
+
     public User() {
     }
 
@@ -98,16 +101,16 @@ public class User
         this.password = password;
         this.userName = userName;
         this.email = email;
-        this.systemEntity = systemEntity == null ? false : this.systemEntity;
+        this.systemEntity = systemEntity == null ? Boolean.FALSE : this.systemEntity;
     }
 
     public User setDefaultValue() {
         this.salt = this.salt == null ? StringUtils.UUID32() : salt;
-        this.active = this.active == null ? true : this.active;
-        this.superUser = this.superUser == null ? false : this.superUser;
-        this.systemEntity = this.systemEntity == null ? false : this.systemEntity;
-        this.createTime = this.createTime == null ? new Date() : this.createTime;
-        this.lastLoginTime = this.lastLoginTime == null ? new Date() : this.lastLoginTime;
+        this.active = this.active == null ? Boolean.TRUE : this.active;
+        this.superUser = this.superUser == null ? Boolean.FALSE : this.superUser;
+        this.systemEntity = this.systemEntity == null ? Boolean.FALSE : this.systemEntity;
+        this.createTime = this.createTime == null ? LocalDateTime.now() : this.createTime;
+        this.lastLoginTime = this.lastLoginTime == null ? LocalDateTime.now() : this.lastLoginTime;
         this.extend = this.extend == null ? new UserExtend() : this.extend;
         this.roles = this.roles == null ? new HashSet<>() : this.roles;
         this.permissions = this.permissions == null ? new HashSet<>() : this.permissions;
@@ -121,11 +124,12 @@ public class User
      *
      * @return
      */
-    public Boolean isSuperUser() {
+    @Transient
+    public boolean isSuperUser() {
         return superUser == null ? false : superUser;
     }
-
-    public Boolean isActive() {
+    @Transient
+    public boolean isActive() {
         return active == null ? false : active;
     }
 

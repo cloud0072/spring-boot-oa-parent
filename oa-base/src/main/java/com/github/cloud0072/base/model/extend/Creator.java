@@ -7,32 +7,34 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import java.util.Date;
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Embeddable
-public class Creator {
+public class Creator implements Serializable {
 
     @Column
-    private Date createTime;
+    private LocalDateTime createTime;
     @Column
-    private Date modifyTime;
+    private LocalDateTime modifyTime;
     @Column
     private User createUser;
     @Column
     private User modifyUser;
 
-    public void modifyBy(User user) {
+    public Creator modifyBy(User user) {
         if (createTime == null) {
-            createTime = new Date();
+            createTime = LocalDateTime.now();
         }
         if (createUser == null) {
             createUser = user;
         }
-        modifyTime = new Date();
+        modifyTime = LocalDateTime.now();
         modifyUser = user;
+        return this;
     }
 
 }

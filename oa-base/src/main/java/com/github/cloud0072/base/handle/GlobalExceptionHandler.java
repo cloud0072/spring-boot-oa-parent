@@ -2,7 +2,7 @@ package com.github.cloud0072.base.handle;
 
 
 import com.github.cloud0072.base.exception.AjaxException;
-import com.github.cloud0072.common.util.SecurityUtils;
+import com.github.cloud0072.common.util.MySecurityUtils;
 import com.github.cloud0072.common.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
@@ -114,7 +114,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = {Exception.class})
     public ModelAndView exceptionHandler(HttpServletRequest request, HttpServletResponse response,
                                          Exception ex) {
-        if (SecurityUtils.isSubjectAvailable() && !SecurityUtils.getSubject().isAuthenticated()) {
+        if (MySecurityUtils.isSubjectAvailable() && !MySecurityUtils.getSubject().isAuthenticated()) {
             return authenticationExceptionHandler(request, response,
                     new AuthenticationException("账号信息异常,请先登录"));
         }

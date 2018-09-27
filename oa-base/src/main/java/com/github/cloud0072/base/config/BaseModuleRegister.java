@@ -85,7 +85,7 @@ public class BaseModuleRegister
         /*
          * 添加实体
          */
-        List<EntityResource> entityResources = ReflectUtils.getClasses("com.caolei").stream()
+        List<EntityResource> entityResources = ReflectUtils.getClasses("com.github.cloud0072").stream()
                 .filter(clazz -> AnnotationUtils.isAnnotationDeclaredLocally(EntityInfo.class, clazz))
                 .filter(BaseEntity.class::isAssignableFrom)
                 .map(clazz -> new EntityResource((Class<? extends BaseEntity>) clazz))
@@ -167,7 +167,7 @@ public class BaseModuleRegister
     /**
      * 获取所有url的映射
      */
-    public void RequestMappingInfo() {
+    public void requestMappingInfo() {
         WebApplicationContext appContext = WebApplicationContextUtils.getWebApplicationContext(ctx);
 
         //获取所有的RequestMapping

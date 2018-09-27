@@ -10,6 +10,7 @@ import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -55,7 +56,7 @@ public class OperationLog
      * 访问时间
      */
     @Column
-    private Date createTime;
+    private LocalDateTime createTime;
 
     public OperationLog() {
     }
@@ -69,7 +70,7 @@ public class OperationLog
         this.requestUrl = request.getRequestURL().toString();
         this.ipAddress = HttpUtils.IPAddress(request);
         this.sessionId = getSessionId();
-        this.createTime = new Date();
+        this.createTime = LocalDateTime.now();
     }
 
     @Override

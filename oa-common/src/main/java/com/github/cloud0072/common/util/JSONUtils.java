@@ -8,7 +8,7 @@ import java.io.IOException;
 @Slf4j
 public class JSONUtils {
 
-    private static ObjectMapper objectMapper = new ObjectMapper();
+    private final static ObjectMapper objectMapper = new ObjectMapper();
 
     public static <T> T readValue(String string, Class<T> clazz) {
         try {

@@ -55,7 +55,9 @@ public class UserController
         }
         switch (operation) {
             case DELETE:
+                break;
             case PUT:
+                break;
             case POST:
                 Set<Role> allRoles = userService.findById(currentUser.getId()).getRoles();
                 Set<Role> hasRoles = EntityUtils.orNull(user.getRoles(), new LinkedHashSet<>());

@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Getter
 @Setter
-public class ShiroProperties {
+public class ShiroProperties{
     // cookie加密安全码
     private String cipherKey = "4028c081645b411c01645b4127c40026";
     // 加密方式

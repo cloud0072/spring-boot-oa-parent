@@ -19,6 +19,8 @@ import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import static com.github.cloud0072.common.constant.Constants.TXT_LOCALHOST;
@@ -106,7 +108,7 @@ public class HttpUtils {
         MediaType mediaType = contentType == null ? MediaType.APPLICATION_OCTET_STREAM :
                 MediaType.valueOf(contentType);
 
-        log.info("download: {}\ttime: {}", fileName, DateUtils.defaultDateFormat(new Date()));
+        log.info("download: {}\ttime: {}", fileName, DateUtils.defaultDateTimeFormatter(LocalDateTime.now()));
 
         return ResponseEntity
                 .ok()

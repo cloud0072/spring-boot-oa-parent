@@ -1,6 +1,7 @@
 package com.github.cloud0072.base.repository;
 
 import com.github.cloud0072.base.model.User;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -18,4 +19,6 @@ public interface UserRepository
      */
     User findUserByAccount(String account);
 
+    @Query("select u from User u join fetch u.roles join fetch u.permissions where account=?1")
+    User findUserWithRolesAndPermissionsByAccount(String account);
 }
