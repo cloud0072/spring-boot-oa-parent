@@ -1,9 +1,12 @@
 package com.github.cloud0072.websocket.config;
 
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
+import com.github.cloud0072.base.model.User;
+import com.github.cloud0072.common.util.StringUtils;
+import com.github.cloud0072.websocket.model.ChatUser;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.messaging.simp.stomp.StompCommand;
@@ -14,7 +17,9 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
+import java.util.LinkedList;
 import java.util.Map;
+
 
 @Configuration
 @EnableWebSocketMessageBroker
@@ -22,7 +27,10 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry stompEndpointRegistry) {
-        stompEndpointRegistry.addEndpoint("/chat/endpoint").withSockJS();
+        stompEndpointRegistry
+                .addEndpoint("/chat/endpoint")
+                .setAllowedOrigins("*")
+                .withSockJS();
     }
 
     @Override
@@ -36,25 +44,17 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registration.interceptors(new ChannelInterceptorAdapter() {
             @Override
             public Message<?> preSend(Message<?> message, MessageChannel channel) {
-                StompHeaderAccessor accessor =
-                        MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
-                //1. 判断是否首次连接请求
+                StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
                 if (StompCommand.CONNECT.equals(accessor.getCommand())) {
-                    //2. 验证是否登录
-                    String username = accessor.getNativeHeader("username").get(0);
-                    String password = accessor.getNativeHeader("password").get(0);
-//                    for (Map.Entry<String, String> entry : Users.USERS_MAP.entrySet()) {
-////                        System.out.println(entry.getKey() + "---" + entry.getValue());
-//                        if (entry.getKey().equals(username) && entry.getValue().equals(password)) {
-//                            //验证成功,登录
-//                            Authentication user = new Authentication(username); // access authentication header(s)}
-//                            accessor.setUser(user);
-//                            return message;
-//                        }
-//                    }
-                    return null;
+                    Object raw = message.getHeaders().get(SimpMessageHeaderAccessor.NATIVE_HEADERS);
+                    if (raw instanceof Map) {
+                        Object username = ((Map) raw).get("username");
+                        if (username instanceof LinkedList) {
+                            // 设置当前访问器的认证用户
+                            accessor.setUser(new ChatUser(((LinkedList) username).get(0).toString()));
+                        }
+                    }
                 }
-                //不是首次连接，已经成功登陆
                 return message;
             }
         });

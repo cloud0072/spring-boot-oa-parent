@@ -19,4 +19,14 @@ public class ErrorController
         return "404";
     }
 
+    /**
+     * 跳转404页面
+     *
+     * @return
+     */
+    @GetMapping(value = "/403")
+    public String error_403() {
+        return "403";
+    }
+
 }

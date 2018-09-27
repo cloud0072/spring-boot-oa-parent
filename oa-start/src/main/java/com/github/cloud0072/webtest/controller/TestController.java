@@ -104,7 +104,7 @@ public class TestController implements BaseController {
     @ApiOperation("恢复admin密码为admin")
     @GetMapping("/06")
     public Object test06(HttpServletRequest request, HttpServletResponse response) {
-        User user = userService.findUserByAccount("admin");
+        User user = userService.findUserByUsername("admin");
         user.setPassword("admin");
         userService.update(user);
 

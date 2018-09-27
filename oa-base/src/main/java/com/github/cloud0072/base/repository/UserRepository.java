@@ -14,11 +14,11 @@ public interface UserRepository
     /**
      * 查询
      *
-     * @param account
+     * @param username
      * @return
      */
-    User findUserByAccount(String account);
+    User findByUsername(String username);
 
-    @Query("select u from User u join fetch u.roles join fetch u.permissions where account=?1")
-    User findUserWithRolesAndPermissionsByAccount(String account);
+//    @Query("select u from User u join fetch u.roles join fetch u.permissions where account=?1")
+//    User findUserWithRolesAndPermissionsByUsername(String account);
 }

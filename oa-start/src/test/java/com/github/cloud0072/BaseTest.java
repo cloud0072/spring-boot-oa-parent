@@ -140,7 +140,7 @@ public class BaseTest {
                 .peek(user -> new User(StringUtils.UUID32()))
                 .map(user -> {
                     Map<String, Object> m = new HashMap<>();
-                    m.put("account", user.getAccount());
+                    m.put("account", user.getUsername());
                     m.put("name", user.getName());
                     m.put("password", user.getPassword());
                     return m;

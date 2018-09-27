@@ -63,15 +63,15 @@ public class SystemTest {
     @Test
     public void test02FindUser() {
         printIndex();
-        System.out.println(userService.findAuthorInfoByAccount("cloud0072"));
+        System.out.println(userService.findAuthorInfoByUsername("cloud0072"));
     }
 
     @Test
     public void test03ModifyUser() {
         printIndex();
-        User user = userService.findUserByAccount("cloud0072");
+        User user = userService.findUserByUsername("cloud0072");
         user.setEmail("352419394@qq.com");
-        user.setUserName("caolei");
+        user.setUsername("caolei");
         userService.save(user, null, null);
     }
 
@@ -90,7 +90,7 @@ public class SystemTest {
     @Test
     public void test05UserAddPermissions() {
         printIndex();
-        User user = userService.findAuthorInfoByAccount("cloud0072");
+        User user = userService.findAuthorInfoByUsername("cloud0072");
 
         Permission permission = new Permission();
         permission.setOperation(Operation.POST);
@@ -105,7 +105,7 @@ public class SystemTest {
     @Test
     public void test06UserFindPermissions() {
         printIndex();
-        User user = userService.findUserByAccount("cloud0072");
+        User user = userService.findUserByUsername("cloud0072");
 
         System.out.println(user.getPermissions());
     }
@@ -113,7 +113,7 @@ public class SystemTest {
     @Test
     public void test07UserAddRoles() {
         printIndex();
-        User user = userService.findUserByAccount("cloud0072");
+        User user = userService.findUserByUsername("cloud0072");
 
         Role role = roleService.findRoleByCode("user");
 
@@ -126,7 +126,7 @@ public class SystemTest {
     @Test
     public void test08UserAddLogs() {
         printIndex();
-        User user = userService.findUserWithLogsByAccount("cloud0072");
+        User user = userService.findUserWithLogsByUsername("cloud0072");
 
         OperationLog log = new OperationLog();
         log.setCreateTime(LocalDateTime.now());
@@ -141,7 +141,7 @@ public class SystemTest {
     @Test
     public void test09UserRemoveLogs() {
         printIndex();
-        User user = userService.findUserWithLogsByAccount("cloud0072");
+        User user = userService.findUserWithLogsByUsername("cloud0072");
 
         user.getExtend().getLogs().clear();
 
@@ -152,14 +152,14 @@ public class SystemTest {
     @Test
     public void test10UserFindRoles() {
         printIndex();
-        User user = userService.findUserByAccount("cloud0072");
+        User user = userService.findUserByUsername("cloud0072");
         System.out.println(user.getRoles());
     }
 
     //    @Test
     public void test11UserRemoveRoles() {
         printIndex();
-        User user = userService.findAuthorInfoByAccount("cloud0072");
+        User user = userService.findAuthorInfoByUsername("cloud0072");
         Iterator it = user.getRoles().iterator();
         if (it.hasNext()) it.remove();
         userService.save(user, null, null);
@@ -167,7 +167,7 @@ public class SystemTest {
 
     //    @Test
     public void test13UserRemove() {
-        userService.delete(userService.findUserByAccount("cloud0072"));
+        userService.delete(userService.findUserByUsername("cloud0072"));
     }
 
 
@@ -190,7 +190,7 @@ public class SystemTest {
 
     @Test
     public void changPassword() {
-        User user = userService.findUserByAccount("admin");
+        User user = userService.findUserByUsername("admin");
         user.setPassword("admin");
         userService.update(user);
     }

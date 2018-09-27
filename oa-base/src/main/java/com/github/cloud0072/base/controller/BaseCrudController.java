@@ -6,12 +6,10 @@ import com.github.cloud0072.common.annotation.EntityInfo;
 import com.github.cloud0072.common.annotation.ModuleInfo;
 import com.github.cloud0072.common.constant.Operation;
 import com.github.cloud0072.common.util.ReflectUtils;
-import com.github.cloud0072.common.util.MySecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.NonNull;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.data.domain.*;
 import org.springframework.http.ResponseEntity;
@@ -74,7 +72,7 @@ public abstract class BaseCrudController<T extends BaseEntity> implements BaseCo
     protected String showCreatePage(HttpServletRequest request,
                                     HttpServletResponse response,
                                     Model model) {
-        MySecurityUtils.checkOperation(entityName, Operation.POST);
+//        MySecurityUtils.checkOperation(entityName, Operation.POST);
         T t = instance();
         putModel(model, Operation.POST, t);
         return modulePath + entityPath + entityPath + "_edit";
@@ -86,7 +84,7 @@ public abstract class BaseCrudController<T extends BaseEntity> implements BaseCo
                                     HttpServletResponse response,
                                     @PathVariable("id") @NonNull String id,
                                     Model model) {
-        MySecurityUtils.checkOperation(entityName, Operation.PUT, id);
+//        MySecurityUtils.checkOperation(entityName, Operation.PUT, id);
         T t = service().findById(id);
         putModel(model, Operation.PUT, t);
         return modulePath + entityPath + entityPath + "_edit";
@@ -98,7 +96,6 @@ public abstract class BaseCrudController<T extends BaseEntity> implements BaseCo
                                   HttpServletResponse response,
                                   @PathVariable("id") @NonNull String id,
                                   Model model) {
-        MySecurityUtils.checkOperation(entityName, Operation.GET, id);
         T t = service().findById(id);
         putModel(model, Operation.GET, t);
         return modulePath + entityPath + entityPath + "_view";
@@ -114,7 +111,6 @@ public abstract class BaseCrudController<T extends BaseEntity> implements BaseCo
                                   @RequestParam(value = "direction", defaultValue = "ASC") String direction,
                                   @RequestParam(value = "sortField", defaultValue = "id") String sortField,
                                   Model model) {
-        MySecurityUtils.checkOperation(entityName, Operation.GET);
         Pageable pageable = PageRequest.of(pageNumber, pageSize, new Sort(Sort.Direction.fromString(direction), sortField));
         Page<T> list = service().findAll(Example.of(t), pageable);
         model.addAttribute("page", list);
@@ -131,7 +127,6 @@ public abstract class BaseCrudController<T extends BaseEntity> implements BaseCo
     protected ResponseEntity create(HttpServletRequest request,
                                     HttpServletResponse response,
                                     T t) {
-        MySecurityUtils.checkOperation(entityName, Operation.POST);
         t = service().save(t, request, response);
         Map<String, Object> map = new HashMap<>();
         map.put("message", "新增成功");
@@ -145,7 +140,6 @@ public abstract class BaseCrudController<T extends BaseEntity> implements BaseCo
     protected ResponseEntity delete(HttpServletRequest request,
                                     HttpServletResponse response,
                                     @PathVariable("id") @NonNull String id) {
-        MySecurityUtils.checkOperation(entityName, Operation.DELETE, id);
         service().deleteById(id);
         Map<String, Object> map = new HashMap<>();
         map.put("message", "删除成功");
@@ -160,7 +154,6 @@ public abstract class BaseCrudController<T extends BaseEntity> implements BaseCo
                                     HttpServletResponse response,
                                     @PathVariable("id") @NonNull String id,
                                     T t) {
-        MySecurityUtils.checkOperation(entityName, Operation.PUT);
         t = service().update(t, request, response);
         Map<String, Object> map = new HashMap<>();
         map.put("message", "修改成功");
@@ -174,7 +167,6 @@ public abstract class BaseCrudController<T extends BaseEntity> implements BaseCo
     protected ResponseEntity find(HttpServletRequest request,
                                   HttpServletResponse response,
                                   @PathVariable("id") @NonNull String id) {
-        MySecurityUtils.checkOperation(entityName, Operation.GET, id);
         T t = service().findById(id);
         Map<String, Object> map = new HashMap<>();
         map.put("message", "查询成功");
@@ -188,7 +180,6 @@ public abstract class BaseCrudController<T extends BaseEntity> implements BaseCo
     protected ResponseEntity findAll(HttpServletRequest request,
                                      HttpServletResponse response,
                                      T t) {
-        MySecurityUtils.checkOperation(entityName, Operation.GET);
         Map<String, Object> map = new HashMap<>();
         map.put("message", "查询成功");
         map.put(entityName, service().findAll(Example.of(t)));

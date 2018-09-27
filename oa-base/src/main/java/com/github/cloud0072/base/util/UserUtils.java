@@ -1,12 +1,11 @@
 package com.github.cloud0072.base.util;
 
 import com.github.cloud0072.base.model.User;
-import com.github.cloud0072.common.autoconfig.ShiroProperties;
 import com.github.cloud0072.common.constant.Constants;
 import com.github.cloud0072.common.util.HttpUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.crypto.hash.Sha256Hash;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -17,11 +16,16 @@ import org.springframework.util.StringUtils;
 @Component
 public class UserUtils {
 
-    private static ShiroProperties shiroProperties;
+//    private static ShiroProperties shiroProperties;
+//
+//    @Autowired
+//    private UserUtils(ShiroProperties shiroProperties) {
+//        UserUtils.shiroProperties = shiroProperties;
+//    }
 
-    @Autowired
-    private UserUtils(ShiroProperties shiroProperties) {
-        UserUtils.shiroProperties = shiroProperties;
+    private final static PasswordEncoder encoder = new BCryptPasswordEncoder();
+
+    private UserUtils() {
     }
 
     /**
@@ -45,6 +49,7 @@ public class UserUtils {
         HttpUtils.httpSession().setAttribute(Constants.USER_INFO, user);
     }
 
+
     /**
      * 加密
      *
@@ -53,10 +58,12 @@ public class UserUtils {
      * @date 2018/6/12 22:37
      */
     public static User encrypt(User user) {
-        if (user == null || StringUtils.isEmpty(user.getSalt()) || StringUtils.isEmpty(user.getPassword())) {
+        if (user == null || StringUtils.isEmpty(user.getPassword())) {
             throw new NullPointerException("用户的加密信息缺失,请确认后重试");
         }
-        user.setPassword(new Sha256Hash(user.getPassword(), user.getSalt(), shiroProperties.getHashIterations()).toString());
+//        user.setPassword(new Sha256Hash(user.getPassword(), user.getSalt(), shiroProperties.getHashIterations()).toString());
+
+        user.setPassword(encoder.encode(user.getPassword()));
         return user;
     }
 
@@ -67,10 +74,11 @@ public class UserUtils {
      * @return
      */
     public static boolean checkPwd(User user, String password) {
-        if (user == null || StringUtils.isEmpty(user.getSalt()) || StringUtils.isEmpty(user.getPassword())) {
+        if (user == null || StringUtils.isEmpty(user.getPassword())) {
             throw new NullPointerException("用户的加密信息缺失,请确认后重试");
         }
-        return user.getPassword().equals(new Sha256Hash(password, user.getSalt(), shiroProperties.getHashIterations()).toString());
+//        return user.getPassword().equals(new Sha256Hash(password, user.getSalt(), shiroProperties.getHashIterations()).toString());
+        return encoder.matches(password, user.getPassword());
     }
 
 }

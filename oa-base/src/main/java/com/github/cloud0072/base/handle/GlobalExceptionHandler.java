@@ -2,14 +2,15 @@ package com.github.cloud0072.base.handle;
 
 
 import com.github.cloud0072.base.exception.AjaxException;
-import com.github.cloud0072.common.util.MySecurityUtils;
+import com.github.cloud0072.common.util.SecurityUtils;
 import com.github.cloud0072.common.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -51,30 +52,14 @@ public class GlobalExceptionHandler {
     public ModelAndView authenticationExceptionHandler(HttpServletRequest request, HttpServletResponse response,
                                                        Exception ex) {
         ModelAndView modelAndView = new ModelAndView("forward:/prepare_login");
-        if (ex instanceof IncorrectCredentialsException) {
-            ex = new IncorrectCredentialsException("用户名或密码错误");
+
+        if (ex instanceof BadCredentialsException) {
+            ex = new BadCredentialsException("用户名或密码错误");
+        } else if (ex instanceof UsernameNotFoundException) {
+            ex = new UsernameNotFoundException("该用户不存在");
+        } else if (ex instanceof DisabledException) {
+            ex = new DisabledException("用户已被禁用");
         }
-
-        addErrorMessage(modelAndView, ex);
-        printErrorMessage(ex);
-
-        return modelAndView;
-    }
-
-    /**
-     * 授权异常返回错误页
-     * 可接受所有的 AuthenticationException 及其子类的异常
-     * code = 400
-     *
-     * @param request
-     * @param ex
-     * @return
-     */
-    @ExceptionHandler(value = {UnauthorizedException.class})
-    public ModelAndView unauthorizedExceptionExceptionHandler(HttpServletRequest request,
-                                                              HttpServletResponse response, Exception ex) {
-
-        ModelAndView modelAndView = new ModelAndView("500");
 
         addErrorMessage(modelAndView, ex);
         printErrorMessage(ex);
@@ -112,14 +97,15 @@ public class GlobalExceptionHandler {
      * @return
      */
     @ExceptionHandler(value = {Exception.class})
-    public ModelAndView exceptionHandler(HttpServletRequest request, HttpServletResponse response,
+    public ModelAndView exceptionHandler(HttpServletRequest request,
+                                         HttpServletResponse response,
                                          Exception ex) {
-        if (MySecurityUtils.isSubjectAvailable() && !MySecurityUtils.getSubject().isAuthenticated()) {
-            return authenticationExceptionHandler(request, response,
-                    new AuthenticationException("账号信息异常,请先登录"));
+        if (!SecurityUtils.isAuthenticated()) {
+            return authenticationExceptionHandler(request,
+                    response, new UnsupportedOperationException("账号信息异常,请先登录"));
         }
-        ModelAndView modelAndView = new ModelAndView("500");
 
+        ModelAndView modelAndView = new ModelAndView("500");
         addErrorMessage(modelAndView, ex);
         printErrorMessage(ex);
 

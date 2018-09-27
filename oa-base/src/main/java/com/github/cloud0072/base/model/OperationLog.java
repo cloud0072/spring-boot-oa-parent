@@ -76,7 +76,7 @@ public class OperationLog
     @Override
     public String toString() {
         return "OperationLog{" +
-                (user == null ? "" : "user=" + user.getUserName()) +
+                (user == null ? "" : "user=" + user.getUsername()) +
                 ", method='" + method + '\'' +
                 ", requestUrl='" + requestUrl + '\'' +
                 ", ipAddress='" + ipAddress + '\'' +

@@ -8,9 +8,12 @@ import com.github.cloud0072.common.util.StringUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,15 +30,15 @@ import java.util.Set;
 @Table(name = "auth_user", uniqueConstraints = @UniqueConstraint(columnNames = {"account"}))
 public class User
         extends BaseEntity
-        implements NamedEntity, SystemEntity, BaseModuleEntity {
+        implements NamedEntity, SystemEntity, BaseModuleEntity, UserDetails {
 
     @Column(nullable = false, unique = true)
-    private String account;
+    private String username;
     @JsonIgnore
     @Column
     private String password;
-    @Column
-    private String userName;
+    @Column(nullable = false)
+    private String realName;
     @Column
     private String email;
     @Column
@@ -90,16 +93,16 @@ public class User
     public User() {
     }
 
-    public User(String account) {
+    public User(String username) {
         this.setDefaultValue();
-        this.account = account;
+        this.username = username;
     }
 
-    public User(String account, String password, String userName, String email, Boolean systemEntity) {
+    public User(String username, String password, String realName, String email, Boolean systemEntity) {
         this.setDefaultValue();
-        this.account = account;
+        this.username = username;
         this.password = password;
-        this.userName = userName;
+        this.realName = realName;
         this.email = email;
         this.systemEntity = systemEntity == null ? Boolean.FALSE : this.systemEntity;
     }
@@ -124,36 +127,59 @@ public class User
      *
      * @return
      */
-    @Transient
-    public boolean isSuperUser() {
-        return superUser == null ? false : superUser;
+    public Boolean isSuperUser() {
+        return superUser == null ? Boolean.FALSE : superUser;
     }
-    @Transient
-    public boolean isActive() {
-        return active == null ? false : active;
+
+    public Boolean isActive() {
+        return active == null ? Boolean.TRUE : active;
     }
 
     @Override
     public String getName() {
         //namedEntity
-        return getUserName();
+        return realName;
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "account='" + account + '\'' +
+                "username='" + username + '\'' +
                 ", password='" + password + '\'' +
-                ", userName='" + userName + '\'' +
+                ", realName='" + realName + '\'' +
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
                 ", salt='" + salt + '\'' +
                 ", active=" + active +
                 ", superUser=" + superUser +
+                ", systemEntity=" + systemEntity +
                 ", createTime=" + createTime +
                 ", lastLoginTime=" + lastLoginTime +
                 '}';
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
 
+    @Override
+    public boolean isAccountNonExpired() {
+        return active;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return active;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return active;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return active;
+    }
 }

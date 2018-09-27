@@ -3,14 +3,19 @@ package com.github.cloud0072.websocket.controller;
 import com.github.cloud0072.common.util.JSONUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.user.SimpUser;
+import org.springframework.messaging.simp.user.SimpUserRegistry;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * websocket 消息进出控制器
@@ -21,6 +26,8 @@ public class WsController {
 
     @Autowired
     SimpMessagingTemplate messagingTemplate;
+    @Autowired
+    private SimpUserRegistry userRegistry;
 
     @MessageMapping("/queue-chat")
     public void chat(Principal principal, String message) {
@@ -48,4 +55,15 @@ public class WsController {
     public String showChatPage() {
         return "/websocket/index";
     }
+
+    @RequestMapping("/ws/onlineUserInfo")
+    public ResponseEntity onlineUserInfo() {
+        log.info("当前在线人数:" + userRegistry.getUserCount());
+        Set<SimpUser> users = userRegistry.getUsers();
+        for (SimpUser user : users) {
+            log.info(user.toString());
+        }
+        return ResponseEntity.ok(users);
+    }
+
 }

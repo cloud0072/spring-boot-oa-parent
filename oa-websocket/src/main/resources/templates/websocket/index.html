@@ -133,11 +133,9 @@
     });
 
     function connect() {
-        var socket = new SockJS(endpoint);
-        stompClient = Stomp.over(socket);
-        var headers={
-            username:'admin',
-            password:'admin'
+        stompClient = Stomp.over(new SockJS(endpoint));
+        var headers = {
+            username: account
         };
         stompClient.connect(headers, function () {
             setConnected(true);
@@ -147,16 +145,7 @@
                     if (data.account !== account) {
                         toastr.success(data.chatContent, "您收到了新的消息:");
                     } else {
-                        bootbox.alert({
-                            message: '发送成功!',
-                            size: 'small',
-                            buttons: {
-                                ok: {
-                                    label: "确认",
-                                    className: "btn-info"
-                                }
-                            }
-                        });
+                        toastr.success(data.chatContent, "发送成功:");
                     }
                 }
 

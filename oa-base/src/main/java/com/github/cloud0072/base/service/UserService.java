@@ -1,6 +1,8 @@
 package com.github.cloud0072.base.service;
 
 import com.github.cloud0072.base.model.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -9,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author cloud0072
  */
 public interface UserService
-        extends BaseCrudService<User> {
+        extends BaseCrudService<User> , UserDetailsService {
 
     /**
      *
@@ -24,18 +26,18 @@ public interface UserService
               HttpServletResponse response,
               boolean encrypt);
 
-    /**
-     * 登陆
-     *
-     * @param user
-     * @return
-     */
-    boolean login(User user);
-
-    /**
-     * 登出
-     */
-    void logout();
+//    /**
+//     * 登陆
+//     *
+//     * @param user
+//     * @return
+//     */
+//    boolean login(User user);
+//
+//    /**
+//     * 登出
+//     */
+//    void logout();
 
     /**
      * 查询用户
@@ -43,7 +45,7 @@ public interface UserService
      * @param account
      * @return
      */
-    User findUserByAccount(String account);
+    User findUserByUsername(String account);
 
     /**
      * 懒加载
@@ -51,7 +53,7 @@ public interface UserService
      * @param account
      * @return
      */
-    User findUserWithLogsByAccount(String account);
+    User findUserWithLogsByUsername(String account);
 
 
     /**
@@ -60,7 +62,7 @@ public interface UserService
      * @param account
      * @return
      */
-    User findAuthorInfoByAccount(String account);
+    User findAuthorInfoByUsername(String account);
 
     /**
      * 修改密码

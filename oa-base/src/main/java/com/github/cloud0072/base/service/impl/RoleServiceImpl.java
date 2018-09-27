@@ -6,12 +6,7 @@ import com.github.cloud0072.base.repository.BaseRepository;
 import com.github.cloud0072.base.repository.RoleRepository;
 import com.github.cloud0072.base.service.PermissionService;
 import com.github.cloud0072.base.service.RoleService;
-import com.github.cloud0072.common.util.MySecurityUtils;
-import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
-import org.apache.shiro.mgt.RealmSecurityManager;
-import org.apache.shiro.realm.jdbc.JdbcRealm;
-import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
@@ -42,6 +37,19 @@ public class RoleServiceImpl
     }
 
     @Override
+    public Role save(Role role, HttpServletRequest request, HttpServletResponse response) {
+
+        if (request != null) {
+            List<String> permissionIds = Arrays.asList(request.getParameterValues("permission-select[]"));
+            List<Permission> permissions = new ArrayList<>();
+            permissionIds.forEach(permissionId -> permissions.add(permissionService.findById(permissionId)));
+            role.setPermissions(permissions);
+        }
+
+        return repository().save(role);
+    }
+
+    @Override
     public Role update(Role input,
                        HttpServletRequest request,
                        HttpServletResponse response) {
@@ -54,19 +62,6 @@ public class RoleServiceImpl
         save(role, request, response);
 
         return role;
-    }
-
-    @Override
-    public Role save(Role role, HttpServletRequest request, HttpServletResponse response) {
-
-        if (request != null) {
-            List<String> permissionIds = Arrays.asList(request.getParameterValues("permission-select[]"));
-            List<Permission> permissions = new ArrayList<>();
-            permissionIds.forEach(permissionId -> permissions.add(permissionService.findById(permissionId)));
-            role.setPermissions(permissions);
-        }
-
-        return repository().save(role);
     }
 
     @Override
@@ -88,19 +83,19 @@ public class RoleServiceImpl
 //        Cache<Object, Object> cache = shiroCacheManager.getCache("org.apache.shiro.realm.jdbc.JdbcRealm.authorizationCache");
 //        shiroCacheManager.destroy();//清除全部缓存
 //        LifecycleUtils.destroy(cache);//清除某个缓存
-        Subject subject = MySecurityUtils.getSubject();
+//        Subject subject = MySecurityUtils.getSubject();
         /*subject.getPrincipal()------>登录名
         String realmName = subject.getPrincipals().getRealmNames().iterator().next();
         //第一个参数为用户名,想要操作权限的用户，第二个参数为realmName,
         SimplePrincipalCollection principals = new SimplePrincipalCollection(subject.getPrincipal(),realmName);
         */
-        RealmSecurityManager securityManager = (RealmSecurityManager) MySecurityUtils.getSecurityManager();
-        JdbcRealm jdbcRealm = (JdbcRealm) securityManager.getRealms().iterator().next();
-        //删除登陆人
-        jdbcRealm.getAuthorizationCache().remove(subject.getPrincipal());
-        //删除登陆人对应的缓存
-        jdbcRealm.getAuthorizationCache().remove(subject.getPrincipals());
-        //重新加载subject
-        subject.releaseRunAs();
+//        RealmSecurityManager securityManager = (RealmSecurityManager) MySecurityUtils.getSecurityManager();
+//        JdbcRealm jdbcRealm = (JdbcRealm) securityManager.getRealms().iterator().next();
+//        //删除登陆人
+//        jdbcRealm.getAuthorizationCache().remove(subject.getPrincipal());
+//        //删除登陆人对应的缓存
+//        jdbcRealm.getAuthorizationCache().remove(subject.getPrincipals());
+//        //重新加载subject
+//        subject.releaseRunAs();
     }
 }

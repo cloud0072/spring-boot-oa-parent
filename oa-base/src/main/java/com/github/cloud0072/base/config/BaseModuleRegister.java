@@ -147,12 +147,12 @@ public class BaseModuleRegister
          * 注册用户
          */
         String account = "admin";
-        if (null == userService.findUserByAccount(account)) {
+        if (null == userService.findUserByUsername(account)) {
             User admin = new User(account, account, account, null, true).setDefaultValue();
             admin.setSuperUser(true);
             userService.save(admin, null, null, false);
 
-            admin = userService.findAuthorInfoByAccount(account);
+            admin = userService.findAuthorInfoByUsername(account);
             Role superuser = roleService.findRoleByCode("superuser");
             Role user = roleService.findRoleByCode("user");
             admin.getRoles().addAll(Arrays.asList(superuser, user));
