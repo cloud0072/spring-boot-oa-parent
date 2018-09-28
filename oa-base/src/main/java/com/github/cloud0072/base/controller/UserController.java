@@ -122,11 +122,12 @@ public class UserController
                 map.put("message", "修改成功! 请重新登陆");
                 map.put("url", url);
                 return ResponseEntity.ok(map);
+            } else {
+                throw new AccessDeniedException("您没有权限进行此操作！");
             }
         } catch (Exception e) {
             throw new AjaxException(e);
         }
-        throw new AccessDeniedException("您没有权限进行此操作！");
     }
 
 

@@ -15,7 +15,8 @@
 
                 <div class="login-header">
                     <a href="#" class="logo">
-                        <img src="" data-th-src="@{/assets/xenon/images/logo@2x.png}" alt="" width="80"/>
+                        <img src="" data-th-src="@{/assets/xenon/images/logo@2x.png}"
+                             alt="" width="80"/>
                         <span>log in</span>
                     </a>
 
@@ -41,9 +42,11 @@
                     </button>
                 </div>
 
-                <div data-th-remove="${error == null?'all':'none'}">
-                    <span class="text-red" data-th-text="${error}"></span>
-                </div>
+                <!--如果参数包含 error 则显示 该span SPRING_SECURITY_LAST_EXCEPTION 保存了登录错误信息-->
+                <span class="text-red"
+                      th:if="${session.SPRING_SECURITY_LAST_EXCEPTION != null}"
+                      data-th-text="${session.SPRING_SECURITY_LAST_EXCEPTION.getMessage()}">
+                </span>
 
                 <div class="login-footer">
                     <a href="#">忘记密码？</a>

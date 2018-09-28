@@ -43,4 +43,4 @@ logging:
        com.github.cloud0072.base.aop.WebLogAspect: info
 plugin:
     swagger2:
-        enable: true
+        enable: false

@@ -150,14 +150,14 @@ public class BaseModuleRegister
         if (null == userService.findUserByUsername(account)) {
             User admin = new User(account, account, account, null, true).setDefaultValue();
             admin.setSuperUser(true);
-            userService.save(admin, null, null, false);
+            userService.save(admin, null, null);
 
             admin = userService.findAuthorInfoByUsername(account);
             Role superuser = roleService.findRoleByCode("superuser");
             Role user = roleService.findRoleByCode("user");
             admin.getRoles().addAll(Arrays.asList(superuser, user));
             try {
-                userService.save(admin, null, null, true);
+               userService.repository().save(admin);
             } catch (Exception ignored) {
             }
         }

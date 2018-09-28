@@ -1,13 +1,13 @@
 package com.github.cloud0072.base.controller;
 
 import com.github.cloud0072.base.service.UserService;
-import com.github.cloud0072.common.util.SecurityUtils;
+import com.github.cloud0072.base.util.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -31,7 +31,7 @@ public class LoginController
      * @author cloud0072
      * @date 2018/6/12 21:55
      */
-    @GetMapping("/prepare_login")
+    @RequestMapping(value = "/prepare_login",method = {RequestMethod.GET,RequestMethod.POST})
     public String prepareLogin() {
         return "login";
     }
@@ -43,10 +43,9 @@ public class LoginController
      * @author cloud0072
      * @date 2018/6/12 21:55
      */
-    @RequestMapping(value = "/index",method = {RequestMethod.GET,RequestMethod.POST})
+    @RequestMapping(value = "/index", method = {RequestMethod.GET, RequestMethod.POST})
     public String index() {
         return "index";
     }
-
 
 }

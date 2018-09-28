@@ -1,7 +1,6 @@
 package com.github.cloud0072.base.service;
 
 import com.github.cloud0072.base.model.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,33 +10,18 @@ import javax.servlet.http.HttpServletResponse;
  * @author cloud0072
  */
 public interface UserService
-        extends BaseCrudService<User> , UserDetailsService {
+        extends BaseCrudService<User>, UserDetailsService {
 
     /**
-     *
+     * 注册用户 对用户密码进行加密并保存
      * @param user
      * @param request
      * @param response
-     * @param encrypt
      * @return
      */
-    User save(User user,
-              HttpServletRequest request,
-              HttpServletResponse response,
-              boolean encrypt);
-
-//    /**
-//     * 登陆
-//     *
-//     * @param user
-//     * @return
-//     */
-//    boolean login(User user);
-//
-//    /**
-//     * 登出
-//     */
-//    void logout();
+    User saveWithoutEncrypt(User user,
+                            HttpServletRequest request,
+                            HttpServletResponse response);
 
     /**
      * 查询用户

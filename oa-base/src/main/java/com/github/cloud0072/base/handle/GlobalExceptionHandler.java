@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.nio.file.AccessDeniedException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -61,7 +62,7 @@ public class GlobalExceptionHandler {
             ex = new DisabledException("用户已被禁用");
         }
 
-        addErrorMessage(modelAndView, ex);
+        request.getSession().setAttribute("SPRING_SECURITY_LAST_EXCEPTION",ex);
         printErrorMessage(ex);
 
         return modelAndView;
@@ -102,7 +103,7 @@ public class GlobalExceptionHandler {
                                          Exception ex) {
         if (!SecurityUtils.isAuthenticated()) {
             return authenticationExceptionHandler(request,
-                    response, new UnsupportedOperationException("账号信息异常,请先登录"));
+                    response, new AccessDeniedException("账号信息异常,请先登录"));
         }
 
         ModelAndView modelAndView = new ModelAndView("500");

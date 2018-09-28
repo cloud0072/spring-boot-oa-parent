@@ -15,8 +15,8 @@ var form = $("#main_form");
 $(document).ready(function () {
     form.validate({
         rules: {
-            userName: "required",
-            account: {
+            realName: "required",
+            username: {
                 required: true,
                 rangelength: [5, 20]
             },
@@ -39,8 +39,8 @@ $(document).ready(function () {
             }
         },
         messages: {
-            userName: "请输入用户名",
-            account: {
+            realName: "请输入用户名",
+            username: {
                 required: "请输入账号",
                 rangelength: $.validator.format("账号长度必须在 {0} 到 {1} 之间")
             },
@@ -93,10 +93,10 @@ var uploading = false;
 function fileUpload() {
     var headPhoto_id = $('#head_photo_id').val();
     var file = document.getElementById("file_id").files[0];
-    var url = hostUrl + "/file/PORTRAIT";
+    var url = hostUrl + "file/PORTRAIT";
     var type = "POST";
     if (headPhoto_id) {
-        url = hostUrl + "/file/PORTRAIT/" + headPhoto_id;
+        url = hostUrl + "file/PORTRAIT/" + headPhoto_id;
         type = "PUT";
     }
     if (!uploading && file) {

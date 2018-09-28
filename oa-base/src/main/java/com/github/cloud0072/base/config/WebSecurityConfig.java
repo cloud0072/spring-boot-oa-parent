@@ -41,30 +41,33 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                    //定义不需要认证就可以访问
-                    .antMatchers("/assets/**").permitAll()
-                    //定义哪些url需要保护
-                    .anyRequest().authenticated()
+                //定义不需要认证就可以访问
+                .antMatchers("/assets/**")
+                .permitAll()
+                .antMatchers("/test/**")
+                .permitAll()
+                //定义哪些url需要保护
+                .anyRequest().authenticated()
                 .and()
-                    .formLogin()
-                    .loginPage("/prepare_login")
-                    .loginProcessingUrl("/login")
-                    .failureForwardUrl("/login?error")
-                    .permitAll()
-                    .usernameParameter("username")
-                    .passwordParameter("password")
-                    .successForwardUrl("/index")
+                .formLogin()
+                .loginPage("/prepare_login")
+                .usernameParameter("username")
+                .passwordParameter("password")
+                .loginProcessingUrl("/login")
+                .failureUrl("/prepare_login?error")
+                .permitAll()
+                .defaultSuccessUrl("/index")
                 .and()
-                    .logout()
-                    .logoutUrl("/logout")
-                    .logoutSuccessUrl("/login").permitAll()
+                .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/prepare_login")
+                .permitAll()
                 .and()
-                    .exceptionHandling()
-                    .accessDeniedPage("/403")
+                .exceptionHandling()
+                .accessDeniedPage("/403")
                 .and()
-                    .csrf()
-//                    .disable()
-        ;
+                .csrf()
+                .disable();
     }
 
 

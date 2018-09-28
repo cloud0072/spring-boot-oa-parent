@@ -106,7 +106,7 @@ public abstract class BaseCrudController<T extends BaseEntity> implements BaseCo
                                   T t,
                                   @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber,
                                   @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                                  @RequestParam(value = "direction", defaultValue = "ASC") String direction,
+                                  @RequestParam(value = "direction", defaultValue = "DESC") String direction,
                                   @RequestParam(value = "sortField", defaultValue = "id") String sortField,
                                   Model model) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize, new Sort(Sort.Direction.fromString(direction), sortField));

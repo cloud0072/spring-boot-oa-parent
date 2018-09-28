@@ -15,9 +15,9 @@ public interface RoleRepository
      * 查询成员变量中的某个值 用 _ 代表成员变量
      * findByUsers_AccountEquals
      *
-     * @param userName
+     * @param username
      * @return
      */
-    List<Role> findByUsers_UsernameEquals(String userName);
+    List<Role> findByUsers_UsernameEquals(String username);
 
 }

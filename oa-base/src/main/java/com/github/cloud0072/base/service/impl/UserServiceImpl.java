@@ -60,12 +60,17 @@ public class UserServiceImpl
     @Override
     public User save(User user, HttpServletRequest request, HttpServletResponse response) {
         //调用save默认执行加密 如果有其他需求 置为false
-        return this.save(user, request, response, true);
+        user.setDefaultValue();
+
+        user = UserUtils.encrypt(user);
+
+        updateUserAdvice(user, request);
+
+        return repository().save(user);
     }
 
     @Override
     public User update(User input, HttpServletRequest request, HttpServletResponse response) {
-
         User user = findById(input.getId());
 
         user.setUsername(input.getUsername());
@@ -74,32 +79,16 @@ public class UserServiceImpl
         user.setPhone(input.getPhone());
 
         if (!StringUtils.isEmpty(input.getPassword())) {
-            user.setPassword(input.getPassword());
-            UserUtils.encrypt(user);
+            return save(user, request, response);
         }
 
-        updateUserAdvice(user, request);
-
-        return repository().save(user);
+        return saveWithoutEncrypt(user, request, response);
     }
 
-    /**
-     * 保存用户 可以控制是否对密码进行加密
-     *
-     * @param user
-     * @param request
-     * @param response
-     * @param encrypt
-     * @return
-     */
     @Override
-    public User save(User user, HttpServletRequest request, HttpServletResponse response,
-                     boolean encrypt) {
-
+    public User saveWithoutEncrypt(User user, HttpServletRequest request, HttpServletResponse response) {
+        //调用save默认执行加密 如果有其他需求 置为false
         user.setDefaultValue();
-        if (encrypt) {
-            user = UserUtils.encrypt(user);
-        }
 
         updateUserAdvice(user, request);
 
@@ -176,10 +165,11 @@ public class UserServiceImpl
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserDetails userDetails = userRepository.findByUsername(username);
-        if (userDetails == null) {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
             throw new UsernameNotFoundException("UsernameNotFound\t:\t" + username);
         }
-        return userDetails;
+        UserUtils.setCurrentUser(user);
+        return user;
     }
 }

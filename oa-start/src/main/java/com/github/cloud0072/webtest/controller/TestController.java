@@ -8,6 +8,7 @@ import com.github.cloud0072.common.autoconfig.LocationProperties;
 import com.github.cloud0072.common.autoconfig.ShiroProperties;
 import com.github.cloud0072.common.util.DateUtils;
 import com.github.cloud0072.common.util.FileUtils;
+import com.github.cloud0072.common.util.SecurityUtils;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -110,6 +111,7 @@ public class TestController implements BaseController {
         return FileUtils.getUploadPath();
     }
 
+    @ApiOperation("测试接受参数")
     @RequestMapping("/receive")
     @ResponseBody
     public ResponseEntity test07(HttpServletRequest request, HttpServletResponse response) {
@@ -121,6 +123,13 @@ public class TestController implements BaseController {
         }
 
         return ResponseEntity.ok("接收成功");
+    }
+
+    @ApiOperation("测试认证签名格式")
+    @RequestMapping("/08")
+    @ResponseBody
+    public ResponseEntity test08(HttpServletRequest request, HttpServletResponse response) {
+        return ResponseEntity.ok(SecurityUtils.authentication().getPrincipal());
     }
 
 }

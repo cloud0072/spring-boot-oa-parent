@@ -9,6 +9,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.user.SimpUser;
 import org.springframework.messaging.simp.user.SimpUserRegistry;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
@@ -51,12 +52,12 @@ public class WsController {
         messagingTemplate.convertAndSend("/topic/system", message);
     }
 
-    @RequestMapping("/chat/index")
+    @GetMapping("/chat/index")
     public String showChatPage() {
         return "/websocket/index";
     }
 
-    @RequestMapping("/ws/onlineUserInfo")
+    @GetMapping("/ws/onlineUserInfo")
     public ResponseEntity onlineUserInfo() {
         log.info("当前在线人数:" + userRegistry.getUserCount());
         Set<SimpUser> users = userRegistry.getUsers();

@@ -18,23 +18,25 @@ import java.util.Collection;
 public class SecurityUtils {
 
     public static Authentication authentication() {
-        try {
-            return SecurityContextHolder
-                    .getContext()
-                    .getAuthentication();
-        } catch (Exception e) {
+        Authentication authentication = SecurityContextHolder.getContext()
+                .getAuthentication();
+        if (authentication == null) {
             throw new AuthenticationServiceException("无法获取认证信息!");
         }
+        return authentication;
     }
 
     public static Collection<? extends GrantedAuthority> authorities() {
-        return authentication()
-                .getAuthorities();
+        return authentication().getAuthorities();
     }
 
     public static boolean isAuthenticated() {
-        return authentication()
-                .isAuthenticated();
+        try {
+            return authentication().isAuthenticated() &&
+                    !"anonymousUser".equals(authentication().getPrincipal());
+        } catch (Exception e) {
+            return false;
+        }
     }
 
 

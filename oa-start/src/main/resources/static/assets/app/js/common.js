@@ -1,5 +1,5 @@
 $('.btn-logout').on('click', function () {
-    location.href = hostUrl + "/logout";
+    location.href = hostUrl + "logout";
 });
 
 $('.btn.view').on('click', function () {
