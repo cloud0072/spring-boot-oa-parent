@@ -9,7 +9,6 @@ import com.github.cloud0072.common.util.ReflectUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.NonNull;
-import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.data.domain.*;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +29,6 @@ import static com.github.cloud0072.common.constant.Constants.TY_ADMIN;
  * @date 2018/7/25 11:41
  */
 @Api("基础增删改查方法的抽象类")
-@RequiresAuthentication
 public abstract class BaseCrudController<T extends BaseEntity> implements BaseController {
 
     public final Class<T> persistentClass = ReflectUtils.getClassGenericType(getClass(), 0);

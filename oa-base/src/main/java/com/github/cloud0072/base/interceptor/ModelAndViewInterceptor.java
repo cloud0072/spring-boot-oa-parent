@@ -4,6 +4,8 @@ package com.github.cloud0072.base.interceptor;
 import com.github.cloud0072.base.config.Global;
 import com.github.cloud0072.base.model.Category;
 import com.github.cloud0072.base.service.CategoryService;
+import com.github.cloud0072.base.service.UserService;
+import com.github.cloud0072.common.util.SecurityUtils;
 import com.github.cloud0072.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,7 +24,8 @@ public class ModelAndViewInterceptor implements HandlerInterceptor {
 
     @Autowired
     private CategoryService categoryService;
-
+    @Autowired
+    private UserService userService;
     @Autowired
     private Global global;
 
@@ -48,6 +51,8 @@ public class ModelAndViewInterceptor implements HandlerInterceptor {
             modelAndView.addObject("categories", categoryList);
 
             modelAndView.addObject("Global", global);
+
+//            modelAndView.addObject("authentication", SecurityUtils.authentication());
         }
     }
 }

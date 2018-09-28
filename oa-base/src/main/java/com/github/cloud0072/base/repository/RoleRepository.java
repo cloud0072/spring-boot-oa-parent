@@ -18,6 +18,6 @@ public interface RoleRepository
      * @param userName
      * @return
      */
-    List<Role> findByUsers_AccountEquals(String userName);
+    List<Role> findByUsers_UsernameEquals(String userName);
 
 }

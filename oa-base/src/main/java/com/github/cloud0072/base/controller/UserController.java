@@ -11,9 +11,9 @@ import com.github.cloud0072.base.util.EntityUtils;
 import com.github.cloud0072.base.util.UserUtils;
 import com.github.cloud0072.common.constant.Operation;
 import lombok.NonNull;
-import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -98,7 +98,7 @@ public class UserController
             putModel(model, Operation.PUT, u);
             return modulePath + entityPath + entityPath + "_resetpwd";
         }
-        throw new UnauthorizedException("您没有权限进行此操作！");
+        throw new AccessDeniedException("您没有权限进行此操作！");
     }
 
     /**
@@ -126,7 +126,7 @@ public class UserController
         } catch (Exception e) {
             throw new AjaxException(e);
         }
-        throw new UnauthorizedException("您没有权限进行此操作！");
+        throw new AccessDeniedException("您没有权限进行此操作！");
     }
 
 

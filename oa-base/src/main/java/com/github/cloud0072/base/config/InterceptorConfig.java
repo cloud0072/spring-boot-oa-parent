@@ -44,9 +44,6 @@ public class InterceptorConfig
                 .addPathPatterns("/**")
                 .excludePathPatterns(excludePatterns);
 
-//        registry.addInterceptor(urlPathMatchingInterceptor)
-//                .addPathPatterns("/**")
-//                .excludePathPatterns(excludePatterns);
     }
 
 }

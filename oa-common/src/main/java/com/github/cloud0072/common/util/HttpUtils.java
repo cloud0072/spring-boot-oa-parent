@@ -1,10 +1,6 @@
 package com.github.cloud0072.common.util;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.UnavailableSecurityManagerException;
-import org.apache.shiro.session.Session;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpHeaders;
@@ -57,20 +53,6 @@ public class HttpUtils {
      */
     public static HttpSession httpSession() {
         return httpServletRequest().getSession();
-    }
-
-    /**
-     * 获取shiro会话
-     *
-     * @return
-     */
-    public static Session shiroSession() {
-        try {
-            return SecurityUtils.getSubject().getSession();
-        } catch (UnavailableSecurityManagerException e) {
-            log.error("无法获取当前SHIRO会话");
-            throw new UnsupportedOperationException("无法获取当前SHIRO会话!");
-        }
     }
 
     /**

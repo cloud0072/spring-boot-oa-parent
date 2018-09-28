@@ -9,7 +9,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
  * @author caolei
  * @date 2018/9/27 15:08
  */
-@Configuration
-@EnableAuthorizationServer
+//@Configuration
+//@EnableAuthorizationServer
 public class AuthorizationServerConfig {
 }

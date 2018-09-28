@@ -7,8 +7,10 @@ import com.github.cloud0072.base.util.UserUtils;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
-import org.apache.shiro.crypto.hash.Md5Hash;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -22,6 +24,8 @@ import static java.util.stream.Collectors.toList;
 @SuppressWarnings("all")
 @SuppressFBWarnings
 public class BaseTest {
+
+    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Test
     public void test01() {
@@ -120,8 +124,8 @@ public class BaseTest {
 
     @Test
     public void test12() {
-        String password = new Md5Hash("admin", "8d78869f470951332959580424d4bf4f", 2).toString();
-
+//        String password = new Md5Hash("admin", "8d78869f470951332959580424d4bf4f", 2).toString();
+        String password =  passwordEncoder.encode("admin");
         System.out.println(password);
     }
 

@@ -10,7 +10,7 @@ import lombok.Data;
 public class ChatMessage {
 
     //自身账号
-    private String account;
+    private String username;
     //目标用户
     private String destuser;
     //内容

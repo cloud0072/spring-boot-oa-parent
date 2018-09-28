@@ -4,7 +4,6 @@ import com.github.cloud0072.base.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -33,6 +32,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
+//                .eraseCredentials(false)
                 .userDetailsService(userService)
                 .passwordEncoder(passwordEncoder());
     }
@@ -41,22 +41,30 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                //定义不需要认证就可以访问
-                .antMatchers("/assets").permitAll()
-                //定义哪些url需要保护
-                .antMatchers().authenticated()
+                    //定义不需要认证就可以访问
+                    .antMatchers("/assets/**").permitAll()
+                    //定义哪些url需要保护
+                    .anyRequest().authenticated()
                 .and()
-                .formLogin()
-                .loginPage("/prepare_login").permitAll()
-                .successForwardUrl("/index")
+                    .formLogin()
+                    .loginPage("/prepare_login")
+                    .loginProcessingUrl("/login")
+                    .failureForwardUrl("/login?error")
+                    .permitAll()
+                    .usernameParameter("username")
+                    .passwordParameter("password")
+                    .successForwardUrl("/index")
                 .and()
-                .logout()
-                .logoutUrl("/logout").permitAll()
+                    .logout()
+                    .logoutUrl("/logout")
+                    .logoutSuccessUrl("/login").permitAll()
                 .and()
-                .httpBasic()
+                    .exceptionHandling()
+                    .accessDeniedPage("/403")
                 .and()
-                .csrf()
-                .disable();
+                    .csrf()
+//                    .disable()
+        ;
     }
 
 

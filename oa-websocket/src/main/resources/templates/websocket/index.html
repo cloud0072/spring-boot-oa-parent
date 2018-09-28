@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      lang="zh-CN">
+<html lang="zh-CN"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
 <head th:replace="fragment :: head"></head>
 <link rel="stylesheet" th:href="@{/assets/bootstrap-select/css/bootstrap-select.min.css}">
 <script type="text/javascript"
@@ -57,10 +59,7 @@
 
                         <!--/*@thymesVar id="category" type="com.github.cloud0072.base.model.Category"*/-->
                         <form id="main_form" role="form" class="form-horizontal">
-                            <label>
-                                <input hidden="hidden" th:id="account"
-                                       th:value="   ${session.user_info.account}">
-                            </label>
+                            <span hidden="hidden" id="username" sec:authentication="name"></span>
 
                             <div class="form-group">
                                 <label class="col-sm-2 control-label"
@@ -119,7 +118,7 @@
     var endpoint = hostUrl + "/chat/endpoint";
     var subscribeUrl = '/topic/system';
     var sendUrl = '/topic-system';
-    var account = $("#account").val();
+    var username = $("#username").val();
 
     $(function () {
         $("#userGroup").selectpicker({
@@ -135,14 +134,14 @@
     function connect() {
         stompClient = Stomp.over(new SockJS(endpoint));
         var headers = {
-            username: account
+            username: username
         };
         stompClient.connect(headers, function () {
             setConnected(true);
             stompClient.subscribe(subscribeUrl, function (response) {
                 if (response && response.body) {
                     var data = JSON.parse(response.body);
-                    if (data.account !== account) {
+                    if (data.username !== username) {
                         toastr.success(data.chatContent, "您收到了新的消息:");
                     } else {
                         toastr.success(data.chatContent, "发送成功:");
@@ -156,7 +155,7 @@
     function sendMessage() {
 
         stompClient.send(sendUrl, {}, JSON.stringify({
-            "account": account,
+            "username": username,
             "destUser": null,
             "chatContent": $('#chatContent').val(),
             "userGroup": $('#userGroup').val()

@@ -1,14 +1,12 @@
 package com.github.cloud0072.base.aop;
 
-import com.github.cloud0072.base.util.UserUtils;
 import com.github.cloud0072.base.model.SystemEntity;
+import com.github.cloud0072.base.util.UserUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.authz.UnauthenticatedException;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.stereotype.Component;
+import org.springframework.security.access.AccessDeniedException;
 
 /**
  * 暂时不生效 正在排查原因
@@ -29,7 +27,7 @@ public class SystemEntityAspect {
             SystemEntity entity = (SystemEntity) o;
             //非超级管理员无权删除系统实体
             if (entity.isSystemEntity() && !UserUtils.getCurrentUser().isSuperUser()) {
-                throw new UnauthenticatedException("您无权删除系统数据");
+                throw new AccessDeniedException("您无权删除系统数据");
             }
         }
     }

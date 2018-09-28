@@ -174,7 +174,7 @@ public class SystemTest {
     @Test
     public void test14JoinFind() {
 
-        List<Permission> permissions = permissionRepository.findPermissionsByRoles_Users_AccountEquals("admin");
+        List<Permission> permissions = permissionRepository.findPermissionsByRoles_Users_UsernameEquals("admin");
 
         permissions.forEach(permission -> System.out.println(permission.getName()));
     }

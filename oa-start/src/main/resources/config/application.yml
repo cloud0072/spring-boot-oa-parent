@@ -14,8 +14,8 @@ server:
             rename-on-rotate: true
 spring:
     profiles:
-        active: pord
-#        active: dev
+#        active: pord
+        active: dev
     resources:
         static-locations:
             - classpath:/META-INF/resources/

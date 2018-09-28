@@ -8,7 +8,6 @@ import com.github.cloud0072.common.autoconfig.LocationProperties;
 import com.github.cloud0072.common.autoconfig.ShiroProperties;
 import com.github.cloud0072.common.util.DateUtils;
 import com.github.cloud0072.common.util.FileUtils;
-import com.github.cloud0072.common.util.MySecurityUtils;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -84,19 +83,19 @@ public class TestController implements BaseController {
     @ApiOperation("测试shiro通配符范围")
     @GetMapping("/05")
     public ResponseEntity test05(HttpServletRequest request, HttpServletResponse response) {
-        String p1 = "base:entity:123:UPDATE";
-        String p2 = "base:entity:123:FIND";
-        String p3 = "base:entity:123:*";
-        String p4 = "base:entity:*";
-        String p5 = "base:entity:*:FIND";
-        String p6 = "base:entity:*:UPDATE";
-
-        log.info(p1 + "\t" + MySecurityUtils.hasPermission(p1));
-        log.info(p2 + "\t" + MySecurityUtils.hasPermission(p2));
-        log.info(p3 + "\t" + MySecurityUtils.hasPermission(p3));
-        log.info(p4 + "\t" + MySecurityUtils.hasPermission(p4));
-        log.info(p5 + "\t" + MySecurityUtils.hasPermission(p5));
-        log.info(p6 + "\t" + MySecurityUtils.hasPermission(p6));
+//        String p1 = "base:entity:123:UPDATE";
+//        String p2 = "base:entity:123:FIND";
+//        String p3 = "base:entity:123:*";
+//        String p4 = "base:entity:*";
+//        String p5 = "base:entity:*:FIND";
+//        String p6 = "base:entity:*:UPDATE";
+//
+//        log.info(p1 + "\t" + MySecurityUtils.hasPermission(p1));
+//        log.info(p2 + "\t" + MySecurityUtils.hasPermission(p2));
+//        log.info(p3 + "\t" + MySecurityUtils.hasPermission(p3));
+//        log.info(p4 + "\t" + MySecurityUtils.hasPermission(p4));
+//        log.info(p5 + "\t" + MySecurityUtils.hasPermission(p5));
+//        log.info(p6 + "\t" + MySecurityUtils.hasPermission(p6));
 
         return ResponseEntity.ok("");
     }

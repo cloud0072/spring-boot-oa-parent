@@ -74,7 +74,6 @@ public class RoleController
      */
     @DeleteMapping("/clearRoleCache")
     public ResponseEntity<String> clearRoleCache() {
-        roleService.clearRoleCache();
         return ResponseEntity.ok("重新加载权限成功");
     }
 }

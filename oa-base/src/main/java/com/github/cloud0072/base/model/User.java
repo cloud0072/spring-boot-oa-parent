@@ -27,7 +27,7 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
-@Table(name = "auth_user", uniqueConstraints = @UniqueConstraint(columnNames = {"account"}))
+@Table(name = "auth_user", uniqueConstraints = @UniqueConstraint(columnNames = {"username"}))
 public class User
         extends BaseEntity
         implements NamedEntity, SystemEntity, BaseModuleEntity, UserDetails {

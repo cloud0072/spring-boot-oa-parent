@@ -12,8 +12,8 @@ import com.github.cloud0072.base.util.UserUtils;
 import com.github.cloud0072.common.constant.FileType;
 import com.github.cloud0072.common.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -105,31 +105,6 @@ public class UserServiceImpl
 
         return repository().save(user);
     }
-//
-//    @Override
-//    public boolean login(User user) {
-//        //subject理解成权限对象。类似user
-//        Subject subject = MySecurityUtils.getSubject();
-//        //创建用户名和密码的令牌
-//        UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(), user.getPassword());
-//        //记录该令牌，如果不记录则类似购物车功能不能使用。
-//        token.setRememberMe(false);
-//        //统一处理登录异常信息
-//        subject.login(token);
-//        //验证是否成功登录的方法
-//        if (subject.isAuthenticated()) {
-//            log.info(user.getUsername() + " 登陆成功...");
-//            return true;
-//        } else {
-//            UserUtils.setCurrentUser(null);
-//        }
-//        return false;
-//    }
-//
-//    @Override
-//    public void logout() {
-//        MySecurityUtils.getSubject().logout();
-//    }
 
     @Override
     public User findUserByUsername(String username) {
@@ -170,7 +145,7 @@ public class UserServiceImpl
             repository().save(user);
             return "/logout";
         } else {
-            throw new UnauthorizedException("原密码输入错误");
+            throw new BadCredentialsException("原密码输入错误");
         }
 
     }
@@ -201,6 +176,10 @@ public class UserServiceImpl
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username);
+        UserDetails userDetails = userRepository.findByUsername(username);
+        if (userDetails == null) {
+            throw new UsernameNotFoundException("UsernameNotFound\t:\t" + username);
+        }
+        return userDetails;
     }
 }

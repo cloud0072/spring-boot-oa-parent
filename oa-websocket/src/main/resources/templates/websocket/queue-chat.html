@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      lang="zh-CN">
+<html lang="zh-CN"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
 <head th:replace="fragment :: head"></head>
 <link rel="stylesheet" th:href="@{/assets/bootstrap-select/css/bootstrap-select.min.css}">
 <script type="text/javascript"
@@ -57,10 +59,7 @@
 
                         <!--/*@thymesVar id="category" type="com.github.cloud0072.base.model.Category"*/-->
                         <form id="main_form" role="form" class="form-horizontal">
-                            <label>
-                                <input hidden="hidden" th:id="account"
-                                       th:value="   ${session.user_info.account}">
-                            </label>
+                            <span hidden="hidden" id="username" sec:authentication="name"></span>
 
                             <div class="form-group">
                                 <label class="col-sm-2 control-label"

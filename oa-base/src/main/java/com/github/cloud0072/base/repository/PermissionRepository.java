@@ -24,8 +24,8 @@ public interface PermissionRepository
 
     /**
      * 使用 _ 可以查询关联实体的属性
-     * @param name
+     * @param username
      * @return
      */
-    List<Permission> findPermissionsByRoles_Users_AccountEquals(String name);
+    List<Permission> findPermissionsByRoles_Users_UsernameEquals(String username);
 }
