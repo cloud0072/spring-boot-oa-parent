@@ -125,11 +125,11 @@ public class User
      * @return
      */
     @Transient
-    public boolean isSuperUser() {
+    public Boolean isSuperUser() {
         return superUser == null ? false : superUser;
     }
     @Transient
-    public boolean isActive() {
+    public Boolean isActive() {
         return active == null ? false : active;
     }
 
