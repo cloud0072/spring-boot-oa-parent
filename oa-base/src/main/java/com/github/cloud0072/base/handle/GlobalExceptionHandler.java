@@ -27,6 +27,29 @@ public class GlobalExceptionHandler {
     private GlobalExceptionHandler() {
     }
 
+    /**
+     * 全局异常处理逻辑...默认返回 错误页
+     * code=500
+     *
+     * @param request
+     * @param ex
+     * @return
+     */
+    @ExceptionHandler(value = {Exception.class})
+    public ModelAndView exceptionHandler(HttpServletRequest request, HttpServletResponse response,
+                                         Exception ex) {
+        if (MySecurityUtils.isSubjectAvailable() && !MySecurityUtils.getSubject().isAuthenticated()) {
+            return authenticationExceptionHandler(request, response,
+                    new AuthenticationException("账号信息异常,请先登录"));
+        }
+        ModelAndView modelAndView = new ModelAndView("500");
+
+        addErrorMessage(modelAndView, ex);
+        printErrorMessage(ex);
+
+        return modelAndView;
+    }
+
     private void addErrorMessage(ModelAndView modelAndView, Exception ex) {
         String message = StringUtils.isEmpty(ex.getMessage()) ? "您的请求出错了!" : ex.getMessage();
         modelAndView.addObject("error", message);
@@ -103,27 +126,5 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
     }
 
-    /**
-     * 全局异常处理逻辑...默认返回 错误页
-     * code=500
-     *
-     * @param request
-     * @param ex
-     * @return
-     */
-    @ExceptionHandler(value = {Exception.class})
-    public ModelAndView exceptionHandler(HttpServletRequest request, HttpServletResponse response,
-                                         Exception ex) {
-        if (MySecurityUtils.isSubjectAvailable() && !MySecurityUtils.getSubject().isAuthenticated()) {
-            return authenticationExceptionHandler(request, response,
-                    new AuthenticationException("账号信息异常,请先登录"));
-        }
-        ModelAndView modelAndView = new ModelAndView("500");
-
-        addErrorMessage(modelAndView, ex);
-        printErrorMessage(ex);
-
-        return modelAndView;
-    }
 
 }

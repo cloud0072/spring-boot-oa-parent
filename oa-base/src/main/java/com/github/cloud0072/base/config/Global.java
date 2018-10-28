@@ -38,6 +38,7 @@ public class Global {
     public static Serializable getConfig(String key) {
         return configMap.get(key);
     }
+
     public static void setConfig(String key, Serializable value) {
         if (configMap.containsKey(key)) {
             log.info("已经存在该配置\t: {}\t由 {} 修改为 {}", key, configMap.get(key), value);

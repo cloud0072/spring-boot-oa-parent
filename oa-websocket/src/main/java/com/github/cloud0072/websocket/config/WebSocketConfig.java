@@ -43,6 +43,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                     //2. 验证是否登录
                     String username = accessor.getNativeHeader("username").get(0);
                     String password = accessor.getNativeHeader("password").get(0);
+                    //TODO:
 //                    for (Map.Entry<String, String> entry : Users.USERS_MAP.entrySet()) {
 ////                        System.out.println(entry.getKey() + "---" + entry.getValue());
 //                        if (entry.getKey().equals(username) && entry.getValue().equals(password)) {
